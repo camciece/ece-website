@@ -1,28 +1,292 @@
 @import "tailwindcss";
 @import "tailwindcss/preflight";
 @tailwind utilities;
-
+/* === THEME from your single-file === */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0b0c0e;
+  --card: #111216;
+  --muted: #9aa0a6;
+  --text: #e6e9ee;
+  --accent: #61dafb;
+  --accent-2: #ff6a3d;
+  --border: #1b1e24;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Base */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  /* radial gradient background + solid */
+  background:
+    radial-gradient(1200px 500px at 20% -10%, #152034 10%, transparent 60%)
+      no-repeat,
+    var(--bg);
+  line-height: 1.6;
+  font-family:
+    var(--font-inter),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Layout helpers (names reused from your HTML) */
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+header.sticky {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--bg) 90%, transparent);
+  border-bottom: 1px solid var(--border);
+  z-index: 50;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.brand {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 24px var(--accent-2);
+}
+.nav a {
+  color: var(--text);
+  opacity: 0.9;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.nav a.active,
+.nav a:hover {
+  background: #151820;
+  opacity: 1;
+  text-decoration: none;
+  color: var(--text);
+}
+.layout {
+  padding: 40px 0 80px;
+}
+
+/* Hero */
+.hero {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  padding: 56px 0;
+}
+.hero h1 {
+  color: var(--text);
+  letter-spacing: -0.01em;
+  font-family: var(--font-news), serif;
+  font-weight: 700;
+  font-size: clamp(36px, 4.4vw, 56px);
+  line-height: 1.08;
+  margin: 0 0 16px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--text);
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.lead {
+  font-size: clamp(16px, 1.5vw, 18px);
+  color: #cfd5de;
+  margin: 12px 0 20px;
+}
+.cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #151820;
+  color: var(--text);
+  font-weight: 600;
+}
+.btn.primary {
+  background: linear-gradient(180deg, #1b2738, #131a26);
+  border: 1px solid #2a3342;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 8px 24px rgba(2, 10, 20, 0.35);
+}
+.hero-card {
+  background: linear-gradient(180deg, #12151d 0%, #0e1117 100%);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(3, 6, 12, 0.35);
+}
+.hero-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.pill {
+  font-size: 12px;
+  background: #141821;
+  border: 1px solid #202635;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* Sections */
+section {
+  margin: 56px 0;
+}
+h2 {
+  font-size: clamp(22px, 2.4vw, 28px);
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-family: var(--font-news), serif;
+}
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.card {
+  color: var(--text);
+  background: linear-gradient(180deg, #10141b, #0c0f14);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+}
+.card strong {
+  color: var(--text);
+}
+.card:hover {
+  transform: translateY(-2px);
+  transition: 0.2s ease;
+}
+.card .meta {
+  color: #c7ced8;
+}
+.meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Writing */
+.post-list {
+  display: grid;
+  gap: 14px;
+}
+.post-item {
+  color: var(--text);
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #0e1218;
+}
+.post-item a {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.post-item .meta {
+  color: #c7ced8;
+}
+
+.post-item p {
+  color: #d6dbe2;
+}
+
+/* Article (overrides Tailwind Typography) */
+.prose {
+  color: var(--text);
+}
+.prose h1,
+.prose h2,
+.prose h3 {
+  font-family: var(--font-news), serif;
+}
+.prose img {
+  max-width: 100%;
+  border-radius: 12px;
+}
+.prose pre {
+  padding: 14px;
+  background: #0b0f15;
+  border: 1px solid #1a2030;
+  border-radius: 12px;
+  overflow: auto;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .grid {
+    grid-template-columns: 1fr;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* SECTION HEADINGS */
+section h2 {
+  color: var(--text);
 }
