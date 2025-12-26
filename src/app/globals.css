@@ -642,6 +642,8 @@ body.text-\[--text\] {
 .home {
   color: #141414;
   background-color: #fff;
+  --frame-max: 1920px;
+  --frame-pad: clamp(18px, 4vw, 48px);
   padding: 28px 0 120px;
 }
 
@@ -649,10 +651,12 @@ body.text-\[--text\] {
   position: relative;
   background-image: url('/MerryChristmas.JPG');
   background-size: cover;
-  background-position: center top;
-  padding: 204px 22px 120px;
-  margin: -110px auto 0;
-  max-width: 1200px;
+  background-position: center;
+  width: min(100%, var(--frame-max));
+  padding: 204px var(--frame-pad) 120px;
+  margin-top: -110px;
+  margin-left: auto;
+  margin-right: auto;
   height: 800px;
 }
 
@@ -717,9 +721,9 @@ body.text-\[--text\] {
 }
 
 .writingGrid {
-  padding: 36px 22px 10px;
+  width: min(100%, var(--frame-max));
   margin: 0 auto;
-  max-width: 1200px;
+  padding: 36px var(--frame-pad) 10px;
   background: #fff;
 }
 
@@ -791,9 +795,9 @@ body.text-\[--text\] {
   display: grid;
   grid-template-columns: 1fr 0.9fr;
   gap: 32px;
-  padding: 40px 22px 10px;
+  width: min(100%, var(--frame-max));
   margin: 0 auto;
-  max-width: 1200px;
+  padding: 40px var(--frame-pad) 10px;
 }
 
 .homeEssay {
