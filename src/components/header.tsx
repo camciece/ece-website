@@ -1,39 +1,61 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/writing", label: "Writing" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+  { href: '/', label: 'Work' },
+  { href: '/writing', label: 'Meet Ece' },
+  { href: '/about', label: 'Books' },
+  { href: '/contact', label: 'Heroes' },
+]
 
 export default function Header() {
-  const pathname = usePathname() || "/";
+  const pathname = usePathname() || '/'
+
   return (
-    <header className="sticky">
-      <div className="container nav">
-        <div className="brand">
-          <span className="dot" />
-          Ece Çamcı
+    <header className="topBar">
+      <div className="topBar__wrap">
+        {/* LEFT island */}
+        <div className="island island--logo">
+          <Link href="/" className="logoLink" aria-label="Home">
+            <span className="logoBadge">
+              Eces
+              <br />
+              Notes
+            </span>
+          </Link>
         </div>
-        <nav className="flex gap-1">
-          {links.map((l) => {
-            const active =
-              l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={`px-3 py-2 rounded-md ${active ? "active" : ""}`}
-              >
-                {l.label}
-              </Link>
-            );
-          })}
-        </nav>
+
+        {/* CENTER island (absolute centered) */}
+        <div
+          className="island island--nav island--navCentered"
+          aria-label="Primary"
+        >
+          <nav className="navRow">
+            {links.map((l) => {
+              const active =
+                l.href === '/' ? pathname === '/' : pathname.startsWith(l.href)
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className={`navPill ${active ? 'isActive' : ''}`}
+                >
+                  {l.label}
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        {/* RIGHT island */}
+        <div className="island island--search">
+          <button type="button" className="searchIconBtn" aria-label="Search">
+            <span className="searchIcon" aria-hidden />
+          </button>
+        </div>
       </div>
     </header>
-  );
+  )
 }
