@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tailwindcss/preflight';
-@tailwind utilities;
 /* === THEME from your single-file === */
 :root {
   --bg: #0b0c0e;
@@ -495,7 +494,7 @@ section h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 /* Common island */
@@ -650,10 +649,10 @@ body.text-\[--text\] {
   position: relative;
   background-image: url('/MerryChristmas.JPG');
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   padding: 204px 22px 120px;
-  margin: -110px 0 0;
-  max-width: none;
+  margin: -110px auto 0;
+  max-width: 1200px;
   height: 800px;
 }
 
