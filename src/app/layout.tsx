@@ -10,9 +10,7 @@ const newsreader = Newsreader({
 })
 
 export const metadata: Metadata = {
-  title: 'Ece Çamcı — AI • Product • Partner Marketing',
-  description:
-    'AI-driven product & partner marketing leader. Writing about pragmatic AI, distributed cloud, and GTM.',
+  title: 'The website of Ece Çamcı | Eces Notes',
 }
 
 export default function RootLayout({

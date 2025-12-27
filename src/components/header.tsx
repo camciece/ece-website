@@ -18,6 +18,9 @@ export default function Header() {
       <div className="topBar__wrap">
         {/* LEFT island */}
         <div className="island island--logo">
+          <button type="button" className="menuBtn" aria-label="Menu">
+            <span className="menuIcon" aria-hidden />
+          </button>
           <Link href="/" className="logoLink" aria-label="Home">
             <span className="logoBadge">
               Eces
@@ -47,6 +50,9 @@ export default function Header() {
               )
             })}
           </nav>
+          <Link href="/" className="logoCenter" aria-label="Home">
+            EcesNotes
+          </Link>
         </div>
 
         {/* RIGHT island */}

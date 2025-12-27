@@ -499,8 +499,8 @@ section h2 {
 
 /* Common island */
 .island {
-  border: 1px solid #3a3a3a;
-  background: #2b2b2b;
+  background: #000000eb;
+  border: 1px solid #000000eb;
   border-radius: 4px;
   height: 54px;
   display: flex;
@@ -531,6 +531,58 @@ section h2 {
   letter-spacing: 0.2px;
   font-size: 14px;
   opacity: 0.95;
+}
+
+.menuBtn {
+  display: none;
+  width: 54px;
+  height: 54px;
+  border-radius: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  place-items: center;
+}
+
+.menuBtn:hover {
+  background: #151820;
+}
+
+.menuIcon {
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+  display: inline-block;
+  position: relative;
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+.menuIcon::before {
+  top: -6px;
+}
+
+.menuIcon::after {
+  top: 6px;
+}
+
+.logoCenter {
+  display: none;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: 0.2px;
 }
 
 /* RIGHT search island (separate small island) */
@@ -608,25 +660,50 @@ section h2 {
 /* Make sure center island doesn't overlap on small widths */
 @media (max-width: 900px) {
   .island--navCentered {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    position: static;
+    transform: none;
   }
   .topBar__wrap {
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    justify-content: initial;
   }
   .navPill {
     padding: 10px 14px;
+  }
+  .island--nav {
+    width: 100%;
+    max-width: 560px;
+    padding: 0 12px;
+  }
+  .navRow {
+    display: none;
+  }
+  .logoCenter {
+    display: inline-flex;
+    margin: 0 auto;
+  }
+  .menuBtn {
+    display: grid;
+  }
+  .logoLink {
+    display: none;
+  }
+  .heroStage__card {
+    position: static;
+    margin: 0 auto;
+    width: min(520px, 100%);
+  }
+  .homeHeroBg {
+    padding-bottom: 80px;
+    height: auto;
   }
 }
 
 @media (max-width: 760px) {
   .island--nav {
-    padding: 0 12px; /* iç padding küçülsün */
-    justify-content: center;
-    min-width: 640px; /* 👈 ANA HAMLE */
-    max-width: 720px;
+    max-width: 520px;
   }
 }
 
@@ -652,24 +729,25 @@ body.text-\[--text\] {
   background-image: url('/MerryChristmas.JPG');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   width: min(100%, var(--frame-max));
   padding: 204px var(--frame-pad) 120px;
   margin-top: -110px;
   margin-left: auto;
   margin-right: auto;
-  height: 800px;
+  height: 850px;
 }
 
 .heroStage__card {
   position: absolute;
   left: 36px;
   bottom: 24px;
-  background: #f5f2ebc2;
   border-radius: 8px;
   border: 1px solid #e0d9cc;
   width: min(420px, 70%);
   padding: 22px 22px 20px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 12px 28px;
+  background: rgba(245, 242, 235, 0.76);
 }
 
 .heroStage__eyebrow {
@@ -685,7 +763,7 @@ body.text-\[--text\] {
   font-size: clamp(28px, 3vw, 36px);
   margin: 12px 0 10px;
   color: #1d1a16;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 .heroStage__card p {
