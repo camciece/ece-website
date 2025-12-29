@@ -496,7 +496,7 @@ section h2 {
   position: sticky;
   top: 0;
   z-index: 70;
-  padding: 14px 0;
+  padding: 24px 0;
   background: transparent;
   backdrop-filter: none;
   font-family:
@@ -512,7 +512,7 @@ section h2 {
 }
 
 .topBar__wrap {
-  width: min(100%, var(--frame-max));
+  width: 1240px;
   margin: 0 auto;
   padding: 0 var(--frame-pad);
   position: relative; /* needed for absolute centering */
@@ -735,13 +735,6 @@ section h2 {
   .navCompact {
     display: flex;
   }
-  .heroStage__card {
-    position: absolute;
-    left: 50%;
-    bottom: var(--frame-pad);
-    transform: translateX(-50%);
-    width: min(380px, calc(100% - (var(--frame-pad) * 2)));
-  }
   .homeHeroFrame {
     max-width: 560px;
     margin: 0 auto;
@@ -754,7 +747,7 @@ section h2 {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 767px) {
   .island--nav {
     max-width: 520px;
   }
@@ -762,7 +755,7 @@ section h2 {
 
 /* ===== Gatesnotes-like Home ===== */
 body.bg-\[--bg\] {
-  background-color: #fff;
+  background-color: #f2f2f2;
 }
 
 body.text-\[--text\] {
@@ -780,7 +773,7 @@ body.text-\[--text\] {
   display: flex;
   justify-content: center;
   width: min(100%, var(--frame-max));
-  margin-top: -110px;
+  margin-top: -124px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -1008,6 +1001,9 @@ body.text-\[--text\] {
 }
 
 @media (max-width: 1279px) {
+  .topBar__wrap {
+    width: 704px;
+  }
   .heroStage__card {
     padding: 32px 20px;
     align-items: flex-start;
@@ -1058,6 +1054,10 @@ body.text-\[--text\] {
   }
 }
 @media (max-width: 767px) {
+  .topBar__wrap {
+    width: 450px;
+  }
+
   .heroStage__card {
     width: 100%;
   }
