@@ -18,9 +18,6 @@ export default function Header() {
       <div className="topBar__wrap">
         {/* LEFT island */}
         <div className="island island--logo">
-          <button type="button" className="menuBtn" aria-label="Menu">
-            <span className="menuIcon" aria-hidden />
-          </button>
           <Link href="/" className="logoLink" aria-label="Home">
             <span className="logoBadge">
               Eces
@@ -35,6 +32,17 @@ export default function Header() {
           className="island island--nav island--navCentered"
           aria-label="Primary"
         >
+          <div className="navCompact" aria-label="Primary">
+            <button type="button" className="menuBtn" aria-label="Menu">
+              <span className="menuIcon" aria-hidden />
+            </button>
+            <Link href="/" className="logoCenter" aria-label="Home">
+              EcesNotes
+            </Link>
+            <button type="button" className="searchIconBtn" aria-label="Search">
+              <span className="searchIcon" aria-hidden />
+            </button>
+          </div>
           <nav className="navRow">
             {links.map((l) => {
               const active =
@@ -50,9 +58,6 @@ export default function Header() {
               )
             })}
           </nav>
-          <Link href="/" className="logoCenter" aria-label="Home">
-            EcesNotes
-          </Link>
         </div>
 
         {/* RIGHT island */}

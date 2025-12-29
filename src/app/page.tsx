@@ -4,16 +4,18 @@ export default function Home() {
   return (
     <main className="home">
       <section className="homeHeroBg">
-        <div className="heroStage__card">
-          <div className="heroStage__eyebrow">Seasonal readings</div>
-          <h1>Five books to read this winter</h1>
-          <p>
-            These were some of my favorite books from 2025 - concise, thoughtful
-            picks for the season ahead.
-          </p>
-          <Link className="heroStage__link" href="/writing">
-            Read the picks
-          </Link>
+        <div className="homeHeroFrame">
+          <div className="heroStage__card">
+            <div className="heroStage__eyebrow">Seasonal readings</div>
+            <h1>Five books to read this winter</h1>
+            <p>
+              These were some of my favorite books from 2025 - concise,
+              thoughtful picks for the season ahead.
+            </p>
+            <Link className="heroStage__link" href="/writing">
+              Read the picks
+            </Link>
+          </div>
         </div>
       </section>
 
