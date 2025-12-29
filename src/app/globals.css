@@ -799,7 +799,6 @@ body.text-\[--text\] {
 
 .heroStage__card {
   position: absolute;
-  left: var(--frame-pad);
   bottom: 60px;
   border-radius: 12px;
   border: 1px solid rgba(224, 217, 204, 0.8);
@@ -1056,5 +1055,10 @@ body.text-\[--text\] {
   }
   .homeSplit {
     max-width: 480px;
+  }
+}
+@media (max-width: 767px) {
+  .heroStage__card {
+    width: 100%;
   }
 }
