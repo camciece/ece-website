@@ -28,7 +28,7 @@ export default function Home() {
         </div>
         <div className="writingGrid__rows">
           <article className="writingCard">
-            <div>
+            <div className="writingCard__content">
               <div className="writingCard__rule" />
               <div className="writingCard__tag">Under the sea</div>
               <h3>Growing older with Remarkably Bright Creatures</h3>
@@ -41,7 +41,7 @@ export default function Home() {
             <div className="writingCard__media writingCard__media--one" />
           </article>
           <article className="writingCard">
-            <div>
+            <div className="writingCard__content">
               <div className="writingCard__rule" />
               <div className="writingCard__tag">Goes without saying</div>
               <h3>Lessons from a toilet paper shortage</h3>
@@ -54,7 +54,7 @@ export default function Home() {
             <div className="writingCard__media writingCard__media--two" />
           </article>
           <article className="writingCard">
-            <div>
+            <div className="writingCard__content">
               <div className="writingCard__rule" />
               <div className="writingCard__tag">Diller instinct</div>
               <h3>The man who built modern media</h3>
@@ -69,37 +69,47 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="homeSplit">
-        <div className="homeEssay">
-          <div className="homeEssay__label">Featured series</div>
-          <h3>Shipping AI with clear constraints</h3>
-          <p>
-            A four-part series on budgets, latency tradeoffs, and the decisions
-            that keep AI products reliable in the wild.
-          </p>
-          <Link className="homeEssay__link" href="/writing">
-            Explore the series
-          </Link>
-        </div>
-        <div className="homeNotes">
-          <div className="homeNotes__header">Notes and links</div>
-          <div className="homeNotes__item">
-            <div className="homeNotes__title">
-              The checklist I use before every launch
-            </div>
-            <div className="homeNotes__meta">2 min read</div>
+      <section className="closingSection">
+        <div className="closingPanel">
+          <div className="closingNav">
+            <Link href="/writing">Writings</Link>
+            <Link href="/meet-ece">Meet Ece</Link>
+            <Link href="/recommendations">Recommendations</Link>
+            <Link href="/heroes">Heroes</Link>
           </div>
-          <div className="homeNotes__item">
-            <div className="homeNotes__title">
-              Partner marketing that feels like product
+          <div className="closingMeta">
+            <div className="closingLinks">
+              <Link href="/privacy">Privacy</Link>
+              <Link href="/disclaimer">Disclaimer</Link>
+              <Link href="/contact">Contact me</Link>
             </div>
-            <div className="homeNotes__meta">3 min read</div>
-          </div>
-          <div className="homeNotes__item">
-            <div className="homeNotes__title">
-              What I learned building AI demos that turned into products
+            <div className="closingSocial">
+              <a
+                href="https://www.instagram.com/ececamci"
+                aria-label="Instagram"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src="/ig.svg" alt="" />
+              </a>
+              <a
+                href="https://www.youtube.com/@msececamci"
+                aria-label="YouTube"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src="/yt.svg" alt="" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/ececamci/"
+                aria-label="LinkedIn"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src="/in.svg" alt="" />
+              </a>
             </div>
-            <div className="homeNotes__meta">5 min read</div>
+            <div className="closingCopyright">© 2025 Eces Notes</div>
           </div>
         </div>
       </section>
