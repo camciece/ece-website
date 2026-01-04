@@ -1797,7 +1797,7 @@ body.text-\[--text\] {
 .meetHeroMedia {
   min-height: 640px;
   padding: 420px var(--frame-pad) 120px;
-  background-image: url('/gemin.png');
+  background-image: url('/gemini.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1930,10 +1930,11 @@ body.text-\[--text\] {
 }
 
 .meetAlbum__photo {
-  height: 320px;
+  width: 100%;
+  aspect-ratio: 3 / 2;
   border-radius: 18px;
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-color: #efe6dc;
 }
 
@@ -1952,7 +1953,10 @@ body.text-\[--text\] {
 }
 
 .meetAlbum__photo--one {
-  background-image: linear-gradient(140deg, #d8a079, #f0c8a1);
+  background-image: linear-gradient(140deg, rgba(216, 160, 121, 0.2), rgba(240, 200, 161, 0.2)),
+    url('/Nil.JPG');
+  background-size: cover;
+  background-position: center;
 }
 
 .meetAlbum__photo--two {

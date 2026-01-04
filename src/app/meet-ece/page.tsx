@@ -75,11 +75,11 @@ export default function MeetEcePage() {
       <section className="meetSection meetSection--intro">
         <div className="meetSectionFrame">
           <p className="meetStatement">
-            I work at the intersection of AI, product and 'Why is this still
-            this stupid?' I build, test, break, and rewire tech ideas - usually
-            faster than organizations are ready for. I think about AI the way
-            most people think about cofee: constantly, practically, and with
-            very low tolerance for weak execution
+            I work in tech and I’m currently carving my own path within it. I
+            love experimenting with AI tools, and somewhere along the way, that
+            curiosity turned into building this website through a bit of vibe
+            coding. Writing helps me think, learn, and actually digest what I’m
+            building, so I share what I learn as I go.
           </p>
         </div>
       </section>
