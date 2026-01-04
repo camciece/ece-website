@@ -12,6 +12,7 @@
   --border: #1b1e24;
   --frame-max: 1200px;
   --frame-pad: clamp(18px, 4vw, 48px);
+  --writing-pad: clamp(48px, 8vw, 72px);
 }
 
 /* Base */
@@ -74,8 +75,14 @@ a:hover {
   :root {
     --frame-max: 100%;
     --frame-pad: 100px;
+    --writing-pad: clamp(48px, 16vw, 250px);
   }
-  .topBar__wrap,
+  .topBar__wrap {
+    width: 1240px;
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .homeHeroBg,
   .homeHeroFrame,
   .writingGrid,
@@ -528,13 +535,29 @@ section h2 {
 }
 
 .topBar__wrap {
-  width: 100%;
+  width: min(100%, var(--frame-max));
   margin: 0 auto;
   position: relative; /* needed for absolute centering */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 3px;
+  padding: 0 var(--frame-pad);
+}
+
+@media (min-width: 1280px) {
+  .topBar__wrap {
+    width: min(100%, var(--frame-max));
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .closingSection {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* Common island */
@@ -692,6 +715,13 @@ section h2 {
   padding: 0 8px;
 }
 
+@media (min-width: 1280px) {
+  .island--nav {
+    width: 1240px;
+    max-width: 1240px;
+  }
+}
+
 .island--navCentered {
   position: static;
   transform: none;
@@ -835,7 +865,7 @@ section h2 {
     padding-bottom: 0px;
   }
   .topBar__wrap {
-    width: 560px;
+    width: min(100%, var(--frame-max));
   }
 }
 
@@ -946,7 +976,7 @@ body.text-\[--text\] {
 .writingGrid {
   width: min(100%, var(--frame-max));
   margin: 0 auto;
-  padding: 36px var(--frame-pad) 45px;
+  padding: 140px var(--frame-pad) 45px;
   background: #fff;
 }
 
@@ -965,9 +995,62 @@ body.text-\[--text\] {
   color: inherit;
 }
 
+.writingCard--featured {
+  max-width: 1040px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.writingCard--featured .writingCard__media {
+  height: 320px;
+  border-radius: 14px;
+}
+
+.writingCard--featured .writingCard p {
+  max-width: none;
+}
+
+.writingGrid--featured .writingGrid__rows {
+  grid-template-columns: 1fr;
+}
+
+.writingCard__body {
+  flex: 1;
+  display: grid;
+  gap: 18px;
+}
+
+.writingCard__summary {
+  margin: 0;
+  color: #2f2a25;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.writingCard__highlights {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: #4a4540;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.writingCard__visual {
+  flex: 0 0 440px;
+}
+
+.writingCard__visual .writingCard__media {
+  width: 100%;
+  height: 380px;
+  margin-top: 0;
+}
+
 .writingGrid--list .writingGrid__rows {
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 0px;
 }
 
 .writingGrid--list .writingCard {
@@ -978,6 +1061,15 @@ body.text-\[--text\] {
   border-top: 1px solid #d7d7d7;
   border-bottom: 1px solid #d7d7d7;
   margin-top: -1px;
+}
+
+.writingGrid--list .writingCard:first-child {
+  border-top: 0;
+  margin-top: 0;
+}
+
+.writingGrid--list .writingCard:last-child {
+  border-bottom: 0;
 }
 
 .writingGrid--list .writingCard__content {
@@ -1012,7 +1104,7 @@ body.text-\[--text\] {
   height: 1px;
   background: #d7d7d7;
   width: 100%;
-  margin-bottom: 6px;
+  margin-bottom: 16px;
 }
 
 .writingCard__tag {
@@ -1036,7 +1128,6 @@ body.text-\[--text\] {
 .writingCard p {
   color: #4a4a4a;
   margin: 0;
-  max-width: 320px;
   line-height: 1.6;
   font-family:
     'Google Sans',
@@ -1074,7 +1165,8 @@ body.text-\[--text\] {
 .writingPage {
   background: #f2f2f2;
   color: #1a1a1a;
-  padding: 24px 0 96px;
+  padding: 0 0 96px;
+  margin-top: -136px;
 }
 
 .writingHero {
@@ -1092,16 +1184,33 @@ body.text-\[--text\] {
   box-shadow: 0 20px 48px rgba(20, 20, 20, 0.18);
 }
 
+.writingHero--article {
+  width: 100%;
+  margin: 0 0 28px;
+  padding: 0;
+}
+
+.writingHero--article .writingHeroFrame {
+  width: 100%;
+  height: clamp(280px, 40vw, 460px);
+}
+
 .writingArticle {
   width: min(100%, var(--frame-max));
-  margin: -48px auto 0;
-  padding: 40px var(--frame-pad) 72px;
+  margin: 24px auto 0;
+  padding: 130px var(--writing-pad) 72px;
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 0px;
   box-shadow: 0 18px 48px rgba(20, 20, 20, 0.12);
   position: relative;
   top: 16px;
   z-index: 10;
+}
+
+.writingHeader {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .writingArticle__tag {
@@ -1179,14 +1288,14 @@ body.text-\[--text\] {
 }
 
 .closingSection--meet .closingSocial {
-  top: 44px;
+  top: 56px;
 }
 
 .closingPanel {
   background: #1f2228;
   color: #f3f4f6;
   border-radius: 0px 0px 16px 16px;
-  padding: 56px 44px 28px;
+  padding: 56px var(--frame-pad) 28px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
   position: relative;
 }
@@ -1214,7 +1323,7 @@ body.text-\[--text\] {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  margin-top: 24px;
+  margin-top: 40px;
   font-size: 12px;
   color: #a8b0ba;
 }
@@ -1237,8 +1346,8 @@ body.text-\[--text\] {
 
 .closingSocial {
   position: absolute;
-  top: 28px;
-  right: 34px;
+  top: 56px;
+  right: var(--frame-pad);
   display: inline-flex;
   gap: 12px;
   align-items: center;
@@ -1266,8 +1375,8 @@ body.text-\[--text\] {
 }
 
 .closingSocial img {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: block;
 }
 
@@ -1972,7 +2081,7 @@ body.text-\[--text\] {
 
 @media (max-width: 1279px) {
   .topBar__wrap {
-    width: 704px;
+    width: min(100%, var(--frame-max));
   }
   .heroStage__card {
     padding: 32px 20px;
@@ -2012,11 +2121,21 @@ body.text-\[--text\] {
     width: 100%;
     height: 210px;
   }
+  .writingCard--featured {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .writingCard__visual {
+    flex-basis: auto;
+  }
+  .writingCard__visual .writingCard__media {
+    height: 260px;
+  }
 }
 
 @media (max-width: 720px) {
   .writingArticle {
-    margin-top: -32px;
+    margin-top: 16px;
     padding: 32px var(--frame-pad) 56px;
   }
 }
@@ -2052,6 +2171,15 @@ body.text-\[--text\] {
   .meetAlbum__grid {
     gap: 50px;
   }
+
+  .writingCard--featured {
+    max-width: none;
+    width: 100%;
+  }
+
+  .writingCard__visual {
+    margin-left: auto;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -2078,7 +2206,7 @@ body.text-\[--text\] {
     max-width: 480px;
   }
   .closingPanel {
-    padding: 32px 24px 24px;
+    padding: 32px var(--frame-pad) 24px;
   }
   .closingMeta {
     flex-direction: column;
@@ -2110,15 +2238,20 @@ body.text-\[--text\] {
 }
 @media (max-width: 767px) {
   .topBar__wrap {
-    width: 450px;
+    width: min(100%, var(--frame-max));
   }
 
   .heroStage__card {
     width: 100%;
   }
 }
-@media (min-width: 768) and (max-width: 900px) {
+@media (min-width: 768px) and (max-width: 900px) {
   .topBar__wrap {
-    width: 560px;
+    width: min(100%, var(--frame-max));
+  }
+
+  .heroStage__card {
+    width: 100%;
+    max-width: none;
   }
 }

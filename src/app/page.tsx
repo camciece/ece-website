@@ -19,7 +19,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="writingGrid">
+      <section className="writingGrid writingGrid--featured">
         <div className="sectionHeader">
           <h2>Latest writing</h2>
           <Link className="sectionLink" href="/writing">
@@ -27,44 +27,30 @@ export default function Home() {
           </Link>
         </div>
         <div className="writingGrid__rows">
-          <article className="writingCard">
-            <div className="writingCard__content">
-              <div className="writingCard__rule" />
-              <div className="writingCard__tag">Under the sea</div>
-              <h3>Growing older with Remarkably Bright Creatures</h3>
-              <p>
-                Shelby Van Pelt’s novel was the perfect way to start my next
-                decade of life.
+          <article className="writingCard writingCard--featured">
+            <div className="writingCard__body">
+              <div className="writingCard__content">
+                <div className="writingCard__rule" />
+                <div className="writingCard__tag">Under the sea</div>
+                <h3>Growing older with Remarkably Bright Creatures</h3>
+                <p>
+                  Shelby Van Pelt’s novel was the perfect way to start my next
+                  decade of life.
+                </p>
+              </div>
+              <p className="writingCard__summary">
+                A warm, layered reflection on aging, tenderness, and the quiet
+                friendships that pull us back to ourselves.
               </p>
+              <ul className="writingCard__highlights">
+                <li>What the octopus chapters reveal about empathy</li>
+                <li>How grief reshapes identity in small, daily ways</li>
+                <li>Favorite lines to re-read when life feels loud</li>
+              </ul>
             </div>
-
-            <div className="writingCard__media writingCard__media--one" />
-          </article>
-          <article className="writingCard">
-            <div className="writingCard__content">
-              <div className="writingCard__rule" />
-              <div className="writingCard__tag">Goes without saying</div>
-              <h3>Lessons from a toilet paper shortage</h3>
-              <p>
-                Steven Pinker’s latest book explores the fascinating science
-                behind common...
-              </p>
+            <div className="writingCard__visual">
+              <div className="writingCard__media writingCard__media--one" />
             </div>
-
-            <div className="writingCard__media writingCard__media--two" />
-          </article>
-          <article className="writingCard">
-            <div className="writingCard__content">
-              <div className="writingCard__rule" />
-              <div className="writingCard__tag">Diller instinct</div>
-              <h3>The man who built modern media</h3>
-              <p>
-                Barry Diller’s memoir is a candid playbook for creativity and
-                competition in business.
-              </p>
-            </div>
-
-            <div className="writingCard__media writingCard__media--three" />
           </article>
         </div>
       </section>

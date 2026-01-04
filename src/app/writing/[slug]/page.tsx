@@ -3,25 +3,27 @@ import Link from 'next/link'
 export default async function Post() {
   return (
     <main className="writingPage">
-      <section className="writingHero">
-        <div className="writingHeroFrame" />
-      </section>
-
       <article className="writingArticle">
-        <div className="writingArticle__tag">Under the sea</div>
-        <h1 className="writingArticle__title">
-          Growing older with Remarkably Bright Creatures
-        </h1>
-        <p className="writingArticle__deck">
-          Shelby Van Pelt’s novel was the perfect way to start my next decade of
-          life.
-        </p>
-        <div className="writingAuthor">
-          <div className="writingAuthor__avatar" aria-hidden="true" />
-          <div className="writingAuthor__info">
-            <span>By Ece Camci</span>
-            <span>Published on Tuesday, Nov 25, 2025</span>
+        <header className="writingHeader">
+          <div className="writingArticle__tag">Under the sea</div>
+          <h1 className="writingArticle__title">
+            Growing older with Remarkably Bright Creatures
+          </h1>
+          <p className="writingArticle__deck">
+            Shelby Van Pelt’s novel was the perfect way to start my next decade
+            of life.
+          </p>
+          <div className="writingAuthor">
+            <div className="writingAuthor__avatar" aria-hidden="true" />
+            <div className="writingAuthor__info">
+              <span>By Ece Camci</span>
+              <span>Published on Tuesday, Nov 25, 2025</span>
+            </div>
           </div>
+        </header>
+
+        <div className="writingHero writingHero--article">
+          <div className="writingHeroFrame" />
         </div>
 
         <div className="writingBody">
