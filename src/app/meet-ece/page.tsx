@@ -84,7 +84,12 @@ export default function MeetEcePage() {
 
       <section className="meetSection meetSection--album">
         <div className="meetSectionFrame meetAlbum__frame">
-          <div className="meetSectionHeader"></div>
+          <div className="meetSectionHeader">
+            <h2 className="meetSectionTitle">
+              I&apos;m grateful for my family and friends. They keep me grounded
+              and remind me what matters.
+            </h2>
+          </div>
           <div className="meetAlbum__grid">
             {albumItems.map((item) => (
               <div key={item.note} className="meetAlbum__card">
