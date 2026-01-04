@@ -73,7 +73,7 @@ export default function MeetEcePage() {
       <section className="meetSection meetSection--intro">
         <div className="meetSectionFrame">
           <p className="meetStatement">
-            I'm grateful for my <strong>family and friends</strong>. They keep
+            I&apos;m grateful for my <strong>family and friends</strong>. They keep
             me grounded and remind me what matters. I care about building good
             products and learning in public, but the{' '}
             <strong>tiny rituals</strong> and people I love are the real
