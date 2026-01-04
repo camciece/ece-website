@@ -55,7 +55,7 @@ a:hover {
 }
 
 .topBar .mobileMenu__link:hover {
-  color: #111;
+  color: var(--accent-2);
 }
 
 /* Layout helpers (names reused from your HTML) */
