@@ -5,17 +5,15 @@ export default function Home() {
     <main className="home">
       <section className="homeHeroBg">
         <div className="homeHeroFrame">
-          <div className="heroStage__card">
+          <Link className="heroStage__card heroStage__card--link" href="/writing">
             <div className="heroStage__eyebrow">Seasonal readings</div>
             <h1>Five books to read this winter</h1>
             <p>
               These were some of my favorite books from 2025 - concise,
               thoughtful picks for the season ahead.
             </p>
-            <Link className="heroStage__link" href="/writing">
-              Read the picks
-            </Link>
-          </div>
+            <span className="heroStage__link">Read the picks</span>
+          </Link>
         </div>
       </section>
 
@@ -27,7 +25,10 @@ export default function Home() {
           </Link>
         </div>
         <div className="writingGrid__rows">
-          <article className="writingCard writingCard--featured">
+          <Link
+            className="writingCard writingCard--featured writingCard--link"
+            href="/writing/remarkably-bright-creatures"
+          >
             <div className="writingCard__body">
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
@@ -51,7 +52,7 @@ export default function Home() {
             <div className="writingCard__visual">
               <div className="writingCard__media writingCard__media--one" />
             </div>
-          </article>
+          </Link>
         </div>
       </section>
 
