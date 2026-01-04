@@ -578,6 +578,9 @@ section h2 {
 .island--logo {
   padding: 0;
 }
+.island--logo:hover {
+  background-color: rgba(35, 36, 35, 1);
+}
 .logoLink {
   display: inline-flex;
   align-items: center;
