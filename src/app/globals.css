@@ -976,8 +976,11 @@ body.text-\[--text\] {
 .writingGrid {
   width: min(100%, var(--frame-max));
   margin: 0 auto;
-  padding: 140px var(--frame-pad) 45px;
+  padding: 40px var(--frame-pad) 45px;
   background: #fff;
+}
+.writingGrid--list {
+  padding: 140px var(--frame-pad) 45px;
 }
 
 .writingGrid__rows {
