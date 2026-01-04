@@ -2139,7 +2139,7 @@ body.text-\[--text\] {
 @media (max-width: 720px) {
   .writingArticle {
     margin-top: 16px;
-    padding: 32px var(--frame-pad) 56px;
+    padding: 130px var(--frame-pad) 56px;
   }
 }
 @media screen and (max-width: 1279px) {
