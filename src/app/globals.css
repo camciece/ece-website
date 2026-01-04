@@ -1953,7 +1953,8 @@ body.text-\[--text\] {
 }
 
 .meetAlbum__photo--one {
-  background-image: linear-gradient(140deg, rgba(216, 160, 121, 0.2), rgba(240, 200, 161, 0.2)),
+  background-image:
+    linear-gradient(140deg, rgba(216, 160, 121, 0.2), rgba(240, 200, 161, 0.2)),
     url('/Nil.JPG');
   background-size: cover;
   background-position: center;
