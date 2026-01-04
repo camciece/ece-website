@@ -1790,6 +1790,11 @@ body.text-\[--text\] {
 }
 
 .meetHeroFrame {
+  width: min(100%, var(--frame-max));
+  margin: 0 auto;
+}
+
+.meetHeroMedia {
   min-height: 640px;
   padding: 420px var(--frame-pad) 120px;
   background-image: url('/gemin.png');
@@ -1797,6 +1802,7 @@ body.text-\[--text\] {
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  overflow: hidden;
 }
 
 .meetHeroTitle {
@@ -2037,7 +2043,7 @@ body.text-\[--text\] {
 }
 
 @media (max-width: 900px) {
-  .meetHeroFrame {
+  .meetHeroMedia {
     min-height: 560px;
     padding: 320px var(--frame-pad) 96px;
   }

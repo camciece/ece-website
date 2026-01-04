@@ -65,19 +65,21 @@ export default function MeetEcePage() {
   return (
     <main className="meetPage">
       <section className="homeHeroBg meetHeroBg">
-        <div className="homeHeroFrame meetHeroFrame">
-          <p className="meetHeroTitle">Meet Ece</p>
+        <div className="meetHeroFrame">
+          <div className="meetHeroMedia">
+            <p className="meetHeroTitle">Meet Ece</p>
+          </div>
         </div>
       </section>
 
       <section className="meetSection meetSection--intro">
         <div className="meetSectionFrame">
           <p className="meetStatement">
-            I&apos;m grateful for my <strong>family and friends</strong>. They keep
-            me grounded and remind me what matters. I care about building good
-            products and learning in public, but the{' '}
-            <strong>tiny rituals</strong> and people I love are the real
-            context.
+            I work at the intersection of AI, product and 'Why is this still
+            this stupid?' I build, test, break, and rewire tech ideas - usually
+            faster than organizations are ready for. I think about AI the way
+            most people think about cofee: constantly, practically, and with
+            very low tolerance for weak execution
           </p>
         </div>
       </section>
@@ -86,8 +88,8 @@ export default function MeetEcePage() {
         <div className="meetSectionFrame meetAlbum__frame">
           <div className="meetSectionHeader">
             <h2 className="meetSectionTitle">
-              I&apos;m grateful for my family and friends. They keep me grounded
-              and remind me what matters.
+              This is what keeps me sane while I obsess over AI, products, and
+              why things still don’t work.
             </h2>
           </div>
           <div className="meetAlbum__grid">
