@@ -5,14 +5,16 @@ export default function Home() {
     <main className="home">
       <section className="homeHeroBg">
         <div className="homeHeroFrame">
-          <Link className="heroStage__card heroStage__card--link" href="/writing">
-            <div className="heroStage__eyebrow">Seasonal readings</div>
-            <h1>Five books to read this winter</h1>
+          <Link
+            className="heroStage__card heroStage__card--link"
+            href="/writing"
+          >
+            <h1>Notes from building with AI</h1>
             <p>
-              These were some of my favorite books from 2025 - concise,
-              thoughtful picks for the season ahead.
+              Early thoughts, experiments, and lessons from building with AI -
+              written as I learn, not after everything is figured out.
             </p>
-            <span className="heroStage__link">Read the picks</span>
+            <span className="heroStage__link">Start reading</span>
           </Link>
         </div>
       </section>
