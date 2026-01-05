@@ -2173,7 +2173,6 @@ body.text-\[--text\] {
     height: unset;
     position: relative;
     bottom: -80px;
-ß
   }
   .writingGrid__rows {
     grid-template-columns: repeat(2, minmax(0, 1fr));
