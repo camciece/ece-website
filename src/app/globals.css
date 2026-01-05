@@ -1158,7 +1158,10 @@ body.text-\[--text\] {
 }
 
 .writingCard__media--one {
-  background-image: linear-gradient(120deg, #3b7b9a, #6bc1d6);
+  background-image: url('/firstarticle.png');
+  background-size: cover;
+  background-position: 65%;
+  background-repeat: no-repeat;
 }
 
 .writingCard__media--two {
