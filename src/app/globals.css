@@ -913,7 +913,6 @@ body.text-\[--text\] {
   background-repeat: no-repeat;
   overflow: hidden;
 }
-
 .heroStage__card {
   display: block;
   position: absolute;
@@ -2167,7 +2166,7 @@ body.text-\[--text\] {
     gap: 16px;
     align-self: stretch;
     border-radius: 4px;
-    background-color: #e8e1da;
+    background: rgba(255, 255, 255, 0.82);
 
     width: 664px;
     height: unset;
