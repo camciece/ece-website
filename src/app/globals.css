@@ -1930,12 +1930,13 @@ body.text-\[--text\] {
 }
 
 .meetAlbum__photo {
-  width: 100%;
+  width: 80%;
   aspect-ratio: 3 / 2;
   border-radius: 18px;
   background-size: cover;
   background-position: center center;
   background-color: #efe6dc;
+  margin: 0 auto;
 }
 
 .meetAlbum__note {
