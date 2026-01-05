@@ -1,52 +1,9 @@
 import Link from 'next/link'
 
-const albumItems = [
-  {
-    note: 'Three micro-meltdowns, one unstoppable laugh with the nieces.',
-    meta: 'Saturday kitchen chaos',
-    toneClass: 'meetAlbum__photo--one',
-  },
-  {
-    note: 'We said "no work talk," then... work talk.',
-    meta: 'Istanbul, late lunch',
-    toneClass: 'meetAlbum__photo--two',
-  },
-  {
-    note: "Dad's favorite corner, his quiet rule: tea first.",
-    meta: 'Family home',
-    toneClass: 'meetAlbum__photo--three',
-  },
-  {
-    note: 'A chaotic, warm table that somehow feeds everyone.',
-    meta: 'Sunday dinner',
-    toneClass: 'meetAlbum__photo--four',
-  },
-  {
-    note: 'Best friend, worst playlist, perfect night.',
-    meta: 'Road trip',
-    toneClass: 'meetAlbum__photo--five',
-  },
-  {
-    note: "Mom's laugh travels faster than any Wi-Fi.",
-    meta: 'Garden break',
-    toneClass: 'meetAlbum__photo--six',
-  },
-  {
-    note: 'Group photo attempt #6 -- we kept the fail.',
-    meta: 'After a tiny hike',
-    toneClass: 'meetAlbum__photo--seven',
-  },
-  {
-    note: 'Someone always brings dessert. Someone else brings drama.',
-    meta: 'Friends night',
-    toneClass: 'meetAlbum__photo--eight',
-  },
-]
-
 const topics = [
   {
     title: 'AI Series',
-    copy: 'The practical edges of building with AI.',
+    copy: 'The useful edges of building with AI.',
     href: '/writing',
   },
   {
@@ -84,28 +41,8 @@ export default function MeetEcePage() {
         </div>
       </section>
 
-      <section className="meetSection meetSection--album">
-        <div className="meetSectionFrame meetAlbum__frame">
-          <div className="meetSectionHeader">
-            <h2 className="meetSectionTitle">
-              This is what keeps me sane while I obsess over AI, products, and
-              why things still don’t work.
-            </h2>
-          </div>
-          <div className="meetAlbum__grid">
-            {albumItems.map((item) => (
-              <div key={item.note} className="meetAlbum__card">
-                <div className={`meetAlbum__photo ${item.toneClass}`} />
-                <p className="meetAlbum__note">{item.note}</p>
-                <span className="meetAlbum__meta">{item.meta}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="meetSection meetSection--topics">
-        <div className="meetSectionFrame meetSectionFrame--overlap">
+        <div className="meetSectionFrame">
           <div className="meetSectionHeader">
             <h2 className="meetSectionTitle">What I write about</h2>
           </div>
@@ -121,6 +58,75 @@ export default function MeetEcePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="meetSection meetSection--beyond">
+        <div className="meetSectionFrame">
+          <div className="meetSectionHeader">
+            <h2 className="meetSectionTitle">
+              Beyond writing / Outside this page
+            </h2>
+          </div>
+          <p className="meetSectionNote">
+            This site is mostly about how I think and what I build. If
+            you&apos;re curious about the more human, unfiltered side - everyday
+            moments, side thoughts, and life in between - I share those over on
+            Instagram.
+          </p>
+
+          <Link
+            className="meetSectionLink"
+            href="https://www.instagram.com/ececamci"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Follow me on Instagram
+          </Link>
+
+          <p className="meetSectionNote">
+            For more professional conversations, work updates, and
+            collaborations, I’m also on LinkedIn.
+          </p>
+
+          <Link
+            className="meetSectionLink"
+            href="https://www.linkedin.com/in/ececamci"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Connect me on Linkedin
+          </Link>
+        </div>
+      </section>
+
+      <section className="meetSection meetSection--note">
+        <div className="meetSectionFrame">
+          <div className="meetSectionHeader">
+            <h2 className="meetSectionTitle">A small note</h2>
+          </div>
+          <p className="meetSectionNote">
+            This website started as a side project: built while experimenting
+            with AI tools, learning by doing, and occasionally breaking things
+            along the way. It’s built with a simple setup and hosted on{' '}
+            <Link href="https://vercel.com/" target="_blank" rel="noreferrer">
+              Vercel
+            </Link>
+            . I decided to open-source it in case it’s useful (or at least
+            reassuring) for others building their own small corners on the
+            internet.
+          </p>
+          <Link
+            className="meetSectionLink"
+            href="https://github.com/camciece/ece-website"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View the source code on GitHub
+          </Link>
+          <p className="meetSectionNote meetSectionNote--small">
+            Feel free to explore, fork, or borrow ideas.
+          </p>
         </div>
       </section>
 

@@ -554,7 +554,6 @@ section h2 {
   }
 
   .closingSection {
-    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -916,6 +915,7 @@ body.text-\[--text\] {
 }
 
 .heroStage__card {
+  display: block;
   position: absolute;
   bottom: 60px;
   border-radius: 12px;
@@ -1774,12 +1774,24 @@ body.text-\[--text\] {
   margin: 0 auto;
 }
 
-.meetSection + .meetSection {
-  margin-top: 16px;
+.meetSection--topics {
+  margin-top: 0px;
+}
+
+.meetSection--beyond {
+  margin-top: 10px;
+}
+.meetSection--beyond .meetSectionFrame {
+  padding-bottom: 30px;
+}
+
+.meetSection--note {
+  margin-top: 10px;
+  padding-bottom: opx;
 }
 
 .meetSection--intro {
-  padding-top: 10px;
+  padding: 10px;
   padding-bottom: 10px;
   position: relative;
   z-index: 5;
@@ -1880,8 +1892,51 @@ body.text-\[--text\] {
 
 .meetSectionNote {
   margin: 0;
-  color: #5a4c42;
+  color: #000000;
   font-size: 14px;
+  font-style: 'Google Sans';
+  padding: 0px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.meetSectionNote a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.meetSectionNote a:hover {
+  color: var(--accent-2);
+}
+
+.meetSectionNote--small {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #000000;
+  font-style: 'Google Sans';
+  line-height: 1.6;
+}
+
+.meetSection--note .meetSectionFrame {
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  padding-bottom: 30px;
+}
+
+.meetSectionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  color: #000000;
+  font-weight: 600;
+  text-decoration: none;
+  font-style: 'Google Sans';
+}
+
+.meetSectionLink:hover {
+  color: var(--accent-2);
 }
 
 .meetAlbum__grid {
@@ -1900,8 +1955,8 @@ body.text-\[--text\] {
 
 .meetSectionFrame--overlap {
   position: relative;
-  z-index: 4;
-  margin-bottom: -16px;
+  z-index: 5;
+  margin-bottom: 0;
 }
 
 .meetSection--intro .meetSectionFrame {
@@ -1911,7 +1966,7 @@ body.text-\[--text\] {
 }
 
 .meetSection--topics .meetSectionFrame {
-  padding-bottom: 32px;
+  padding-bottom: 30px;
 }
 
 .meetSection--intro .meetSectionFrame::before {
@@ -2000,28 +2055,30 @@ body.text-\[--text\] {
 }
 
 .meetTopics__card {
-  background: #fffaf5;
-  border: 1px solid #e6dad0;
-  border-radius: 18px;
-  padding: 18px;
+  background: rgb(252 254 255 / 88%);
+  border: 1px solid rgba(224, 217, 204, 0.8);
+  border-radius: 12px;
+  padding: 22px;
   text-decoration: none;
   color: #1b1b1b;
   display: block;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .meetTopics__card h3 {
   margin: 0 0 6px;
   font-family: var(--font-news), 'Times New Roman', serif;
-  font-size: 18px;
+  font-size: 20px;
   color: #2a1f18;
   transition: color 0.15s ease;
 }
 
 .meetTopics__card p {
   margin: 0;
-  font-size: 13px;
-  color: #5a4c42;
+  font-size: 14px;
+  color: #000000;
   line-height: 1.5;
+  font-family: 'Google sans';
 }
 
 .simplePage {
@@ -2110,8 +2167,8 @@ body.text-\[--text\] {
     gap: 16px;
     align-self: stretch;
     border-radius: 4px;
-    background: var(--neutral-palette-100080, rgba(255, 255, 255, 0.8));
-    backdrop-filter: blur(10px);
+    background: #e8e1da;
+    backdrop-filter: none;
     width: 664px;
     height: unset;
     position: relative;
