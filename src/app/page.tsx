@@ -34,22 +34,17 @@ export default function Home() {
             <div className="writingCard__body">
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
-                <div className="writingCard__tag">Under the sea</div>
-                <h3>Growing older with Remarkably Bright Creatures</h3>
-                <p>
-                  Shelby Van Pelt’s novel was the perfect way to start my next
-                  decade of life.
-                </p>
+                <div className="writingCard__tag">AI</div>
+                <h3>Notes on how large language models (LLMs) work</h3>
               </div>
               <p className="writingCard__summary">
-                A warm, layered reflection on aging, tenderness, and the quiet
-                friendships that pull us back to ourselves.
+                Most explanations of LLMs stop at “it’s magic.” This piece goes
+                a level deeper and clearly walks through how large language
+                models actually work, from tokens and embeddings to attention
+                and transformers. By grounding abstract concepts in concrete
+                examples, this reading builds real intuition for what’s
+                happening inside the model.
               </p>
-              <ul className="writingCard__highlights">
-                <li>What the octopus chapters reveal about empathy</li>
-                <li>How grief reshapes identity in small, daily ways</li>
-                <li>Favorite lines to re-read when life feels loud</li>
-              </ul>
             </div>
             <div className="writingCard__visual">
               <div className="writingCard__media writingCard__media--one" />

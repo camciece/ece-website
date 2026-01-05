@@ -3,27 +3,10 @@ import Link from 'next/link'
 const writings = [
   {
     slug: 'remarkably-bright-creatures',
-    tag: 'Under the sea',
-    title: 'Growing older with Remarkably Bright Creatures',
-    excerpt:
-      'Shelby Van Pelt’s novel was the perfect way to start my next decade of life.',
+    tag: 'AI',
+    title: 'Notes on how large language models (LLMs) work',
+    excerpt: 'Notes on how large language models (LLMs) work',
     mediaClass: 'writingCard__media--one',
-  },
-  {
-    slug: 'toilet-paper-shortage',
-    tag: 'Goes without saying',
-    title: 'Lessons from a toilet paper shortage',
-    excerpt:
-      'Steven Pinker’s latest book explores the fascinating science behind common...',
-    mediaClass: 'writingCard__media--two',
-  },
-  {
-    slug: 'barry-diller',
-    tag: 'Diller instinct',
-    title: 'The man who built modern media',
-    excerpt:
-      'Barry Diller’s memoir is a candid playbook for creativity and competition in business.',
-    mediaClass: 'writingCard__media--three',
   },
 ]
 

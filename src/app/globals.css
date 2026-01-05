@@ -1256,7 +1256,9 @@ body.text-\[--text\] {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(140deg, #2e2a26, #6b5f52);
+  background-image: url('/avatar.JPG');
+  background-size: cover;
+  background-position: center;
 }
 
 .writingAuthor__info {
@@ -1892,7 +1894,7 @@ body.text-\[--text\] {
 .meetSectionNote {
   margin: 0;
   color: #000000;
-  font-size: 14px;
+  font-size: 16px;
   font-style: 'Google Sans';
   padding: 0px;
   line-height: 1.7;
@@ -1910,7 +1912,7 @@ body.text-\[--text\] {
 
 .meetSectionNote--small {
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 16px;
   color: #000000;
   font-style: 'Google Sans';
   line-height: 1.6;
@@ -2074,7 +2076,7 @@ body.text-\[--text\] {
 
 .meetTopics__card p {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   color: #000000;
   line-height: 1.5;
   font-family: 'Google sans';
