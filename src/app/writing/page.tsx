@@ -5,7 +5,7 @@ const writings = [
     slug: 'how-llms-work',
     tag: 'AI',
     title: 'How large language models actually work',
-    excerpt: 'How large language models actually work',
+
     mediaClass: 'writingCard__media--one',
   },
 ]
