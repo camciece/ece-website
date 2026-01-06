@@ -925,6 +925,10 @@ body.text-\[--text\] {
   background: rgba(255, 255, 255, 0.82);
 }
 
+.writingBody__preline {
+  white-space: pre-line;
+}
+
 .heroStage__eyebrow {
   font-size: 12px;
   letter-spacing: 0.2em;
@@ -954,6 +958,15 @@ body.text-\[--text\] {
   text-decoration: none;
   color: #1d1a16;
   font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.heroStage__link:hover {
+  color: var(--accent-2);
+}
+
+.heroStage__card--link:hover .heroStage__link {
+  color: var(--accent-2);
 }
 
 .sectionHeader {
@@ -1050,7 +1063,7 @@ body.text-\[--text\] {
 
 .writingCard__visual .writingCard__media {
   width: 100%;
-  height: 380px;
+  height: 321px;
   margin-top: 0;
 }
 
@@ -1091,7 +1104,7 @@ body.text-\[--text\] {
 }
 
 .writingGrid--list .writingCard__media {
-  width: 220px;
+  width: 206px;
   height: 150px;
   margin-top: 0;
   flex-shrink: 0;
@@ -1158,14 +1171,14 @@ body.text-\[--text\] {
 }
 
 .writingCard__media--one {
-  background-image: url('/firstarticle.png');
-  background-size: cover;
+  background-image: url('/LLMArch.png');
+  background-size: contain;
   background-position: 65%;
   background-repeat: no-repeat;
 }
 
 .writingCard__media--two {
-  background-image: linear-gradient(120deg, #b2855d, #ddb57d);
+  background-image: url('/LLMArch.png');
 }
 
 .writingCard__media--three {
@@ -1274,6 +1287,120 @@ body.text-\[--text\] {
   font-size: 16px;
   line-height: 1.7;
   color: #2d2621;
+}
+
+.writingGraphic {
+  margin: 28px 0 36px;
+  padding: 22px;
+  border-radius: 22px;
+  background: #141621;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(10, 12, 20, 0.35);
+  overflow: hidden;
+}
+
+.writingGraphic__tabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #10131c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.writingGraphic__tab {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Google Sans', sans-serif;
+  color: #f6b352;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.writingGraphic__tab--embed {
+  color: #21d19b;
+}
+
+.writingGraphic__tab.isActive {
+  background: rgba(33, 43, 70, 0.7);
+  border-color: rgba(110, 143, 255, 0.6);
+}
+
+.writingGraphic__panelWrap {
+  margin-top: 22px;
+  min-height: 260px;
+}
+
+.writingGraphic__panel {
+  display: none;
+}
+
+.writingGraphic__panel.isActive {
+  display: block;
+}
+
+.writingGraphic__tokens {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: 'Google Sans', sans-serif;
+  font-size: clamp(36px, 7vw, 78px);
+  color: #f6a21a;
+  letter-spacing: 0.02em;
+}
+
+.writingGraphic__token {
+  position: relative;
+  padding: 0 10px 14px;
+}
+
+.writingGraphic__token::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 0;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.writingGraphic__bracket {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.writingGraphic__embeddings {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(80px, 1fr));
+  gap: 18px;
+  padding: 10px 8px;
+  transform: perspective(900px) rotateX(16deg) rotateZ(-8deg);
+  transform-origin: left center;
+}
+
+.writingGraphic__embedCard {
+  background: #3a3f4c;
+  border-radius: 14px;
+  padding: 12px 10px;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.writingGraphic__embedValue {
+  font-family: 'Google Sans', sans-serif;
+  font-size: clamp(18px, 2.3vw, 30px);
+  color: #21d19b;
+  text-shadow: 0 6px 18px rgba(33, 209, 155, 0.18);
 }
 
 .homeSplit {
@@ -2220,6 +2347,24 @@ body.text-\[--text\] {
     margin-top: 16px;
     padding: 130px var(--frame-pad) 56px;
   }
+  .writingGraphic {
+    padding: 18px;
+  }
+  .writingGraphic__tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .writingGraphic__panelWrap {
+    min-height: 220px;
+  }
+  .writingGraphic__tokens {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .writingGraphic__embeddings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    transform: none;
+  }
 }
 @media screen and (max-width: 1279px) {
   .homeHeroBg {
@@ -2342,9 +2487,6 @@ body.text-\[--text\] {
 }
 
 .writingGrid--list .writingCard:hover h3 {
-  color: var(--accent-2);
-}
-.heroStage__card--link:hover h1 {
   color: var(--accent-2);
 }
 .meetTopics__card:hover h3 {

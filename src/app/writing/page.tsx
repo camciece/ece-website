@@ -2,10 +2,10 @@ import Link from 'next/link'
 
 const writings = [
   {
-    slug: 'remarkably-bright-creatures',
+    slug: 'how-llms-work',
     tag: 'AI',
-    title: 'Notes on how large language models (LLMs) work',
-    excerpt: 'Notes on how large language models (LLMs) work',
+    title: 'How large language models actually work',
+    excerpt: 'How large language models actually work',
     mediaClass: 'writingCard__media--one',
   },
 ]

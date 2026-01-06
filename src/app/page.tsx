@@ -9,12 +9,13 @@ export default function Home() {
             className="heroStage__card heroStage__card--link"
             href="/writing"
           >
-            <h1>Welcome!</h1>
+            <h1>Hello World!</h1>
             <p>
-              This site is a living notebook: ideas, experiments, and things I’m
-              still figuring out while working with AI.
+              This is a new tech blog where I document observations and
+              experiments from working with AI. The focus is on what I’m
+              learning along the way.
             </p>
-            <span className="heroStage__link">Start here</span>
+            <span className="heroStage__link">Read the first post</span>
           </Link>
         </div>
       </section>
@@ -35,15 +36,13 @@ export default function Home() {
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
                 <div className="writingCard__tag">AI</div>
-                <h3>Notes on how large language models (LLMs) work</h3>
+                <h3>How large language models actullay work</h3>
               </div>
               <p className="writingCard__summary">
-                Most explanations of LLMs stop at “it’s magic.” This piece goes
-                a level deeper and clearly walks through how large language
-                models actually work, from tokens and embeddings to attention
-                and transformers. By grounding abstract concepts in concrete
-                examples, this reading builds real intuition for what’s
-                happening inside the model.
+                Large language models often feel opaque and almost magical. This
+                piece breaks down how they actually work (from text to numbers,
+                from context to prediction) and why that architecture explains
+                both their strengths and their limits.
               </p>
             </div>
             <div className="writingCard__visual">
