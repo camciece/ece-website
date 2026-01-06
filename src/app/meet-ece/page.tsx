@@ -3,7 +3,7 @@ import Link from 'next/link'
 const topics = [
   {
     title: 'AI Series',
-    copy: 'The useful edges of building with AI.',
+    copy: 'The useful edges of understanding and building with AI.',
     href: '/writing',
   },
   {
