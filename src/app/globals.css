@@ -958,15 +958,6 @@ body.text-\[--text\] {
   text-decoration: none;
   color: #1d1a16;
   font-weight: 600;
-  transition: color 0.15s ease;
-}
-
-.heroStage__link:hover {
-  color: var(--accent-2);
-}
-
-.heroStage__card--link:hover .heroStage__link {
-  color: var(--accent-2);
 }
 
 .sectionHeader {
@@ -2340,6 +2331,12 @@ body.text-\[--text\] {
   .writingCard__visual .writingCard__media {
     height: 260px;
   }
+  .writingCard__media {
+    background-color: #ffffff;
+  }
+  .writingCard__media--one {
+    background-position: 43%;
+  }
 }
 
 @media (max-width: 720px) {
@@ -2487,6 +2484,9 @@ body.text-\[--text\] {
 }
 
 .writingGrid--list .writingCard:hover h3 {
+  color: var(--accent-2);
+}
+.heroStage__card--link:hover h1 {
   color: var(--accent-2);
 }
 .meetTopics__card:hover h3 {
