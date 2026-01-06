@@ -9,12 +9,12 @@ export default function Home() {
             className="heroStage__card heroStage__card--link"
             href="/writing"
           >
-            <h1>Notes from building with AI</h1>
+            <h1>Welcome!</h1>
             <p>
-              Early thoughts, experiments, and lessons from building with AI -
-              written as I learn, not after everything is figured out.
+              This site is a living notebook: ideas, experiments, and things I’m
+              still figuring out while working with AI.
             </p>
-            <span className="heroStage__link">Start reading</span>
+            <span className="heroStage__link">Start here</span>
           </Link>
         </div>
       </section>

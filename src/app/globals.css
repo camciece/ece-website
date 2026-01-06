@@ -909,7 +909,7 @@ body.text-\[--text\] {
   padding: 498px var(--frame-pad) 120px;
   background-image: url('/MerryChristmas.JPG');
   background-size: cover;
-  background-position: center;
+  background-position: center 10%;
   background-repeat: no-repeat;
   overflow: hidden;
 }
