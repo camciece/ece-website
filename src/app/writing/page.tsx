@@ -5,6 +5,8 @@ const writings = [
     slug: 'how-llms-work',
     tag: 'AI',
     title: 'How large language models actually work',
+    excerpt:
+      'A clearer mental model for what’s really happening inside an LLM — from tokens and embeddings to attention and transformers.',
 
     mediaClass: 'writingCard__media--one',
   },
