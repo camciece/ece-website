@@ -2335,7 +2335,7 @@ body.text-\[--text\] {
     background-color: #ffffff;
   }
   .writingCard__media--one {
-    background-position: 43%;
+    background-position: 43%ß;
   }
 }
 
@@ -2486,7 +2486,7 @@ body.text-\[--text\] {
 .writingGrid--list .writingCard:hover h3 {
   color: var(--accent-2);
 }
-.heroStage__card--link:hover h1 {
+.heroStage__card--link:hover span.heroStage__link {
   color: var(--accent-2);
 }
 .meetTopics__card:hover h3 {
