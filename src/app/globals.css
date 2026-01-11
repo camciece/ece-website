@@ -909,7 +909,7 @@ body.text-\[--text\] {
   padding: 420px var(--frame-pad) 120px;
   background-image: url('/MerryChristmas.JPG');
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 20%;
   background-repeat: no-repeat;
   overflow: hidden;
 }
@@ -2310,6 +2310,9 @@ body.text-\[--text\] {
   }
 }
 @media (max-width: 899px) {
+  .homeHeroFrame {
+    background-position: right;
+  }
   .writingGrid__rows {
     grid-template-columns: 1fr;
   }
