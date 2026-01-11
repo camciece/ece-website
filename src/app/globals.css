@@ -905,11 +905,11 @@ body.text-\[--text\] {
 .homeHeroFrame {
   position: relative;
   width: min(100%, var(--frame-max));
-  min-height: 900px;
+  min-height: 600px;
   padding: 420px var(--frame-pad) 120px;
   background-image: url('/MerryChristmas.JPG');
-  background-size: center;
-  background-position: center;
+  background-size: cover;
+  background-position: center 30%;
   background-repeat: no-repeat;
   overflow: hidden;
 }
