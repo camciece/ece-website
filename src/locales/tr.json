@@ -1,0 +1,26 @@
+{
+    "nav": {
+        "writings": "Yazılar",
+        "meetEce": "Ece ile Tanışın",
+        "recommendations": "Tavsiyeler",
+        "heroes": "Kahramanlar",
+        "home": "Ana Sayfa",
+        "search": "Ara",
+        "menu": "Menü"
+    },
+    "footer": {
+        "privacy": "Gizlilik",
+        "disclaimer": "Sorumluluk Reddi",
+        "contact": "İletişim",
+        "copyright": "© {{year}} Eces Notes"
+    },
+    "post": {
+        "by": "Yazar: {{author}}",
+        "publishedOn": "Yayın tarihi: {{date}}"
+    },
+    "language": {
+        "switchTo": "{{lang}} diline geç",
+        "en": "İngilizce",
+        "tr": "Türkçe"
+    }
+}

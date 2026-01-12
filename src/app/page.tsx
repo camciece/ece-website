@@ -1,3 +1,4 @@
+import Footer from '@/components/footer'
 import Link from 'next/link'
 
 export default function Home() {
@@ -52,50 +53,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="closingSection">
-        <div className="closingPanel">
-          <div className="closingNav">
-            <Link href="/writing">Writings</Link>
-            <Link href="/meet-ece">Meet Ece</Link>
-            <Link href="/recommendations">Recommendations</Link>
-            <Link href="/heroes">Heroes</Link>
-          </div>
-          <div className="closingMeta">
-            <div className="closingLinks">
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/disclaimer">Disclaimer</Link>
-              <Link href="/contact">Contact me</Link>
-            </div>
-            <div className="closingSocial">
-              <a
-                href="https://www.instagram.com/ececamci"
-                aria-label="Instagram"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img src="/ig.svg" alt="" />
-              </a>
-              <a
-                href="https://www.youtube.com/@msececamci"
-                aria-label="YouTube"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img src="/yt.svg" alt="" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/ececamci/"
-                aria-label="LinkedIn"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img src="/in.svg" alt="" />
-              </a>
-            </div>
-            <div className="closingCopyright">© 2025 Eces Notes</div>
-          </div>
-        </div>
-      </section>
+      <Footer />
     </main>
   )
 }
