@@ -1,10 +1,19 @@
-export default function DisclaimerPage() {
+import Footer from '@/components/footer'
+import type { Locale } from '@/lib/locale'
+import { getCopy } from '@/lib/static-copy'
+
+export default function DisclaimerPage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
+  const copy = getCopy(params.locale)
   return (
     <main className="disclaimerPage">
       <section className="disclaimerShell">
         <header className="disclaimerHeader">
-          <p className="disclaimerEyebrow">Eces Notes Website</p>
-          <h1 className="disclaimerTitle">Disclaimer</h1>
+          <p className="disclaimerEyebrow">{copy.disclaimer.eyebrow}</p>
+          <h1 className="disclaimerTitle">{copy.disclaimer.title}</h1>
         </header>
 
         <div className="disclaimerMeta">
@@ -12,52 +21,43 @@ export default function DisclaimerPage() {
             EC
           </div>
           <p className="disclaimerByline">
-            <span>By Ece Camci</span> published on{' '}
-            <span>Tuesday, Nov 24, 2015</span>
+            <span>{copy.disclaimer.bylineName}</span>{' '}
+            {copy.disclaimer.publishedOnPrefix}
+            <span>{copy.disclaimer.bylineDate}</span>
+            {copy.disclaimer.publishedOnSuffix}
           </p>
         </div>
 
         <article className="disclaimerBody">
-          <p>
-            The content on this website reflects my personal views and
-            experiences. All writing here is for informational and educational
-            purposes only.
-          </p>
-          <h2 className="disclaimerHeading">Not professional advice</h2>
-          <p>Nothing on this site should be considered:</p>
+          <p>{copy.disclaimer.intro}</p>
+          <h2 className="disclaimerHeading">
+            {copy.disclaimer.headingNotProfessional}
+          </h2>
+          <p>{copy.disclaimer.notProfessionalLead}</p>
           <ul className="disclaimerList">
-            <li>legal advice</li>
-            <li>financial advice</li>
-            <li>medical advice</li>
-            <li>or a substitute for professional consultation</li>
+            {copy.disclaimer.notProfessionalItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
+          <p>{copy.disclaimer.responsibility}</p>
+          <h2 className="disclaimerHeading">
+            {copy.disclaimer.headingAccuracy}
+          </h2>
+          <p>{copy.disclaimer.accuracy}</p>
+          <h2 className="disclaimerHeading">{copy.disclaimer.headingIP}</h2>
+          <p>{copy.disclaimer.intellectualProperty}</p>
+          <h2 className="disclaimerHeading">
+            {copy.disclaimer.headingContact}
+          </h2>
           <p>
-            Any decisions you make based on the content are your own
-            responsibility.
-          </p>
-          <h2 className="disclaimerHeading">Accuracy and updates</h2>
-          <p>
-            I aim to be thoughtful and accurate, but information may change over
-            time. Some posts reflect opinions at a specific moment. I reserve
-            the right to update or revise content as my thinking evolves.
-          </p>
-          <h2 className="disclaimerHeading">Intellectual property</h2>
-          <p>
-            Unless stated otherwise, all content on this site is my original
-            work. You are welcome to quote short excerpts with proper
-            attribution. Please do not reproduce full articles without
-            permission.
-          </p>
-          <h2 className="disclaimerHeading">Contact</h2>
-          <p>
-            If you have questions about the content or its use, feel free to
-            reach out:{' '}
+            {copy.disclaimer.contactLead}{' '}
             <a className="disclaimerEmail" href="mailto:camciece@gmail.com">
               hello@ececamci.com <span aria-hidden>↗</span>
             </a>
           </p>
         </article>
       </section>
+      <Footer locale={params.locale} />
     </main>
   )
 }

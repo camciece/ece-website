@@ -1,10 +1,16 @@
-export default function RecommendationsPage() {
+import type { Locale } from '@/lib/locale'
+import { getCopy } from '@/lib/static-copy'
+
+export default function RecommendationsPage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
+  const copy = getCopy(params.locale)
   return (
     <main className="simplePage">
       <section className="simpleSection">
-        <p className="simpleLead">
-          This page is work in progress. If you’re curious, check back later. :)
-        </p>
+        <p className="simpleLead">{copy.recommendations.lead}</p>
       </section>
     </main>
   )
