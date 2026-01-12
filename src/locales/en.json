@@ -1,0 +1,26 @@
+{
+    "nav": {
+        "writings": "Writings",
+        "meetEce": "Meet Ece",
+        "recommendations": "Recommendations",
+        "heroes": "Heroes",
+        "home": "Home",
+        "search": "Search",
+        "menu": "Menu"
+    },
+    "footer": {
+        "privacy": "Privacy",
+        "disclaimer": "Disclaimer",
+        "contact": "Contact me",
+        "copyright": "© {{year}} Eces Notes"
+    },
+    "post": {
+        "by": "By {{author}}",
+        "publishedOn": "Published on {{date}}"
+    },
+    "language": {
+        "switchTo": "Switch to {{lang}}",
+        "en": "English",
+        "tr": "Turkish"
+    }
+}

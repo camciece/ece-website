@@ -1,6 +1,11 @@
-import Link from 'next/link'
+'use client'
 
-export default async function Post() {
+import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
+
+export default function Post() {
+  const { t } = useTranslation()
+
   return (
     <main className="writingPage">
       <article className="writingArticle">
@@ -22,16 +27,16 @@ export default async function Post() {
       <section className="closingSection">
         <div className="closingPanel">
           <div className="closingNav">
-            <Link href="/writing">Writings</Link>
-            <Link href="/meet-ece">Meet Ece</Link>
-            <Link href="/recommendations">Recommendations</Link>
-            <Link href="/heroes">Heroes</Link>
+            <Link href="/writing">{t('nav.writings')}</Link>
+            <Link href="/meet-ece">{t('nav.meetEce')}</Link>
+            <Link href="/recommendations">{t('nav.recommendations')}</Link>
+            <Link href="/heroes">{t('nav.heroes')}</Link>
           </div>
           <div className="closingMeta">
             <div className="closingLinks">
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/disclaimer">Disclaimer</Link>
-              <Link href="/contact">Contact me</Link>
+              <Link href="/privacy">{t('footer.privacy')}</Link>
+              <Link href="/disclaimer">{t('footer.disclaimer')}</Link>
+              <Link href="/contact">{t('footer.contact')}</Link>
             </div>
             <div className="closingSocial">
               <a
@@ -59,7 +64,9 @@ export default async function Post() {
                 <img src="/in.svg" alt="" />
               </a>
             </div>
-            <div className="closingCopyright">© 2025 Eces Notes</div>
+            <div className="closingCopyright">
+              {t('footer.copyright', { year: 2025 })}
+            </div>
           </div>
         </div>
       </section>
