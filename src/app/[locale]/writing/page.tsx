@@ -1,19 +1,11 @@
 import Footer from '@/components/footer'
+import type { Locale } from '@/lib/locale'
+import { withLocale } from '@/lib/locale'
+import { getAllPosts } from '@/lib/md'
 import Link from 'next/link'
 
-const writings = [
-  {
-    slug: 'how-llms-work',
-    tag: 'AI',
-    title: 'How large language models actually work',
-    excerpt:
-      'A clearer mental model for what’s really happening inside an LLM, from tokens and embeddings to attention and transformers.',
-
-    mediaClass: 'writingCard__media--one',
-  },
-]
-
-export default function Writing() {
+export default function Writing({ params }: { params: { locale: Locale } }) {
+  const writings = getAllPosts(params.locale)
   return (
     <main className="writingPage">
       <section className="simpleSection"></section>
@@ -24,21 +16,23 @@ export default function Writing() {
             <Link
               key={post.slug}
               className="writingCard"
-              href={`/writing/${post.slug}`}
+              href={withLocale(`/writing/${post.slug}`, params.locale)}
             >
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
-                <div className="writingCard__tag">{post.tag}</div>
+                <div className="writingCard__tag">
+                  {post.tags?.[0] ?? 'AI'}
+                </div>
                 <h3>{post.title}</h3>
-                <p>{post.excerpt}</p>
+                {post.excerpt ? <p>{post.excerpt}</p> : null}
               </div>
-              <div className={`writingCard__media ${post.mediaClass}`} />
+              <div className="writingCard__media writingCard__media--one" />
             </Link>
           ))}
         </div>
       </section>
 
-      <Footer />
+      <Footer locale={params.locale} />
     </main>
   )
 }

@@ -2,24 +2,38 @@
 
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import type { Locale } from '@/lib/locale'
+import { withLocale } from '@/lib/locale'
 
-export default function Footer() {
+export default function Footer({ locale }: { locale: Locale }) {
   const { t } = useTranslation()
 
   return (
     <section className="closingSection">
       <div className="closingPanel">
         <div className="closingNav">
-          <Link href="/writing">{t('nav.writings')}</Link>
-          <Link href="/meet-ece">{t('nav.meetEce')}</Link>
-          <Link href="/recommendations">{t('nav.recommendations')}</Link>
-          <Link href="/heroes">{t('nav.heroes')}</Link>
+          <Link href={withLocale('/writing', locale)}>
+            {t('nav.writings')}
+          </Link>
+          <Link href={withLocale('/meet-ece', locale)}>
+            {t('nav.meetEce')}
+          </Link>
+          <Link href={withLocale('/recommendations', locale)}>
+            {t('nav.recommendations')}
+          </Link>
+          <Link href={withLocale('/heroes', locale)}>{t('nav.heroes')}</Link>
         </div>
         <div className="closingMeta">
           <div className="closingLinks">
-            <Link href="/privacy">{t('footer.privacy')}</Link>
-            <Link href="/disclaimer">{t('footer.disclaimer')}</Link>
-            <Link href="/contact">{t('footer.contact')}</Link>
+            <Link href={withLocale('/privacy', locale)}>
+              {t('footer.privacy')}
+            </Link>
+            <Link href={withLocale('/disclaimer', locale)}>
+              {t('footer.disclaimer')}
+            </Link>
+            <Link href={withLocale('/contact', locale)}>
+              {t('footer.contact')}
+            </Link>
           </div>
           <div className="closingSocial">
             <a

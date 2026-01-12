@@ -1,5 +1,3 @@
-import Header from '@/components/header'
-import I18nProvider from '@/components/i18n-provider'
 import type { Metadata } from 'next'
 import { Inter, Newsreader } from 'next/font/google'
 import './globals.css'
@@ -24,10 +22,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${newsreader.variable} bg-[--bg] text-[--text] antialiased`}
       >
-        <I18nProvider>
-          <Header />
-          <div>{children}</div>
-        </I18nProvider>
+        <div>{children}</div>
       </body>
     </html>
   )
