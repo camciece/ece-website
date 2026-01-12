@@ -1,7 +1,9 @@
 'use client'
 
+import type { Locale } from '@/lib/locale'
+import { stripLocale, withLocale } from '@/lib/locale'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,14 +14,18 @@ const links = [
   { href: '/heroes', label: 'nav.heroes' },
 ]
 
-export default function Header() {
+export default function Header({ locale }: { locale: Locale }) {
   const pathname = usePathname() || '/'
+  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
   const { t, i18n } = useTranslation()
+  const currentPath = stripLocale(pathname)
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'tr' : 'en'
-    i18n.changeLanguage(newLang)
+    const newLocale: Locale = locale === 'en' ? 'tr' : 'en'
+    const target = withLocale(currentPath, newLocale)
+    i18n.changeLanguage(newLocale)
+    router.push(target)
   }
 
   return (
@@ -27,7 +33,11 @@ export default function Header() {
       <div className="topBar__wrap">
         {/* LEFT island */}
         <div className="island island--logo">
-          <Link href="/" className="logoLink" aria-label={t('nav.home')}>
+          <Link
+            href={withLocale('/', locale)}
+            className="logoLink"
+            aria-label={t('nav.home')}
+          >
             <span className="logoBadge">
               Eces
               <br />
@@ -51,29 +61,34 @@ export default function Header() {
             >
               <span className="menuIcon" aria-hidden />
             </button>
-            <Link href="/" className="logoCenter" aria-label={t('nav.home')}>
+            <Link
+              href={withLocale('/', locale)}
+              className="logoCenter"
+              aria-label={t('nav.home')}
+            >
               EcesNotes
             </Link>
             <button
               type="button"
               onClick={toggleLanguage}
-              className="searchIconBtn"
+              className="languageBtn"
               aria-label={t('language.switchTo', {
-                lang:
-                  i18n.language === 'en' ? t('language.tr') : t('language.en'),
+                lang: locale === 'en' ? t('language.tr') : t('language.en'),
               })}
             >
-              {i18n.language === 'en' ? 'EN' : 'TR'}
+              {locale === 'en' ? 'EN' : 'TR'}
             </button>
           </div>
           <nav className="navRow">
             {links.map((l) => {
               const active =
-                l.href === '/' ? pathname === '/' : pathname.startsWith(l.href)
+                l.href === '/'
+                  ? currentPath === '/'
+                  : currentPath.startsWith(l.href)
               return (
                 <Link
                   key={l.href}
-                  href={l.href}
+                  href={withLocale(l.href, locale)}
                   className={`navPill ${active ? 'isActive' : ''}`}
                 >
                   {t(l.label)}
@@ -88,13 +103,12 @@ export default function Header() {
           <button
             type="button"
             onClick={toggleLanguage}
-            className="searchIconBtn"
+            className="languageBtn"
             aria-label={t('language.switchTo', {
-              lang:
-                i18n.language === 'en' ? t('language.tr') : t('language.en'),
+              lang: locale === 'en' ? t('language.tr') : t('language.en'),
             })}
           >
-            {i18n.language === 'en' ? 'EN' : 'TR'}
+            {locale === 'en' ? 'EN' : 'TR'}
           </button>
         </div>
       </div>
@@ -107,7 +121,7 @@ export default function Header() {
             return (
               <Link
                 key={l.href}
-                href={l.href}
+                href={withLocale(l.href, locale)}
                 className={`mobileMenu__link ${active ? 'isActive' : ''}`}
                 onClick={() => setMenuOpen(false)}
               >

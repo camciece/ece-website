@@ -1,11 +1,11 @@
-'use client'
-
 import Footer from '@/components/footer'
-import { useTranslation } from 'react-i18next'
+import type { Locale } from '@/lib/locale'
 
-export default function Post() {
-  const { t } = useTranslation()
-
+export default function Post({
+  params,
+}: {
+  params: { locale: Locale; slug: string }
+}) {
   return (
     <main className="writingPage">
       <article className="writingArticle">
@@ -24,7 +24,7 @@ export default function Post() {
         </header>
       </article>
 
-      <Footer />
+      <Footer locale={params.locale} />
     </main>
   )
 }

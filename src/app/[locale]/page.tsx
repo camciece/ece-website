@@ -1,14 +1,16 @@
 import Footer from '@/components/footer'
+import type { Locale } from '@/lib/locale'
+import { withLocale } from '@/lib/locale'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Home({ params }: { params: { locale: Locale } }) {
   return (
     <main className="home">
       <section className="homeHeroBg">
         <div className="homeHeroFrame">
           <Link
             className="heroStage__card heroStage__card--link"
-            href="/writing"
+            href={withLocale('/writing', params.locale)}
           >
             <h1>Hello World!</h1>
             <p>
@@ -24,14 +26,20 @@ export default function Home() {
       <section className="writingGrid writingGrid--featured">
         <div className="sectionHeader">
           <h2>Latest writing</h2>
-          <Link className="sectionLink" href="/writing">
+          <Link
+            className="sectionLink"
+            href={withLocale('/writing', params.locale)}
+          >
             View all
           </Link>
         </div>
         <div className="writingGrid__rows">
           <Link
             className="writingCard writingCard--featured writingCard--link"
-            href="/writing/remarkably-bright-creatures"
+            href={withLocale(
+              '/writing/remarkably-bright-creatures',
+              params.locale,
+            )}
           >
             <div className="writingCard__body">
               <div className="writingCard__content">
@@ -53,7 +61,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+      <Footer locale={params.locale} />
     </main>
   )
 }

@@ -1,4 +1,6 @@
 import Footer from '@/components/footer'
+import type { Locale } from '@/lib/locale'
+import { withLocale } from '@/lib/locale'
 import Link from 'next/link'
 
 const topics = [
@@ -19,7 +21,11 @@ const topics = [
   },
 ]
 
-export default function MeetEcePage() {
+export default function MeetEcePage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
   return (
     <main className="meetPage">
       <section className="homeHeroBg meetHeroBg">
@@ -52,7 +58,7 @@ export default function MeetEcePage() {
               <Link
                 key={topic.title}
                 className="meetTopics__card"
-                href={topic.href}
+                href={withLocale(topic.href, params.locale)}
               >
                 <h3>{topic.title}</h3>
                 <p>{topic.copy}</p>
@@ -131,7 +137,7 @@ export default function MeetEcePage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer locale={params.locale} />
     </main>
   )
 }

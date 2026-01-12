@@ -1,4 +1,6 @@
 import Footer from '@/components/footer'
+import type { Locale } from '@/lib/locale'
+import { withLocale } from '@/lib/locale'
 import Link from 'next/link'
 
 const writings = [
@@ -13,7 +15,7 @@ const writings = [
   },
 ]
 
-export default function Writing() {
+export default function Writing({ params }: { params: { locale: Locale } }) {
   return (
     <main className="writingPage">
       <section className="simpleSection"></section>
@@ -24,7 +26,7 @@ export default function Writing() {
             <Link
               key={post.slug}
               className="writingCard"
-              href={`/writing/${post.slug}`}
+              href={withLocale(`/writing/${post.slug}`, params.locale)}
             >
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
@@ -38,7 +40,7 @@ export default function Writing() {
         </div>
       </section>
 
-      <Footer />
+      <Footer locale={params.locale} />
     </main>
   )
 }
