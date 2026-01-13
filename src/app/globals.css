@@ -1302,7 +1302,7 @@ body.text-\[--text\] {
 }
 
 .writingArticle__body a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .writingArticle__media {
