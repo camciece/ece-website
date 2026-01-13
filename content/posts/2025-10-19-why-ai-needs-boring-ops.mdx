@@ -59,4 +59,98 @@ content:
     Akış aslında şöyle ilerliyor: önce yazdığın metin Tokenizer tarafından küçük parçalara bölünüp sayılara çevriliyor. Sonra bu sayılar Embeddings katmanında, kelimelerin anlam ilişkilerini taşıyan çok boyutlu bir uzaya yerleştiriliyor. Ardından bu vektörler Transformer katmanlarına giriyor; burada Attention mekanizması sayesinde hangi kelimenin hangisiyle ne kadar ilişkili olduğu tartılıyor, Feedforward katmanlarıyla da bu bilgiler defalarca rafine ediliyor. En sonda ise Output katmanı, eldeki bağlama bakarak “bir sonraki en olası kelime hangisi?” sorusuna cevap veriyor ve süreç her kelime için yeniden başlıyor.
 
     Diyagramdaki her kutuyu, bir girdiyi alıp bir çıktı üreten küçük bir fonksiyon gibi düşünebilirsin. Bu fonksiyonlar art arda çalışıyor ve model aslında tek seferde “tam cevabı” üretmiyor; her turda sadece bir sonraki token’ı seçiyor. Sonra o token’ı girdiye ekleyip aynı hattı yeniden çalıştırıyor. Bu döngü, model özel bir “bitir” işareti ürettiğinde (ya da belirlenen limit dolduğunda) duruyor. Bunun pseudocode olarak nasıl görünebileceğine dair bir örnek:
+
+    <div className="writingArticle__codeCard">
+      <pre className="writingArticle__codeBlock">
+        <code>
+          <span className="codeLine">
+            <span className="codeVar">prompt</span>
+            <span className="codeEq"> = </span>
+            <span className="codeString">"Ghosting yapmadığımı anlatan ikna edici bir mesaj yaz"</span>
+          </span>
+          <br />
+          <br />
+          <span className="codeLine">
+            <span className="codeVar">tokens</span>
+            <span className="codeEq"> = </span>
+            <span className="codeFn">tokenizer</span>
+            <span className="codeOp">(</span>
+            <span className="codeVar">prompt</span>
+            <span className="codeOp">);</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeKw">while</span>
+            <span className="codeOp"> (</span>
+            <span className="codeConst">true</span>
+            <span className="codeOp">) &#123;</span>
+          </span>
+          
+          <span className="codeLine">
+          
+            <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">embed</span><span className="codeOp">(</span><span className="codeVar">tokens</span><span className="codeOp">);</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeKw">for</span><span className="codeOp"> ([</span><span className="codeVar">attention</span><span className="codeOp">, </span><span className="codeVar">feedforward</span><span className="codeOp">] of </span><span className="codeVar">transformers</span><span className="codeOp">) &#123;</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">attention</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">feedforward</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeOp">&#125;</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeVar">output_token</span><span className="codeEq"> = </span><span className="codeFn">output</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeKw">if</span><span className="codeOp"> (</span><span className="codeVar">output_token</span><span className="codeEq"> === </span><span className="codeConst">END_TOKEN</span><span className="codeOp">) &#123;</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeKw">break</span>
+            <span className="codeOp">;</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeOp">&#125;</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeVar">tokens</span>
+            <span className="codeOp">.</span>
+            <span className="codeFn">push</span>
+            <span className="codeOp">(</span>
+            <span className="codeVar">output_token</span>
+            <span className="codeOp">);</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeOp">&#125;</span>
+          </span>
+          <br />
+          <span className="codeLine">
+            <span className="codeFn">print</span>
+            <span className="codeOp">(</span>
+            <span className="codeFn">decode</span>
+            <span className="codeOp">(</span>
+            <span className="codeVar">tokens</span>
+            <span className="codeOp">));</span>
+          </span>
+        </code>
+      </pre>
+    </div>
+    Bu kadar mı yani? Evet… ve hayır.
+
+    Yukarıdaki kod tabii ki aşırı sadeleştirilmiş bir versiyon ama beni ilk şaşırtan şey şu olmuştu: Modern LLM’lerin iskeleti, düşündüğümüz kadar devasa ve karmaşık kod bloklarından oluşmuyor. Hatta bazı açık kaynak modellerin “tam çalışan” referans implementasyonları birkaç yüz satır Python koduyla yazılabiliyor. <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> mesela, PyTorch ile sıfırdan model kurulumlarını adım adım gösteren harika eğitimler ve repo’lar paylaşıyor. Şu an oldukça güçlü kabul edilen açık modellerden biri olan OLMo-3’ün temel mimarisi de, yanlış hatırlamıyorsam, sadece birkaç yüz satırlık bir kodla ayağa kaldırılabiliyor. Tabii burada küçük ama kritik bir fark var. Kod kısa olabilir, ama o kodun içinde kullanılan ağırlıklar (weights) devasa. Asıl “zeka” dediğimiz şey, bu mimarinin içine eğitim sırasında doldurulan milyarlarca sayının içinde yaşıyor. Yani motorun şeması basit, ama motoru besleyen yakıt aşırı yoğun. Bu noktada artık hattın ilk durağına rahatça girebiliriz: Bu metin, bu sisteme ilk girdiğinde başına ne geliyor?
+
+    Tokenizer ile başlayalım.
 ---
