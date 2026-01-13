@@ -236,7 +236,7 @@ const copy: Record<Locale, SiteCopy> = {
   },
   tr: {
     home: {
-      heroTitle: 'Merhaba Dünya!',
+      heroTitle: 'Hello World!',
       heroBody:
         'Bu, yapay zekâ ile çalışırken yaptığım gözlemleri ve denemeleri paylaştığım yeni bir teknoloji blogu. Odak noktam, yolda öğrendiklerim.',
       heroCta: 'İlk yazıyı oku',
