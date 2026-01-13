@@ -1,7 +1,7 @@
 ---
 title:
   en: Why AI needs boring ops
-  tr: Yapay zekâ neden sıkıcı operasyonlara ihtiyaç duyar
+  tr: ChatGPT, Gemini, Claude aynı motoru kullanıyor. Peki bu motor nasıl çalışıyor?
 excerpt:
   en: Reliability, reproducibility, and cost control come from the unsexy parts.
   tr: Güvenilirlik, tekrar edilebilirlik ve maliyet kontrolü “sıkıcı” kısımlardan gelir.
@@ -11,24 +11,20 @@ tags:
   - Ops
 content:
   en: |
-    # Why AI needs boring ops
-
     Fast prototypes are fun. But real systems survive because of the dull bits:
     runbooks, quotas, monitoring, budgets, and incident response.
-
-    ## The hidden cost curve
 
     You can spend more than you think, and you won’t see it until a month later.
     “Boring” controls make the cost visible.
 
   tr: |
-    # Yapay zekâ neden sıkıcı operasyonlara ihtiyaç duyar
+    ChatGPT, Claude, Gemini… Arayüzleri farklı, tonları farklı, hatta bazen cevap stilleri bile farklı. Ama işin komik tarafı, içeride dönen ana makine büyük ölçüde aynı. Hepsi, metni alıp “buradan sonra en muhtemel kelime ne gelir?” sorusunu defalarca soran devasa bir matematik sistemi üzerine kurulu.
 
-    Hızlı prototipler keyiflidir. Ama gerçek sistemleri ayakta tutan şey
-    runbook’lar, kotalar, izleme, bütçeler ve olay yönetimidir.
+    Bu yazıyı yazma sebebim, her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bu süreci anladığında, bu sistemlerin neden bazı şeylerde inanılmaz iyi, bazı şeylerde özgüvenli şekilde saçma olabildiği çok daha net oturuyor.
 
-    ## Gizli maliyet eğrisi
+    <figure className="writingArticle__media">
+      <img src="/Desktop.svg" alt="Desktop" />
+    </figure>
 
-    Düşündüğünden daha fazla harcarsın ve bunu çoğu zaman bir ay sonra anlarsın.
-    “Sıkıcı” kontroller maliyeti görünür kılar.
+    Bu yazıda LLM denen bu temel motorun boru hattını adım adım gezeceğiz: metin nasıl sayıya dönüşüyor, bu sayılar nasıl “anlam” kazanıyor, model bağlamı nasıl tartıyor ve neden her şeyi kelime kelime yazarak ilerliyor. En sonda da, son dönemde sık duyduğumuz agent kavramının bu mimarinin neresine oturduğuna bakacağız. Formül yok, ezber yok ama kafada kalıcı bir mental model hedefliyorum.
 ---
