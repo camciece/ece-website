@@ -1,17 +1,22 @@
 import Header from '@/components/header'
 import I18nProvider from '@/components/i18n-provider'
-import type { Locale } from '@/lib/locale'
+import { defaultLocale, isLocale, type Locale } from '@/lib/locale'
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode
-  params: { locale: Locale }
+  params: Promise<{ locale: string }>
 }) {
+  const resolvedParams = await params
+  const locale = isLocale(resolvedParams.locale)
+    ? resolvedParams.locale
+    : defaultLocale
+
   return (
-    <I18nProvider locale={params.locale}>
-      <Header locale={params.locale} />
+    <I18nProvider locale={locale}>
+      <Header locale={locale} />
       <div>{children}</div>
     </I18nProvider>
   )
