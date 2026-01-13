@@ -363,8 +363,7 @@ const copy: Record<Locale, SiteCopy> = {
         'Kişisel verilerin satılması veya paylaşılması yok',
         'Hedefli reklam yok',
       ],
-      closing:
-        'Analitik kullanılıyorsa, hafif ve gizlilik odaklıdır.',
+      closing: 'Analitik kullanılıyorsa, hafif ve gizlilik odaklıdır.',
     },
     article: {
       byLabel: 'Ece Çamcı tarafından',

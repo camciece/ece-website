@@ -5,7 +5,7 @@ title:
 excerpt:
   en: Reliability, reproducibility, and cost control come from the unsexy parts.
   tr: Güvenilirlik, tekrar edilebilirlik ve maliyet kontrolü “sıkıcı” kısımlardan gelir.
-date: 2025-10-19
+date: 2025-11-19
 tags:
   - AI
   - Ops
@@ -18,13 +18,130 @@ content:
     “Boring” controls make the cost visible.
 
   tr: |
-    ChatGPT, Claude, Gemini… Arayüzleri farklı, tonları farklı, hatta bazen cevap stilleri bile farklı. Ama işin komik tarafı, içeride dönen ana makine büyük ölçüde aynı. Hepsi, metni alıp “buradan sonra en muhtemel kelime ne gelir?” sorusunu defalarca soran devasa bir matematik sistemi üzerine kurulu.
+    ChatGPT, Claude, Gemini… Bu yapay zeka araçlarının arayüzleri farklı, tonları farklı, hatta bazen cevap stilleri bile farklı. Ama içeride dönen ana makine büyük ölçüde aynı. Yani hepsi, bir metni alıp “buradan sonra en muhtemel kelime ne gelir?” sorusunu defalarca soran devasa bir matematik sistemi üzerine kurulu.
 
-    Bu yazıyı yazma sebebim, her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bu süreci anladığında, bu sistemlerin neden bazı şeylerde inanılmaz iyi, bazı şeylerde özgüvenli şekilde saçma olabildiği çok daha net oturuyor.
+    Bu yazıyı yazma sebebim de tam olarak bu. Her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bir yandan, bu kadar mekanik bir sistemin bize bu kadar “insansı” gelmesine şahit olurken, bir yandan da kendi zihnimizin nasıl çalıştığına dair daha şeffaf bir tabloyla karşı karşıyayız. Bu süreci anladığında ise, bu sistemlerin neden bazı konularda inanılmaz iyi, bazı konularda ise özgüvenle saçmalayabildiği çok daha net oturuyor.
+
+
+    <div className="writingArticle__callout">
+      <div className="writingArticle__calloutTitle">
+        Bu yazının sonunda şunları net bir şekilde biliyor olacaksın:
+      </div>
+      <ul className="writingArticle__calloutList">
+        <li>
+          Metnin model içinde nasıl sayılara dönüştüğünü ve bu sayıların nasıl
+          “anlam” kazandığını
+        </li>
+        <li>
+          Modelin bağlamı (context) nasıl tarttığını ve hangi bilginin önemli
+          olduğuna nasıl karar verdiğini
+        </li>
+        <li>
+          Neden her cevabın kelime kelime, adım adım üretildiğini ve bunun
+          mimari bir zorunluluk olduğunu
+        </li>
+        <li>
+          Son dönemde sık duyduğumuz agent kavramının bu temel mimarinin neresine
+          oturduğunu
+        </li>
+      </ul>
+    </div>
+
+    ## LLM Mimarisi
+
+    En temel halleriyle bu modeller devasa matematiksel fonksiyonlar. Girdi olarak bir sayı dizisi alıyorlar ve çıktı olarak yine bir sayı üretiyorlar. İçeride ise, bu sayıları alıp adım adım başka sayılara çeviren, milyarlarca küçük hesaplamadan oluşan dev bir yapı çalışıyor. 
+    Göz korkutucu gibi dursa da, bunu kabaca dört ana parçaya ayırarak düşünmek işi oldukça sadeleştiriyor.
 
     <figure className="writingArticle__media">
-      <img src="/Desktop.svg" alt="Desktop" />
+      <img src="/graph.svg" alt="graph" />
     </figure>
 
-    Bu yazıda LLM denen bu temel motorun boru hattını adım adım gezeceğiz: metin nasıl sayıya dönüşüyor, bu sayılar nasıl “anlam” kazanıyor, model bağlamı nasıl tartıyor ve neden her şeyi kelime kelime yazarak ilerliyor. En sonda da, son dönemde sık duyduğumuz agent kavramının bu mimarinin neresine oturduğuna bakacağız. Formül yok, ezber yok ama kafada kalıcı bir mental model hedefliyorum.
+    Akış aslında şöyle ilerliyor: önce yazdığın metin Tokenizer tarafından küçük parçalara bölünüp sayılara çevriliyor. Sonra bu sayılar Embeddings katmanında, kelimelerin anlam ilişkilerini taşıyan çok boyutlu bir uzaya yerleştiriliyor. Ardından bu vektörler Transformer katmanlarına giriyor; burada Attention mekanizması sayesinde hangi kelimenin hangisiyle ne kadar ilişkili olduğu tartılıyor, Feedforward katmanlarıyla da bu bilgiler defalarca rafine ediliyor. En sonda ise Output katmanı, eldeki bağlama bakarak “bir sonraki en olası kelime hangisi?” sorusuna cevap veriyor ve süreç her kelime için yeniden başlıyor.
+
+    Diyagramdaki her kutuyu, bir girdiyi alıp bir çıktı üreten küçük bir fonksiyon gibi düşünebilirsin. Bu fonksiyonlar art arda çalışıyor ve model aslında tek seferde “tam cevabı” üretmiyor; her turda sadece bir sonraki token’ı seçiyor. Sonra o token’ı girdiye ekleyip aynı hattı yeniden çalıştırıyor. Bu döngü, model özel bir “bitir” işareti ürettiğinde (ya da belirlenen limit dolduğunda) duruyor. Bunun pseudocode olarak nasıl görünebileceğine dair bir örnek:
+
+    <div className="writingArticle__codeCard">
+      <pre className="writingArticle__codeBlock">
+        <code>
+          <span className="codeVar">prompt</span>
+          <span className="codeOp"> = </span>
+          <span className="codeString">"Bana kibar bir mail taslağı yaz"</span>
+          {'\n'}
+          {'\n'}
+          <span className="codeVar">tokens</span>
+          <span className="codeOp"> = </span>
+          <span className="codeFn">tokenizer</span>
+          <span className="codeOp">(</span>
+          <span className="codeVar">prompt</span>
+          <span className="codeOp">)</span>
+          {'\n'}
+          {'\n'}
+          <span className="codeKw">while</span>
+          <span className="codeOp"> true:</span>
+          {'\n'}
+          {'  '}
+          <span className="codeVar">vectors</span>
+          <span className="codeOp"> = </span>
+          <span className="codeFn">embed</span>
+          <span className="codeOp">(</span>
+          <span className="codeVar">tokens</span>
+          <span className="codeOp">)</span>
+          <span className="codeComment">  # embeddings + position</span>
+          {'\n'}
+          {'  '}
+          <span className="codeKw">for</span>
+          <span className="codeOp"> block in </span>
+          <span className="codeVar">transformer_blocks</span>
+          <span className="codeOp">:</span>
+          <span className="codeComment">  # attention + feedforward</span>
+          {'\n'}
+          {'    '}
+          <span className="codeVar">vectors</span>
+          <span className="codeOp"> = </span>
+          <span className="codeVar">block</span>
+          <span className="codeOp">(</span>
+          <span className="codeVar">vectors</span>
+          <span className="codeOp">)</span>
+          {'\n'}
+          {'\n'}
+          {'  '}
+          <span className="codeVar">next_token</span>
+          <span className="codeOp"> = </span>
+          <span className="codeFn">output_head</span>
+          <span className="codeOp">(</span>
+          <span className="codeVar">vectors</span>
+          <span className="codeOp">)</span>
+          <span className="codeComment">
+            {'  '}# next token distribution -&gt; pick one
+          </span>
+          {'\n'}
+          {'  '}
+          <span className="codeKw">if</span>
+          <span className="codeOp"> </span>
+          <span className="codeVar">next_token</span>
+          <span className="codeOp"> == </span>
+          <span className="codeConst">END_TOKEN</span>
+          <span className="codeOp">:</span>
+          {'\n'}
+          {'    '}
+          <span className="codeKw">break</span>
+          {'\n'}
+          {'\n'}
+          {'  '}
+          <span className="codeVar">tokens</span>
+          <span className="codeOp">.</span>
+          <span className="codeFn">append</span>
+          <span className="codeOp">(</span>
+          <span className="codeVar">next_token</span>
+          <span className="codeOp">)</span>
+          {'\n'}
+          {'\n'}
+          <span className="codeFn">print</span>
+          <span className="codeOp">(</span><span className="codeFn">decode</span>
+          <span className="codeOp">(</span>
+          <span className="codeVar">tokens</span>
+          <span className="codeOp">))</span>
+        </code>
+      </pre>
+    </div>
 ---
