@@ -20,9 +20,7 @@ export default function Writing({ params }: { params: { locale: Locale } }) {
             >
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
-                <div className="writingCard__tag">
-                  {post.tags?.[0] ?? 'AI'}
-                </div>
+                <div className="writingCard__tag">{post.tags?.[0] ?? 'AI'}</div>
                 <h3>{post.title}</h3>
                 {post.excerpt ? <p>{post.excerpt}</p> : null}
               </div>
