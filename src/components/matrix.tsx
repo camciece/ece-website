@@ -46,7 +46,13 @@ export default function Matrix({ values, title }: MatrixProps) {
         >
           {/* Title label */}
           {title && (
-            <text x="120" y="15" className="matrixLabel" fill="#2ddf9b">
+            <text
+              x={viewBoxWidth / 2}
+              y="15"
+              className="matrixLabel"
+              fill="#2ddf9b"
+              textAnchor="middle"
+            >
               {title}
             </text>
           )}
