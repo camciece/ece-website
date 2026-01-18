@@ -1287,6 +1287,13 @@ body.text-\[--text\] {
   gap: 15px;
   padding-top: 0px;
   min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.writingArticle__body > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .writingArticle__body p {
@@ -1354,6 +1361,7 @@ body.text-\[--text\] {
   color: #d7d9df;
   max-width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .tokenDemo__code {
@@ -1504,7 +1512,8 @@ body.text-\[--text\] {
 
 .embeddingsDemo {
   margin: 24px 0 10px;
-  width: 635px;
+  width: 100%;
+  max-width: 635px;
   height: 350px;
   padding: 18px;
   border-radius: 24px;
@@ -1721,7 +1730,8 @@ body.text-\[--text\] {
 .writingArticle__matrixCard {
   margin: 0px 0 0px;
   padding: 0;
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
   border-radius: 16px;
   background: #1a1b24;
   box-shadow: 0 14px 30px rgba(10, 12, 18, 0.4);
@@ -1862,6 +1872,7 @@ ol.writingArticle__TokenizerList {
   display: inline-block;
   width: fit-content;
   max-width: 100%;
+  overflow: hidden;
 }
 
 .writingArticle__codeBlock {
@@ -1881,11 +1892,11 @@ ol.writingArticle__TokenizerList {
 .writingArticle__codeBlock code {
   color: #e1e5f2;
 }
-
 .writingArticle__codeRow {
   display: flex;
-  gap: 18px;
+  gap: 0 18px;
   align-items: stretch;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -2953,6 +2964,10 @@ ol.writingArticle__TokenizerList {
 
   .meetSectionFrame {
     padding: 20px var(--frame-pad);
+  }
+
+  .writingArticle__codeArrow {
+    margin: 0 33%;
   }
 }
 
