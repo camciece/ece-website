@@ -2,9 +2,14 @@
 
 type MatrixProps = {
   values: number[][]
-  title?: string
-  prefix?: string
-  suffix?: string
+  title?: LabelProps
+  prefix?: LabelProps
+  suffix?: LabelProps
+}
+
+type LabelProps = {
+  text: string
+  colour?: string
 }
 
 export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
@@ -16,8 +21,8 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
   const cols = values[0]?.length ?? 0
 
   // Base dimensions
-  const viewBoxWidth = cols * 80 + 80
-  const viewBoxHeight = rows * 34 + 64
+  const viewBoxWidth = cols * 80 + 72
+  const viewBoxHeight = rows * 34 + 56
   const leftMargin = 18
   const rightMargin = 18
   const topMargin = 24
@@ -26,8 +31,8 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
   const rowSpacingAdd = 2
 
   // Add extra space for prefix/suffix labels
-  const prefixSpace = prefix ? prefix.length * 10 : 0
-  const suffixSpace = suffix ? suffix.length * 10 : 0
+  const prefixSpace = prefix ? prefix.text.length * 10 : 0
+  const suffixSpace = suffix ? suffix.text.length * 10 : 0
   const totalViewBoxWidth = viewBoxWidth + prefixSpace + suffixSpace
 
   // Calculate spacing
@@ -43,7 +48,7 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
   const bracketLeftX = prefixSpace + leftMargin
   const bracketRightX = prefixSpace + viewBoxWidth - rightMargin
 
-  const ariaLabel = title || `Matrix ${rows} by ${cols}`
+  const ariaLabel = title?.text || `Matrix ${rows} by ${cols}`
 
   return (
     <div
@@ -61,25 +66,25 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
           {title && (
             <text
               x={prefixSpace + viewBoxWidth / 2}
-              y="15"
+              y="24"
               className="matrixLabel"
-              fill="#2ddf9b"
+              fill={title?.colour || 'var(--matrix-label-colour)'}
               textAnchor="middle"
             >
-              {title}
+              {title?.text}
             </text>
           )}
           {/* Prefix label */}
           {prefix && (
             <text
-              x={prefixSpace}
+              x={prefixSpace + 2}
               y={bracketCenterY}
               className="matrixLabel"
-              fill="var(--matrix-affix-colour)"
+              fill={prefix?.colour || 'var(--matrix-affix-colour)'}
               textAnchor="end"
               dominantBaseline="middle"
             >
-              {prefix}
+              {prefix?.text}
             </text>
           )}
           {/* Left bracket */}
@@ -98,11 +103,11 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
               x={bracketRightX + 16}
               y={bracketCenterY}
               className="matrixLabel"
-              fill="var(--matrix-affix-colour)"
+              fill={suffix?.colour || 'var(--matrix-affix-colour)'}
               textAnchor="start"
               dominantBaseline="middle"
             >
-              {suffix}
+              {suffix?.text}
             </text>
           )}
 
@@ -114,6 +119,7 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
                 x={rowOffset + bracketLeftX + colSpacing * (colIndex + 0.5)}
                 y={topMargin + rowSpacing * (rowIndex + 1)}
                 className="embedMatrixNumber"
+                fill="var(--matrix-colour)"
               >
                 {value}
               </text>

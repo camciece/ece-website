@@ -1749,7 +1749,6 @@ body.text-\[--text\] {
 }
 
 .matrixLabel {
-  fill: var(--matrix-label-colour);
   font-size: 16px;
   font-weight: 600;
   font-family: 'Google Sans', system-ui, sans-serif;

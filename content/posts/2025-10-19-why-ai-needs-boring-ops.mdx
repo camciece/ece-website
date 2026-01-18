@@ -342,7 +342,7 @@ content:
           </code>
         </pre>
       </div>
-      <div className="writingArticle__codeArrow" aria-hidden="true">→</div>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
       <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} />
      </div> 
       Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding'i alır ve onu üç farklı “lens”ten geçirir. Yani üç farklı matematiksel (**Q, K, V**) dönüşümden geçirir. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
@@ -401,9 +401,9 @@ content:
     **Şimdi aynı örnek üzerinden Query (Q) ve Key (K) matrislerini hesaplayalım**
 
     <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title="Embeddings" />
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text: "Embeddings" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="WQ" />
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text: "WQ" }} />
     </div>
 
     Şu ana kadar aynı aynı embedding’leri, iki farklı “lens”ten geçirerek Q ve K uzaylarına taşıdık. Q, her embedding’in “ne aradığını”; K ise her embedding’in “ne sunduğunu” temsil ediyor. Şimdi attention mekanizmasının asıl kritik sorusuna geliyoruz: Bir embedding’in aradığı şeylerle, diğer embedding’lerin sundukları ne kadar uyuşuyor?
