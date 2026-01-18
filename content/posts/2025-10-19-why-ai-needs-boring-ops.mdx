@@ -401,19 +401,19 @@ content:
     **Şimdi aynı örnek üzerinden Query (Q) ve Key (K) matrislerini hesaplayalım**
 
     <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title="Embeddings" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="WQ" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="Q" />
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embeddings" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"WQ" }} />
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Q"}}/>
     </div>
 
      <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title="Embeddings" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="WK" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="K" />
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embeddings" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"WK" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"K" }}/>
     </div>
 
     Şu ana kadar aynı aynı embedding’leri, iki farklı “lens”ten geçirerek Q ve K uzaylarına taşıdık. Q, her embedding’in “ne aradığını”; K ise her embedding’in “ne sunduğunu” temsil ediyor. Şimdi attention mekanizmasının asıl kritik sorusuna geliyoruz: Bir embedding’in aradığı şeylerle, diğer embedding’lerin sundukları ne kadar uyuşuyor?
@@ -424,11 +424,11 @@ content:
     Bu sorunun cevabı tek bir matris çarpımıyla hesaplanır: **Scores = Q × Kᵀ**
 
       <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title="Q" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="Transpose (K)" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="Scores" />
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Q" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Transpose (K)" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Scores" }}/>
     </div>
 
     Burada olan şey tamamen mekanik. Elimizde 4 embedding var ve her biri 3 boyutlu olduğu için Q = 4×3. K’nin transpozu 3×4 olunca, Q × Kᵀ çarpımından otomatik olarak 4×4 bir tablo çıkıyor. Bu 4×4’lük tablo tesadüf değil: attention skorları embedding boyutuyla değil, prompt’taki parça sayısıyla ilgili. Yani 4 token varsa tablo 4’e 4, 20 token varsa 20’ye 20.
@@ -448,9 +448,9 @@ content:
     Mask’in yaptığı şey şu: Bir embedding’in bakmaması gereken tüm hücreleri geçersiz hâle getirir. Bunu “sıfırlayarak” değil, o hücreleri negatif sonsuz yaparak yapar. Neden sıfır değil de negatif sonsuz? Çünkü bir sonraki adımda softmax uygulanacaktır ve softmax’ta negatif sonsuz, pratikte “olasılığı sıfır” demektir.
 
     <div className="writingArticle__codeRow">
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="Scores" prefix="Mask(" suffix=")" />
-      <div className="writingArticle__codeArrow" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title="Masked" />
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Scores" }} prefix={{ text: "Mask(" }} suffix={{ text: ")" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Masked" }}/>
     </div>
 
     Mask’ten sonra tabloyu şöyle düşünebiliriz: Her embedding sadece kendisinden önce gelen embedding’lere bakabilir. Kendisine bakabilir. Ama geleceğe bakamaz.
