@@ -13,6 +13,9 @@
   --frame-max: 1200px;
   --frame-pad: clamp(18px, 4vw, 48px);
   --writing-pad: clamp(48px, 8vw, 72px);
+  --matrix-colour: black;
+  --matrix-label-colour: black;
+  --matrix-affix-colour: black;
 }
 
 /* Base */
@@ -1727,17 +1730,6 @@ body.text-\[--text\] {
   background: #3a2b63;
 }
 
-.writingArticle__matrixCard {
-  margin: 0px 0 0px;
-  padding: 0;
-  width: 100%;
-  max-width: 800px;
-  border-radius: 16px;
-  background: #1a1b24;
-  box-shadow: 0 14px 30px rgba(10, 12, 18, 0.4);
-  overflow: hidden;
-}
-
 .writingArticle__matrixViz {
   width: 100%;
   height: auto;
@@ -1757,14 +1749,14 @@ body.text-\[--text\] {
 }
 
 .matrixLabel {
-  fill: #eef0f6;
+  fill: var(--matrix-label-colour);
   font-size: 16px;
   font-weight: 600;
   font-family: 'Google Sans', system-ui, sans-serif;
 }
 
 .matrixNumber {
-  fill: #c7cbd6;
+  fill: var(--matrix-colour);
   font-size: 16px;
   font-family:
     'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas,
@@ -1772,7 +1764,7 @@ body.text-\[--text\] {
 }
 
 .matrixSymbol {
-  fill: #c7cbd6;
+  fill: var(--matrix-colour);
   font-size: 28px;
   font-weight: 600;
   font-family:
@@ -1875,6 +1867,15 @@ ol.writingArticle__TokenizerList {
   overflow: hidden;
 }
 
+.writingArticle__matrixCard {
+  margin: 18px 0 10px;
+  padding: 18px 20px;
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .writingArticle__codeBlock {
   margin: 0;
   font-family:
@@ -1900,9 +1901,9 @@ ol.writingArticle__TokenizerList {
   flex-wrap: wrap;
 }
 
-.writingArticle__codeArrow {
+.writingArticle__codeSymbol {
   align-self: center;
-  color: #cfd5e2;
+  color: var(--matrix-colour);
   font-size: 28px;
   font-weight: 600;
   padding: 0 6px;
@@ -1917,6 +1918,8 @@ ol.writingArticle__TokenizerList {
 .writingArticle__codeCard--matrix {
   flex: 0 1 320px;
   padding: 18px;
+  display: flex;
+  align-items: center;
 }
 
 .writingArticle__embedMatrix--full {
@@ -1933,15 +1936,12 @@ ol.writingArticle__TokenizerList {
 }
 
 .writingArticle__codeCard--matrix .embedMatrixNumber {
-  fill: #b7becf;
+  fill: var(--matrix-colour);
   font-size: 16px;
   font-weight: 400;
   font-family:
     'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
-}
-
-.writingArticle__codeCard--matrix .embedMatrixNumber {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
 }
@@ -1952,7 +1952,7 @@ ol.writingArticle__TokenizerList {
 }
 
 .writingArticle__codeCard--matrix .embedMatrixBracket {
-  stroke: #b7becf;
+  stroke: var(--matrix-colour);
   fill: transparent;
   stroke-linecap: round;
 }
