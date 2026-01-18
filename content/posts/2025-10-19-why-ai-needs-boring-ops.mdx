@@ -343,31 +343,7 @@ content:
         </pre>
       </div>
       <div className="writingArticle__codeArrow" aria-hidden="true">→</div>
-      <div className="writingArticle__codeCard writingArticle__codeCard--matrix">
-        <div className="writingArticle__embedMatrix writingArticle__embedMatrix--full">
-          <svg
-            className="writingArticle__embedMatrixSvg"
-            viewBox="0 0 320 200"
-            role="img"
-            aria-label="Embeddings matrix 4 by 3"
-          >
-            <path className="embedMatrixBracket" d="M18 24 H8 V184 H18" />
-            <path className="embedMatrixBracket" d="M302 24 H312 V184 H302" />
-            <text x="70" y="58" className="embedMatrixNumber">0.2</text>
-            <text x="150" y="58" className="embedMatrixNumber">-0.1</text>
-            <text x="230" y="58" className="embedMatrixNumber">0.7</text>
-            <text x="70" y="92" className="embedMatrixNumber">0.9</text>
-            <text x="150" y="92" className="embedMatrixNumber">0.3</text>
-            <text x="230" y="92" className="embedMatrixNumber">-0.2</text>
-            <text x="70" y="126" className="embedMatrixNumber">0.4</text>
-            <text x="150" y="126" className="embedMatrixNumber">0.8</text>
-            <text x="230" y="126" className="embedMatrixNumber">0.1</text>
-            <text x="70" y="160" className="embedMatrixNumber">-0.3</text>
-            <text x="150" y="160" className="embedMatrixNumber">0.2</text>
-            <text x="230" y="160" className="embedMatrixNumber">0.6</text>
-          </svg>
-        </div>
-      </div>
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} />
      </div> 
       Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding'i alır ve onu üç farklı “lens”ten geçirir. Yani üç farklı matematiksel (**Q, K, V**) dönüşümden geçirir. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
            
