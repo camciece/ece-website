@@ -20,12 +20,14 @@ export default function Matrix({ values, title }: MatrixProps) {
   const rightMargin = 18
   const topMargin = 24
   const bottomMargin = 16
+  const rowOffset = 6
+  const rowSpacingAdd = 2
 
   // Calculate spacing
   const contentWidth = viewBoxWidth - leftMargin - rightMargin
   const contentHeight = viewBoxHeight - topMargin - bottomMargin
   const colSpacing = contentWidth / (cols + 0.5)
-  const rowSpacing = contentHeight / (rows + 1)
+  const rowSpacing = contentHeight / (rows + 1) + rowSpacingAdd
 
   // Bracket dimensions
   const bracketY1 = topMargin
@@ -64,7 +66,7 @@ export default function Matrix({ values, title }: MatrixProps) {
             row.map((value, colIndex) => (
               <text
                 key={`${rowIndex}-${colIndex}`}
-                x={leftMargin + colSpacing * (colIndex + 0.5)}
+                x={rowOffset + leftMargin + colSpacing * (colIndex + 0.5)}
                 y={topMargin + rowSpacing * (rowIndex + 1)}
                 className="embedMatrixNumber"
               >
