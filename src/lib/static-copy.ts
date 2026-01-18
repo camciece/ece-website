@@ -100,7 +100,7 @@ const copy: Record<Locale, SiteCopy> = {
     home: {
       heroTitle: 'Hello World!',
       heroBody:
-        'This is a new tech blog where I document observations and experiments from working with AI. The focus is on what I’m learning along the way.',
+        'This is a new tech blog where I document observations and experiments from working with AI. The focus is on what I’m learning along the way. Hope you enjoy!',
       heroCta: 'Read the first post',
       latestTitle: 'Latest writing',
       viewAll: 'View all',
@@ -238,13 +238,13 @@ const copy: Record<Locale, SiteCopy> = {
     home: {
       heroTitle: 'Hello World!',
       heroBody:
-        'Bu, yapay zekâ ile çalışırken yaptığım gözlemleri ve denemeleri paylaştığım yeni bir teknoloji blogu. Odak noktam, yolda öğrendiklerim.',
+        'Yapay zekâ ile çalışırken yaptığım gözlemleri ve denemeleri paylaşıyorum. Odak noktam, yolda öğrendiklerim. Umarım faydalı bulursunuz.',
       heroCta: 'İlk yazıyı oku',
       latestTitle: 'Son yazılar',
       viewAll: 'Tümünü gör',
     },
     meet: {
-      heroTitle: 'Ece ile Tanış',
+      heroTitle: 'Ece ile Tanışın',
       intro:
         'Teknoloji alanında çalışıyorum ve şu sıralar kendi yolumu çiziyorum. Yapay zekâ araçlarıyla denemeler yapmayı seviyorum ve bu merak bir noktada bu siteyi “vibe coding” ile kurmaya dönüştü. Yazmak, ne inşa ettiğimi düşünmemi, öğrenmemi ve sindirmemi sağlıyor; ben de öğrendiklerimi süreç boyunca paylaşıyorum.',
       topicsTitle: 'Neler hakkında yazıyorum',

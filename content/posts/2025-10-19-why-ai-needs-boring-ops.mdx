@@ -20,137 +20,735 @@ content:
   tr: |
     ChatGPT, Claude, Gemini… Bu yapay zeka araçlarının arayüzleri farklı, tonları farklı, hatta bazen cevap stilleri bile farklı. Ama içeride dönen ana makine büyük ölçüde aynı. Yani hepsi, bir metni alıp “buradan sonra en muhtemel kelime ne gelir?” sorusunu defalarca soran devasa bir matematik sistemi üzerine kurulu.
 
-    Bu yazıyı yazma sebebim de tam olarak bu. Her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bir yandan, bu kadar mekanik bir sistemin bize bu kadar “insansı” gelmesine şahit olurken, bir yandan da kendi zihnimizin nasıl çalıştığına dair daha şeffaf bir tabloyla karşı karşıyayız. Bu süreci anladığında ise, bu sistemlerin neden bazı konularda inanılmaz iyi, bazı konularda ise özgüvenle saçmalayabildiği çok daha net oturuyor.
-
+    Bu yazıyı yazma sebebim de tam olarak bu. Her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bir yandan, bu kadar mekanik bir sistemin bize bu kadar “insansı” gelmesine şahit olurken, bir yandan da kendi zihnimizin nasıl çalıştığına dair daha şeffaf bir tabloyla karşı karşıyayız. Bu süreci anladığımızda, bu sistemlerin neden bazı konularda inanılmaz iyi, bazı konularda özgüvenle saçmalayabildiği çok daha net oturuyor.
 
     <div className="writingArticle__callout">
       <div className="writingArticle__calloutTitle">
-        Bu yazının sonunda şunları net bir şekilde biliyor olacaksınız:
+    Bu yazının sonunda şunları net bir şekilde biliyor olacaksınız:
       </div>
       <ul className="writingArticle__calloutList">
-        <li>
-          Metnin model içinde nasıl sayılara dönüştüğünü ve bu sayıların nasıl
-          “anlam” kazandığını
-        </li>
-        <li>
-          Modelin bağlamı (context) nasıl tarttığını ve hangi bilginin önemli
-          olduğuna nasıl karar verdiğini
-        </li>
-        <li>
-          Neden her cevabın kelime kelime, adım adım üretildiğini ve bunun
-          mimari bir zorunluluk olduğunu
-        </li>
-        <li>
-          Son dönemde sık duyduğumuz agent kavramının bu temel mimarinin neresine
-          oturduğunu
-        </li>
+    <li>
+      Metnin model içinde nasıl sayılara dönüştüğünü ve bu sayıların nasıl
+      “anlam” kazandığını
+    </li>
+    <li>
+      Modelin bağlamı (context) nasıl tarttığını ve hangi bilginin önemli
+      olduğuna nasıl karar verdiğini
+    </li>
+    <li>
+      Neden her cevabın kelime kelime, adım adım üretildiğini ve bunun mimari
+      bir zorunluluk olduğunu
+    </li>
+    <li>
+      Son dönemde sık duyduğumuz agent kavramının bu temel mimarinin neresine
+      oturduğunu
+    </li>
       </ul>
     </div>
 
-    ## LLM Mimarisi
+     ## LLM Mimarisi
 
-    En temel halleriyle bu modeller devasa matematiksel fonksiyonlar. Girdi olarak bir sayı dizisi alıyorlar ve çıktı olarak yine bir sayı üretiyorlar. İçeride ise, bu sayıları alıp adım adım başka sayılara çeviren, milyarlarca küçük hesaplamadan oluşan dev bir yapı çalışıyor. 
-    Göz korkutucu gibi dursa da, bunu kabaca dört ana parçaya ayırarak düşünmek işi oldukça sadeleştiriyor.
+     Peki, bu 'hiper-ölçekli' yapı tam olarak nasıl bir pipeline’dan geçiyor? Göz korkutucu görünse de, LLM mimarisini bir fabrikanın üretim bandı gibi dört ana bölüme ayırarak düşünmek işi oldukça sadeleştiriyor:
 
     <figure className="writingArticle__media">
       <img src="/graph.svg" alt="graph" />
     </figure>
+      <ul className="writingArticle__ArchitectureList">
+        <li>**Tokenizer:** Metni parçalara ayırıp sayısal etiketlere dönüştüren giriş kapısı.</li>
+        <li>**Embeddings:** Sayıların, matematiksel bir uzayda anlam kazandığı koordinat sistemi.</li>
+        <li>**Transformer (Attention & Feedforward):** Milyarlarca çarpma işleminin yapıldığı, asıl 'tahmin' motoru.</li>
+        <li>**Output:** Olasılıkların tekrar insan diline dönüştüğü son durak.</li>
+      </ul>
+    Burada kafa karıştıran bir nokta var: Özellikle Transformer kutusunda dönen işlem hacmi (ilerleyen satırlarsa detayına gireceğim) devasa boyutta olmasına rağmen, LLM mimarisi şaşırtıcı derecede yalın. Modelin içindeki adımlar da hep aynı tür işlemlerden ibaret: matrisi çarp, topla, normalize et ve tekrarla. Bu nedenle pipeline akışını aşağıdaki şekilde çok kısa pseudocode olarak ifade etmek mümkün:
+     <div className="writingArticle__codeCard">
+       <pre className="writingArticle__codeBlock">
+         <code>
+           <span className="codeLine">
+             <span className="codeVar">prompt</span>
+             <span className="codeEq"> = </span>
+             <span className="codeString">"Ghosting yapmadığımı anlatan ikna edici bir mesaj yaz"</span>
+           </span>
+           <br />
+           <br />
+           <span className="codeLine">
+             <span className="codeVar">tokens</span>
+             <span className="codeEq"> = </span>
+             <span className="codeFn">tokenizer</span>
+             <span className="codeOp">(</span>
+             <span className="codeVar">prompt</span>
+             <span className="codeOp">);</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeKw">while</span>
+             <span className="codeOp"> (</span>
+             <span className="codeConst">true</span>
+             <span className="codeOp">) &#123;</span>
+           </span>
 
-    Akış aslında şöyle ilerliyor: önce yazdığın metin Tokenizer tarafından küçük parçalara bölünüp sayılara çevriliyor. Sonra bu sayılar Embeddings katmanında, kelimelerin anlam ilişkilerini taşıyan çok boyutlu bir uzaya yerleştiriliyor. Ardından bu vektörler Transformer katmanlarına giriyor; burada Attention mekanizması sayesinde hangi kelimenin hangisiyle ne kadar ilişkili olduğu tartılıyor, Feedforward katmanlarıyla da bu bilgiler defalarca rafine ediliyor. En sonda ise Output katmanı, eldeki bağlama bakarak “bir sonraki en olası kelime hangisi?” sorusuna cevap veriyor ve süreç her kelime için yeniden başlıyor.
+           <span className="codeLine">
 
-    Diyagramdaki her kutuyu, bir girdiyi alıp bir çıktı üreten küçük bir fonksiyon gibi düşünebilirsin. Bu fonksiyonlar art arda çalışıyor ve model aslında tek seferde “tam cevabı” üretmiyor; her turda sadece bir sonraki token’ı seçiyor. Sonra o token’ı girdiye ekleyip aynı hattı yeniden çalıştırıyor. Bu döngü, model özel bir “bitir” işareti ürettiğinde (ya da belirlenen limit dolduğunda) duruyor. Bunun pseudocode olarak nasıl görünebileceğine dair bir örnek:
+             <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">embed</span><span className="codeOp">(</span><span className="codeVar">tokens</span><span className="codeOp">);</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeKw">for</span><span className="codeOp"> ([</span><span className="codeVar">attention</span><span className="codeOp">, </span><span className="codeVar">feedforward</span><span className="codeOp">] of </span><span className="codeVar">transformers</span><span className="codeOp">) &#123;</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">attention</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">feedforward</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeOp">&#125;</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeVar">output_token</span><span className="codeEq"> = </span><span className="codeFn">output</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeKw">if</span><span className="codeOp"> (</span><span className="codeVar">output_token</span><span className="codeEq"> === </span><span className="codeConst">END_TOKEN</span><span className="codeOp">) &#123;</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeKw">break</span>
+             <span className="codeOp">;</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeOp">&#125;</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeVar">tokens</span>
+             <span className="codeOp">.</span>
+             <span className="codeFn">push</span>
+             <span className="codeOp">(</span>
+             <span className="codeVar">output_token</span>
+             <span className="codeOp">);</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeOp">&#125;</span>
+           </span>
+           <br />
+           <span className="codeLine">
+             <span className="codeFn">print</span>
+             <span className="codeOp">(</span>
+             <span className="codeFn">decode</span>
+             <span className="codeOp">(</span>
+             <span className="codeVar">tokens</span>
+             <span className="codeOp">));</span>
+           </span>
+         </code>
+       </pre>
+     </div>
+     Yani modern modellerin iskeleti, düşündüğümüz kadar karmaşık kod yığınlarından oluşmuyor. Hatta bazı açık kaynak modellerin çalışır haldeki örnekleri birkaç yüz satır Python koduyla kurulabiliyor. Hatta <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> gibi araştırmacılar da PyTorch ile bu modellerin nasıl sıfırdan inşa edildiğini adım adım gösteren çok güzel eğitimler ve repo’lar paylaşıyor.
 
-    <div className="writingArticle__codeCard">
-      <pre className="writingArticle__codeBlock">
-        <code>
-          <span className="codeLine">
-            <span className="codeVar">prompt</span>
-            <span className="codeEq"> = </span>
-            <span className="codeString">"Ghosting yapmadığımı anlatan ikna edici bir mesaj yaz"</span>
-          </span>
-          <br />
-          <br />
-          <span className="codeLine">
-            <span className="codeVar">tokens</span>
-            <span className="codeEq"> = </span>
-            <span className="codeFn">tokenizer</span>
-            <span className="codeOp">(</span>
-            <span className="codeVar">prompt</span>
-            <span className="codeOp">);</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeKw">while</span>
-            <span className="codeOp"> (</span>
-            <span className="codeConst">true</span>
-            <span className="codeOp">) &#123;</span>
-          </span>
-          
-          <span className="codeLine">
-          
-            <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">embed</span><span className="codeOp">(</span><span className="codeVar">tokens</span><span className="codeOp">);</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeKw">for</span><span className="codeOp"> ([</span><span className="codeVar">attention</span><span className="codeOp">, </span><span className="codeVar">feedforward</span><span className="codeOp">] of </span><span className="codeVar">transformers</span><span className="codeOp">) &#123;</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">attention</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">feedforward</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeOp">&#125;</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeVar">output_token</span><span className="codeEq"> = </span><span className="codeFn">output</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeKw">if</span><span className="codeOp"> (</span><span className="codeVar">output_token</span><span className="codeEq"> === </span><span className="codeConst">END_TOKEN</span><span className="codeOp">) &#123;</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeKw">break</span>
-            <span className="codeOp">;</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeOp">&#125;</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeVar">tokens</span>
-            <span className="codeOp">.</span>
-            <span className="codeFn">push</span>
-            <span className="codeOp">(</span>
-            <span className="codeVar">output_token</span>
-            <span className="codeOp">);</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeOp">&#125;</span>
-          </span>
-          <br />
-          <span className="codeLine">
-            <span className="codeFn">print</span>
-            <span className="codeOp">(</span>
-            <span className="codeFn">decode</span>
-            <span className="codeOp">(</span>
-            <span className="codeVar">tokens</span>
-            <span className="codeOp">));</span>
-          </span>
-        </code>
-      </pre>
+    AMA, her “matris çarp” dediğimiz şey, milyonlarca hatta milyarlarca sayının birbiriyle aynı anda çarpılıp toplanması demek. Ve bu işlem, tek bir cümle üretirken yüzlerce katmanda tekrar tekrar yapılıyor. Yani sistem aslında şunu yapıyor: Aynı tip matematiksel dönüşümü, inanılmaz büyük tablolar üzerinde, defalarca uyguluyor. Bu yüzden “devasa” olan şey algoritma değil, **hesaplanan alanın büyüklüğü**. Aynı tarif, ama mutfakta 3 kişi yok, 3 milyon kişi aynı anda doğrama yapıyor gibi düşünebilirsiniz.
+
+    O yüzden LLM’ler hem “şaşırtıcı derecede düzenli ve sade” bir yapıya sahip, hem de aynı anda inanılmaz miktarda matematik yapan makineler. Bu yüzden Meta nükleer enerji santrali açmak için kolları sıvadı.
+
+    Şimdi gelelim bu pipeline’ın ilk adımına: Yani sizin ChatGPT'ye yazdığınız bir metni, bu matematik dünyasının anlayacağı dile çevirmeye.
+
+    Burada devreye **Tokenizer** giriyor.
+
+    <h2>Tokenizer</h2>
+
+    Bir yapay zekaya "Naber?" dediğinizde, o aslında "Naber?" kelimesini görmez. İşin özünün döndüğü yer olan Transformer’ın, az önce anlattığımız matematiksel işlemleri yapabilmesi için kelimelere değil, sayılara ihtiyacı var.  Ancak buradaki sayısal dönüşüm iki aşamalı bir süreç ve Tokenizer bunun ilk adımı.
+
+     <h3>**Peki bizim anladığımız dildeki metinleri, LLM’in lugatındaki sözcüklere (yani tokenlara) nasıl çeviririz?**</h3>
+
+    Cevap basit: Metni bir Tokenizer’ın içine sokuyoruz. Ama burada kritik bir detay var: Tokenizer da tıpkı modelin kendisi gibi önceden "eğitilmiş" bir sistemdir. Nasıl ki bir Fransız’a Türkçe bir metni heceletmeye çalıştığınızda zorlanırsa, bir Tokenizer da sadece eğitildiği dillerin ve veri setlerinin kurallarını bilir. Burada önemli nokta şuy: Bu sözlük eğitimden sonra değişmez. Yeni bir kelime çıktığında tokenizer yeni parça eklemez. Bunun yerine o kelimeyi, elindeki mevcut parçalardan en uygun şekilde bölmeye çalışır.
+
+    <ul className="writingArticle__TokenizerList">
+        <li>**Eğitim Süreci:** Geliştiriciler, modeli eğitmeden önce devasa bir metin yığınını (Common Crawl, Wikipedia vb.) Tokenizer’a okuturlar.</li>
+        <li>**İstatistiksel Bölme:** Tokenizer, bu veriye bakarak hangi harf dizilerinin (örneğin: "-iyor", "-laş", "the", "ing") en sık yan yana geldiğini istatistiksel olarak öğrenir.</li>
+        <li>**Sabit Sözlük (Vocabulary):** Eğitim bittikten sonra tokenizer’ın elinde sabit bir parça listesi kalır. Bu liste genelde 50 - 100 bin civarında parçadan oluşur ve model, gördüğü her metni artık sadece bu parçaları kullanarak okumaya çalışır. Mesela sözlükte “kitap” var ama “kitapçılık” yoksa: Tokenizer “kitapçılık” kelimesini “kitap” + “çılık” gibi tanıdık parçalara ayırır.</li>
+      </ul>
+
+      Yani siz bir prompt girdiğinizde, Tokenizer kendi eğitimli hafızasındaki bu sözlüğe bakarak şunları yapar:
+       <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+      <li>Metni en büyük ve en anlamlı parçalara (token) böler.</li>
+      <li>Her parçanın sözlükteki yerini bulur.</li>
+      <li>O parçaya karşılık gelen Token ID’yi çıktı olarak verir.</li>
+      </ol>
+
+      Bunu kendiniz de kurcalamak isterseniz, OpenAI’ın online tokenizer aracıyla herhangi bir metnin nasıl token’lara bölündüğünü anında görebilirsiniz: <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noreferrer">openai.com/tokenizer</a>
+
+     ### Burada şu soru aklınıza gelebilir: Peki kelimeleri neden sadece boşluklardan veya harflerden bölmüyoruz?
+
+    Bu aslında göründüğünden çok daha büyük bir soru. Hakkını vererek anlatmaya kalksak yazı çok uzar. Kısa cevap şu: bu tamamen bir **verimlilik dengesi** meselesi.
+
+    <ul className="writingArticle__TokenizerList">
+      <li>
+        Sadece boşluklardan (kelime bazlı) bölseydik, sözlüğümüz devasa olurdu
+        ("Kitap", "Kitapçı", "Kitapçılık" gibi her bir eki ayrı birer kelime
+        olarak kaydetmemiz gerekirdi) ve model daha önce görmediği ek almış bir
+        kelimeyle karşılaştığında (mesela yeni bir teknolojik terim) tamamen
+        donup kalırdı.
+      </li>
+      <li>
+        Sadece harf harf bölseydik, sözlüğümüz çok küçük olurdu ama modelin tek
+        bir cümleyi anlaması için atması gereken matematiksel adım sayısı
+        (hesaplama maliyeti) arşa çıkardı. Üstelik tek başına "m" veya "e"
+        harfi pek bir anlam taşımadığı için modelin bağlam kurması
+        imkansızlaşırdı.
+      </li>
+    </ul>
+
+    Bu konu o kadar kritik ki, yapay zeka dünyasının efsane isimlerinden <a href="https://karpathy.ai/" target="_blank" rel="noreferrer">Andrej Karpathy</a>'nin sadece sıfırdan bir tokenizer inşa etmek üzerine saatler süren <a href="https://www.youtube.com/watch?v=zduSFxRajkE/" target="_blank" rel="noreferrer">videosu</a> var. Bizim için şimdilik şu kadarı yeterli: Tokenizer, kelime kadar anlamlı ama harf kadar esnek olan o "altın ortayı" buluyor.
+
+
+    ### **Peki şimdi sırada ne var?**
+
+     Tokenizer, son aşamada, eğitim sırasında oluşturduğu sözlüğe bakarak elindeki her parçayı bir Token ID'ye çevirir.
+
+     Metni nasıl parçalara ayırdığını ve bu parçalara Token ID ürettiğini daha pratik bir şekilde görmek isterseniz:
+
+     <TokenDemo />
+     Ama bu numaralar hala anlamsızdır. Token ID’ler **anlam taşımaz**: 77370’un “Ghost”a denk gelmesi, modelin o kelimenin ne demek olduğunu (bir ruh mu, yoksa sosyal medyada birini cevapsız bırakmak mı) bildiği anlamına gelmez. Bu aşamada model sadece numaralarla çalışır. Elinizde bir kütüphanedeki kitapların indeks numaraları olduğunu düşünün, numaraya bakarak o kitabın dram mı yoksa bilim kurgu mu olduğunu anlayamazsınız. Anlam dediğimiz şey (birazdan geleceğiz), bir anda ortaya çıkmaz. **Transformer** katmanınına gelmeden önce, bu sayılar **embedding** katmanında çok boyutlu vektörlere dönüştürülür: yani her token, yüzlerce hatta binlerce farklı özelliği temsil eden boyutlara sahip bir matematiksel noktaya yerleştirilir. Bu adım, anlamın context içinde ortaya çıkması için gerekli zemini hazırlar.
+
+
+     <h2>Embeddings</h2>
+
+     Tokenizer’dan çıkan Token ID’ler tek başına işe yaramaz, çünkü model bu noktada hâlâ sadece düz bir sayı dizisine bakıyordur ve tek boyutlu sayılarla yapılabilecek matematik çok sınırlıdır. Ne benzerlik ölçebilirsin, ne de “bunlar birbirine yakın mı?” gibi sorular sorabilirsin. Embeddings katmanının yaptığı şey tam olarak bunu değiştirmektir. Her Token ID, embedding tablosuna bakılarak **çok boyutlu bir vektöre dönüştürülür.**
+
+     **Bir embedding, n boyutlu bir uzaydaki bir konumu temsil eden, uzunluğu n olan bir sayı dizisidir.** Mesela n = 3 olsaydı, bir embedding [10, 4, 2] gibi görünebilirdi ve bu da 3 boyutlu bir uzayda x=10, y=4, z=2 noktasına karşılık gelirdi.
+
+    Model eğitilirken, her token bu uzayda rastgele bir başlangıç noktasına yerleştirilir. Eğitim süreci boyunca da bu noktalar yavaş yavaş sağa sola itilir; ta ki model, en iyi çıktıları üreten yerleşimi bulana kadar.
+
+    Bunu kafanızda canlandırmak için aşağıdaki "öncesi ve sonrası" tablosuna bakalım:
+     <EmbeddingsDemo />
+
+     <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+      <li>**Adım (Tokens):** Elimizde Tokenizer'dan gelen tamsayılar var. Bunlar sadece birer etiket; aralarında matematiksel bir ilişki yok.</li>
+      <li>**Adım (Embeddings):** Her bir tamsayı, modelin eğitimi sırasında belirlenmiş devasa bir tablodan (look-up table) karşılığını bulur. Artık elimizde tek bir sayı değil, o token’ın n-boyutlu uzaydaki konumunu temsil eden ondalıklı bir sayı listesi (vektör) vardır.</li>
+      </ol>
+
+      **Peki neden bu kadar çok boyut?**
+
+     İnsanlar olarak biz bir problemi çözerken (örneğin sıcaklık dönüşümü yaparken) formülü biliriz. Ancak LLM'lerin önünde böyle bir formül yok. Onlar, kelimeler arasındaki benzerlikleri ve ilişkileri kendi başlarına "keşfetmek" zorundalar. Bir cümleyi; tonu, ritmi, neşeli mi yoksa teknik mi olduğu gibi binlerce farklı boyutta (dimension) inceleyebilmesi için bu "çok boyutlu" yapıya ihtiyaç duyarlar.
+     Güncel modellerde her bir kelime için 10.000’den fazla boyutu olan vektörler kullanılabiliyor. Bu, her bir kelimenin 10.000 farklı "karakter özelliğine" göre bir haritaya yerleştirilmesi demek!
+
+     Embeddings katmanında bahsetmemiz gereken yapılan son bir hamle daha var ve bu önemli: Model, her token’ın sadece ne olduğunu değil, cümle içinde nerede durduğunu da bilmek zorunda. Çünkü “Man bites dog” ile “Dog bites man” aynı kelimelerden oluşur ama anlamları tamamen farklıdır. Bu yüzden embedding’ler oluşturulduktan sonra, her vektöre bir de konum bilgisi eklenir. Buna **positional encoding** denir. Böylece model, kelimelerin sırasını da matematiksel olarak ayırt edebilir. Bu adım olmasaydı, model token’ların hangi sırayla geldiğini anlayamazdı.
+
+     **Özetle** embedding katmanı, token'ların kuru birer sayı olmaktan çıkıp, çok boyutlu bir uzayda konum kazandığı, vektöre dönüştürüldüğü aşamadır. Burada her token, artık sadece bir etiket değil; diğer token’lara göre nerede durduğu, kime yakın olduğu ve kimden uzak olduğu bilinen bir nokta haline gelir.
+
+    **Önemli not:** Embedding’ler henüz bağlam kurabilen yapılar değildir. Yaptıkları şey, bu bağlam kurulabilmesi ve kararların verilebilmesi için gerekli olan zemini hazırlamaktır. Yani token'ları, modelin üzerinde matematik yapabileceği bir forma sokarlar. Bu yüzden embedding’leri, anlamın kendisi değil; **anlamın temsil edilebileceği koordinat sistemi** gibi düşünebiliriz. 
+     
+    Grafikte gördüğünüz her bir nokta aslında farklı bir token'ı temsil eder. Eğitim sırasında model bu noktaları sürekli yerinden oynatır (nudge); benzer anlamdaki token'ları (renkli kümeler) birbirine yaklaştırırken, alakasız olanları uzaklaştırır. Boyut sayısı arttıkça bu harita o kadar detaylanır ki, model kelimeler arasındaki en ince nüansları, hatta duygu değişimlerini bile bu matematiksel koordinatlar üzerinden 'hissetmeye' başlar.
+
+    <figure className="writingArticle__media">
+      <img src="/example3d.png" alt="3D visualization" />
+    </figure>
+
+     Kelimeler artık karşılaştırılabilir, tartılabilir ve birlikte işlenebilir hale gelmiştir ama henüz “hangisi önemli?” sorusunun cevabı ortada yoktur. “Bu kelimeler birbirini nasıl etkiliyor?”, “şu anda hangisi daha önemli?” ve “bir sonraki adımda neye bakmalıyım?” gibi kararlar, bir sonraki katmanda verilir.
+
+    Şimdiye kadar metni sayıya çevirdik, bu sayıları çok boyutlu bir uzaya yerleştirdik ve sırayı da işin içine kattık. Artık elimizde, bağlam kurulmaya hazır bir yapı var. Sırada, bu bağlamın gerçekten kurulduğu yer var: **Transformer** katmanı.
+     
+    <h2 className="writingArticle__transformerTitle">Transformer</h2>
+
+    Bugün ChatGPT, Claude veya Gemini gibi modellerin bu kadar akıllı olmasının ana sebebi **transformer mimarisi**. Her şey 2017’de Google’daki bir araştırma ekibinin yayınladığı efsanevi **<a className="writingArticle__link" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noreferrer">“Attention is all you need”</a>** makalesiyle başladı. O zamana kadar modeller metni kelime kelime, sırayla “okumaya” çalışıyordu. Bu da hem yavaştı hem de uzun cümlelerde bağlamın kopmasına yol açıyordu. Attention (Dikkat) fikriyle birlikte model, ilk kez tüm cümleye aynı anda bakmayı ve “şu an gerçekten önemli olan ne?” sorusunu sormayı öğrendi. Bu da modelleri hem çok daha hızlı hem de çok daha bağlamlı hale getirdi. Eskiden bir cümleyi anlaması saniyeler süren modeller, artık devasa veri yığınlarını aynı anda işleyebilen süper zekalara dönüştü.
+
+     **Statik Vektörden → Canlı Bağlama**
+
+     Embedding aşamasında kelimeleri koordinatlarına yerleştirmiştik. Ancak bu noktada, örneğin "banka" kelimesinın karşılığı olan vektör haritada hep aynı (statik) yerde duruyordu. Transformer katmanının asıl işi, bu statik vektörleri alıp cümledeki diğer kelimelerle etkileşime sokarak onları n-boyutlu uzayda yeniden konumlandırmaktır. Transformer bunu birkaç araçla yapar ama biz en kritik olanına, yani kalbine odaklanacağız: **Attention**.
+
+    **Attention: Kim, Kime, Ne Kadar Bakmalı?**
+
+    Attention mekanizmasının görevi çok net: “Bu cümleyi anlamak için şu an hangi kelimeler daha önemli?” 
+
+    Model bir prompt'u işlerken yine adım adım (token token) ilerler. Ancak, örneğin “Parayı bankaya yatırdım” cümlesinde model "yatırdım" kelimesine ulaştığında, önceki kelimelere eşit davranmaz. Onları bir **"Weighted Combination" (Ağırlıklı Kombinasyon)** ile tartar:
+
+    <ul className="writingArticle__TokenizerList">
+      <li>%48 → bankaya (eylemin “nereye” yapıldığını belirliyor)</li>
+      <li>%34 → parayı (neyin yatırıldığı)</li>
+      <li>%18 → yatırdım öncesi bağlam (gramer ve zaman uyumu gibi sinyaller)</li>
+    </ul>
+
+    Model, önceki kelimelerin embedding’lerini bu oranlarda harmanlayarak ortaya yepyeni ve bağlamsal bir vektör çıkarır. Bu vektör, “banka” kelimesinin bu cümlede finansal bir bağlamda kullanıldığını güçlü biçimde temsil eder. Bir sonraki aşamada model, işte bu bağlamsal temsile bakarak “yatırdım” gibi bir kelimenin daha olası olduğuna karar verir.
+
+    **Peki attention mekanizması bu ağırlıkları nasıl hesaplıyor?** (Şimdi biraz matematiğe giriyoruz ama panik yok, amacım yine olup biteni daha çok sezgisel olarak gözünüzde canlandırabilmeniz)
+
+    Az önce sezgisel olarak anlattığımız bu ağırlıklar (%48 - %34 - %18), modelin içinde tahminle ya da yaklaşık hesaplarla değil, tamamen deterministik **matris işlemleriyle** hesaplanır. Şimdi bunu kullandığımız prompt üzerinden adım adım görelim.
+
+    <ul className="writingArticle__TokenizerList">
+      <li>Prompt’umuz: “Parayı bankaya yatırdım”</li>
+      <li>Tokenizer’ın bunu dört token’a böldüğünü varsayalım: [Parayı] [bankaya] [yatır] [dım]</li>
+      <li>Embedding boyutunu özellikle küçük tutalım (n = 3), böylece tabloları gözümüzde canlandırabilelim. (Gerçek modellerde bu boyut binlercedir. Burada küçük seçmemizin tek sebebi, olan biteni daha sade bir şekilde gösterebilmek. İsterseniz daha gerçekçi bir görselleştirmeyi şu interaktif <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a>’ı kurcalayabilirsiniz.)</li>
+    </ul>
+
+     <div className="writingArticle__codeRow">
+      <div className="writingArticle__codeCard writingArticle__codeCard--narrow">
+        <pre className="writingArticle__codeBlock">
+          <code>
+            <span className="codeLine">
+              <span className="codeConst">Embeddings</span>
+              <span className="codeOp"> (</span>
+              <span className="codeVar">4 × 3</span>
+              <span className="codeOp">)</span>
+            </span>
+            <br />
+            <br />
+            <span className="codeLine">
+              <span className="codeVar">Parayı</span>
+              <span className="codeOp">   → [ </span>
+              <span className="codeVar">0.2</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">-0.1</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">0.7</span>
+              <span className="codeOp"> ]</span>
+            </span>
+            <br />
+            <span className="codeLine">
+              <span className="codeVar">bankaya</span>
+              <span className="codeOp"> → [ </span>
+              <span className="codeVar">0.9</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">0.3</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">-0.2</span>
+              <span className="codeOp"> ]</span>
+            </span>
+            <br />
+            <span className="codeLine">
+              <span className="codeVar">yatır</span>
+              <span className="codeOp">   → [ </span>
+              <span className="codeVar">0.4</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">0.8</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">0.1</span>
+              <span className="codeOp"> ]</span>
+            </span>
+            <br />
+            <span className="codeLine">
+              <span className="codeVar">dım</span>
+              <span className="codeOp">     → [ </span>
+              <span className="codeVar">-0.3</span>
+              <span className="codeOp">, </span>
+              <span className="codeVar">0.2</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">0.6</span>
+              <span className="codeOp"> ]</span>
+            </span>
+          </code>
+        </pre>
+      </div>
+      <div className="writingArticle__codeArrow" aria-hidden="true">→</div>
+      <div className="writingArticle__codeCard writingArticle__codeCard--matrix">
+        <div className="writingArticle__embedMatrix writingArticle__embedMatrix--full">
+          <svg
+            className="writingArticle__embedMatrixSvg"
+            viewBox="0 0 320 200"
+            role="img"
+            aria-label="Embeddings matrix 4 by 3"
+          >
+            <path className="embedMatrixBracket" d="M18 24 H8 V184 H18" />
+            <path className="embedMatrixBracket" d="M302 24 H312 V184 H302" />
+            <text x="70" y="58" className="embedMatrixNumber">0.2</text>
+            <text x="150" y="58" className="embedMatrixNumber">-0.1</text>
+            <text x="230" y="58" className="embedMatrixNumber">0.7</text>
+            <text x="70" y="92" className="embedMatrixNumber">0.9</text>
+            <text x="150" y="92" className="embedMatrixNumber">0.3</text>
+            <text x="230" y="92" className="embedMatrixNumber">-0.2</text>
+            <text x="70" y="126" className="embedMatrixNumber">0.4</text>
+            <text x="150" y="126" className="embedMatrixNumber">0.8</text>
+            <text x="230" y="126" className="embedMatrixNumber">0.1</text>
+            <text x="70" y="160" className="embedMatrixNumber">-0.3</text>
+            <text x="150" y="160" className="embedMatrixNumber">0.2</text>
+            <text x="230" y="160" className="embedMatrixNumber">0.6</text>
+          </svg>
+        </div>
+      </div>
+     </div> 
+      Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding'i alır ve onu üç farklı “lens”ten geçirir. Yani üç farklı matematiksel (**Q, K, V**) dönüşümden geçirir. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
+           
+     <div className="writingArticle__callout">
+    <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+      <li>**Query (Q)** “Bu embedding, diğer embedding’lerde hangi özellikleri *arıyor*?”</li>
+      <li>**Key (K)** “Bu embedding, kendisiyle ilgili *hangi sinyalleri sunuyor*?”</li>
+      <li>**Value (V)** “Bu embedding’den *bağlama hangi bilgi taşınmalı*?”</li>
+      </ol>
+
+     Bu üç farklı bakış açısı, matematikte embedding matrisinin üç farklı öğrenilmiş matris ile çarpılmasıyla elde edilir:
+     <div className="writingArticle__codeCard">
+        <pre className="writingArticle__codeBlock">
+          <code>
+            <span className="codeLine">
+              <span className="codeVar">Q</span>
+              <span className="codeEq"> = </span>
+              <span className="codeVar">Embeddings</span>
+              <span className="codeOp"> × </span>
+              <span className="codeVar">WQ</span>
+            </span>
+            <br />
+            <span className="codeLine">
+              <span className="codeVar">K</span>
+              <span className="codeEq"> = </span>
+              <span className="codeVar">Embeddings</span>
+              <span className="codeOp"> × </span>
+              <span className="codeVar">WK</span>
+            </span>
+            <br />
+            <span className="codeLine">
+              <span className="codeVar">V</span>
+              <span className="codeEq"> = </span>
+              <span className="codeVar">Embeddings</span>
+              <span className="codeOp"> × </span>
+              <span className="codeVar">WV</span>
+            </span>
+          </code>
+        </pre>
+      </div>
+
+    Buradaki **WQ**, **WK** ve **WV** matrisleri, modelin eğitim sırasında öğrendiği parametrelerdir. Bunlara “öğrenilmiş matris” (learned matrix) denmesinin sebebi; model eğitiminin en başında bu matrislerin içi tamamen **rastgele sayılarla** doldurulur. Yani başlangıçta model, embedding’lere nasıl bakması gerektiği konusunda hiçbir fikre sahip değildir. Çünkü modelin öğrenebilmesi için her şeyin aynı olmaması, her şeyin sıfırdan başlamaması, farklı yönlere hareket edebilmesi gerekir. Rastgele başlatmak, modele şunu demektir: “Hiçbir şey bilmiyorsun, ama öğrenmeye açıksın.”  Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre WQ, WK ve WV içindeki sayıları çok küçük adımlarla günceller. Bu işlem milyarlarca örnek üzerinde tekrarlandıkça, bu matrisler yavaş yavaş şu sorulara iyi cevap verecek hâle gelir:
+
+     <ul className="writingArticle__TokenizerList">
+      <li>Hangi embedding özellikleri birbirini gerçekten ilgilendiriyor?</li>
+      <li>Hangi sinyaller bağlam için önemli, hangileri gürültü?</li>
+      <li>Hangi özellikler karıştırılmalı, hangileri bastırılmalı?</li>
+    </ul>
+    Bu yüzden bu matrislere “öğrenilmiş” denir ve modelin “bilgisi”, büyük ölçüde bu matrislerin içindeki ondalıklı sayılarda saklıdır. O çok duyduğumuz “parametre” kavramı bu yüzden bu kadar önemlidir. Bir model için “175 milyar parametre” dendiğinde, bu sayıların büyük bir kısmı tam olarak bu tür matrislerin içindeki ondalıklı değerlerdir. Yani modelin içinde, eğitim sırasında oynatılan 175 milyar ayrı sayı var demektir. Her biri tek başına anlamsızken, birlikte devasa bir davranış bütünü oluştururlar. Tıpkı tek tek nöronların hiçbir şey ifade etmeyip, birlikte düşünce üretmesi gibi.
+
+    Eğitim bittiğinde bu matrisler artık sabitlenir. Inference sırasında model yeni bir şey öğrenmez; sadece bu öğrenilmiş lens’leri kullanarak embedding’leri tartar, karşılaştırır ve harmanlar.
+
     </div>
-    Bu kadar mı yani? Evet… ve hayır.
 
-    Yukarıdaki kod tabii ki aşırı sadeleştirilmiş bir versiyon ama beni ilk şaşırtan şey şu olmuştu: Modern LLM’lerin iskeleti, düşündüğümüz kadar devasa ve karmaşık kod bloklarından oluşmuyor. Hatta bazı açık kaynak modellerin “tam çalışan” referans implementasyonları birkaç yüz satır Python koduyla yazılabiliyor. <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> mesela, PyTorch ile sıfırdan model kurulumlarını adım adım gösteren harika eğitimler ve repo’lar paylaşıyor. Şu an oldukça güçlü kabul edilen açık modellerden biri olan OLMo-3’ün temel mimarisi de, yanlış hatırlamıyorsam, sadece birkaç yüz satırlık bir kodla ayağa kaldırılabiliyor. Tabii burada küçük ama kritik bir fark var. Kod kısa olabilir, ama o kodun içinde kullanılan ağırlıklar (weights) devasa. Asıl “zeka” dediğimiz şey, bu mimarinin içine eğitim sırasında doldurulan milyarlarca sayının içinde yaşıyor. Yani motorun şeması basit, ama motoru besleyen yakıt aşırı yoğun. Bu noktada artık hattın ilk durağına rahatça girebiliriz: Bu metin, bu sisteme ilk girdiğinde başına ne geliyor?
+    **Query (Q) matrisi nasıl elde edilir?**
 
-    Tokenizer ile başlayalım.
+    Model, embedding matrisini alır ve onu WQ adlı öğrenilmiş bir matrisle çarpar. Bu örnekte boyutları küçük tutuyoruz:
+
+     <ul className="writingArticle__TokenizerList">
+      <li>Embeddings → 4 × 3 (yukarıdaki örneğe devam ediyoruz) </li>
+      <li>WQ → 3 × 3 (Örnek bir WQ matrisi düşünelim, tamamen temsili)</li>
+    </ul>
+
+
+
+    <div className="writingArticle__codeRow">
+      <div className="writingArticle__codeCard writingArticle__codeCard--matrix">
+        <div className="writingArticle__embedMatrix writingArticle__embedMatrix--full">
+          <svg
+            className="writingArticle__embedMatrixSvg"
+            viewBox="0 0 320 200"
+            role="img"
+            aria-label="Embeddings matrix 4 by 3"
+          >
+            <path className="embedMatrixBracket" d="M18 24 H8 V184 H18" />
+            <path className="embedMatrixBracket" d="M302 24 H312 V184 H302" />
+            <text x="70" y="58" className="embedMatrixNumber">0.2</text>
+            <text x="150" y="58" className="embedMatrixNumber">-0.1</text>
+            <text x="230" y="58" className="embedMatrixNumber">0.7</text>
+            <text x="70" y="92" className="embedMatrixNumber">0.9</text>
+            <text x="150" y="92" className="embedMatrixNumber">0.3</text>
+            <text x="230" y="92" className="embedMatrixNumber">-0.2</text>
+            <text x="70" y="126" className="embedMatrixNumber">0.4</text>
+            <text x="150" y="126" className="embedMatrixNumber">0.8</text>
+            <text x="230" y="126" className="embedMatrixNumber">0.1</text>
+            <text x="70" y="160" className="embedMatrixNumber">-0.3</text>
+            <text x="150" y="160" className="embedMatrixNumber">0.2</text>
+            <text x="230" y="160" className="embedMatrixNumber">0.6</text>
+          </svg>
+        </div>
+      </div>
+      <div className="writingArticle__codeArrow" aria-hidden="true">×</div>
+      <div className="writingArticle__codeCard writingArticle__codeCard--matrix">
+        <div className="writingArticle__embedMatrix writingArticle__embedMatrix--full">
+          <svg
+            className="writingArticle__embedMatrixSvg"
+            viewBox="0 0 320 200"
+            role="img"
+            aria-label="Embeddings matrix 4 by 3"
+          >
+            <path className="embedMatrixBracket" d="M18 24 H8 V184 H18" />
+            <path className="embedMatrixBracket" d="M302 24 H312 V184 H302" />
+            <text x="70" y="58" className="embedMatrixNumber">0.2</text>
+            <text x="150" y="58" className="embedMatrixNumber">-0.1</text>
+            <text x="230" y="58" className="embedMatrixNumber">0.7</text>
+            <text x="70" y="92" className="embedMatrixNumber">0.9</text>
+            <text x="150" y="92" className="embedMatrixNumber">0.3</text>
+            <text x="230" y="92" className="embedMatrixNumber">-0.2</text>
+            <text x="70" y="126" className="embedMatrixNumber">0.4</text>
+            <text x="150" y="126" className="embedMatrixNumber">0.8</text>
+            <text x="230" y="126" className="embedMatrixNumber">0.1</text>
+            <text x="70" y="160" className="embedMatrixNumber">-0.3</text>
+            <text x="150" y="160" className="embedMatrixNumber">0.2</text>
+            <text x="230" y="160" className="embedMatrixNumber">0.6</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+
+
+              Burada embedding’leri WQ matrisiyle çarparak Query (Q) vektörlerini elde ediyoruz. Her satır hâlâ bir token’ı temsil ediyor, sadece artık “bu kelime diğerlerinde ne arıyor?” perspektifinden bakıyoruz. Boyutlar değişmiyor, sadece temsil şekli değişiyor.
+
+    <figure className="writingArticle__matrixCard">
+      <svg className="writingArticle__matrixViz" viewBox="0 0 900 180" role="img" aria-label="Embeddings times WK equals K">
+        <rect x="0" y="0" width="900" height="180" rx="14" />
+        <text x="80" y="30" className="matrixLabel" fill="#2ddf9b">embeddings</text>
+        <path className="matrixBracket" d="M20 44 H8 V156 H20" />
+        <path className="matrixBracket" d="M230 44 H242 V156 H230" />
+        <text x="50" y="74" className="matrixNumber">-0.06</text>
+        <text x="120" y="74" className="matrixNumber">0.13</text>
+        <text x="190" y="74" className="matrixNumber">-0.30</text>
+        <text x="50" y="104" className="matrixNumber">0.95</text>
+        <text x="120" y="104" className="matrixNumber">-0.49</text>
+        <text x="190" y="104" className="matrixNumber">-0.64</text>
+        <text x="50" y="134" className="matrixNumber">-0.05</text>
+        <text x="120" y="134" className="matrixNumber">0.75</text>
+        <text x="190" y="134" className="matrixNumber">0.65</text>
+        <text x="50" y="164" className="matrixNumber">0.51</text>
+        <text x="120" y="164" className="matrixNumber">-0.72</text>
+        <text x="190" y="164" className="matrixNumber">0.98</text>
+
+        <text x="270" y="106" className="matrixSymbol">×</text>
+
+        <text x="380" y="30" className="matrixLabel">WK</text>
+        <path className="matrixBracket" d="M320 44 H308 V156 H320" />
+        <path className="matrixBracket" d="M550 44 H562 V156 H550" />
+        <text x="340" y="74" className="matrixNumber">0.13</text>
+        <text x="410" y="74" className="matrixNumber">-0.51</text>
+        <text x="480" y="74" className="matrixNumber">-0.63</text>
+        <text x="340" y="104" className="matrixNumber">-0.79</text>
+        <text x="410" y="104" className="matrixNumber">0.54</text>
+        <text x="480" y="104" className="matrixNumber">-0.04</text>
+        <text x="340" y="134" className="matrixNumber">0.33</text>
+        <text x="410" y="134" className="matrixNumber">-0.10</text>
+        <text x="480" y="134" className="matrixNumber">-0.87</text>
+
+        <text x="600" y="106" className="matrixSymbol">=</text>
+
+        <text x="710" y="30" className="matrixLabel">K</text>
+        <path className="matrixBracket" d="M640 44 H628 V156 H640" />
+        <path className="matrixBracket" d="M840 44 H852 V156 H840" />
+        <text x="660" y="74" className="matrixNumber">-0.21</text>
+        <text x="720" y="74" className="matrixNumber">0.13</text>
+        <text x="780" y="74" className="matrixNumber">0.29</text>
+        <text x="660" y="104" className="matrixNumber">0.30</text>
+        <text x="720" y="104" className="matrixNumber">-0.68</text>
+        <text x="780" y="104" className="matrixNumber">-0.03</text>
+        <text x="660" y="134" className="matrixNumber">-0.39</text>
+        <text x="720" y="134" className="matrixNumber">0.36</text>
+        <text x="780" y="134" className="matrixNumber">-0.56</text>
+        <text x="660" y="164" className="matrixNumber">0.96</text>
+        <text x="720" y="164" className="matrixNumber">-0.74</text>
+        <text x="780" y="164" className="matrixNumber">-1.15</text>
+      </svg>
+    </figure>
+
+        Aynı embedding’leri bu kez WK ile çarparak Key (K) vektörlerini üretiyoruz. Bu da her kelimenin “benimle ilgili hangi bilgi var?” bakış açısı. Yapılan işlem birebir aynı, sadece kullanılan matris farklı.
+
+    <figure className="writingArticle__matrixCard writingArticle__matrixCard--alt">
+      <svg className="writingArticle__matrixViz" viewBox="0 0 1120 180" role="img" aria-label="Q times transpose K equals scores">
+        <rect x="0" y="0" width="1120" height="180" rx="14" />
+
+        <text x="170" y="30" className="matrixLabel">Q</text>
+        <path className="matrixBracket" d="M20 44 H8 V156 H20" />
+        <path className="matrixBracket" d="M320 44 H332 V156 H320" />
+        <text x="90" y="74" className="matrixNumber">0.15</text>
+        <text x="170" y="74" className="matrixNumber">0.07</text>
+        <text x="250" y="74" className="matrixNumber">-0.19</text>
+        <text x="90" y="104" className="matrixNumber">-0.10</text>
+        <text x="170" y="104" className="matrixNumber">0.79</text>
+        <text x="250" y="104" className="matrixNumber">-0.78</text>
+        <text x="90" y="134" className="matrixNumber">-0.71</text>
+        <text x="170" y="134" className="matrixNumber">0.15</text>
+        <text x="250" y="134" className="matrixNumber">0.64</text>
+        <text x="90" y="164" className="matrixNumber">-0.56</text>
+        <text x="170" y="164" className="matrixNumber">-0.06</text>
+        <text x="250" y="164" className="matrixNumber">0.51</text>
+
+        <text x="350" y="106" className="matrixSymbol">×</text>
+
+        <text x="570" y="30" className="matrixLabel">transpose(K)</text>
+        <path className="matrixBracket" d="M380 44 H368 V156 H380" />
+        <path className="matrixBracket" d="M760 44 H772 V156 H760" />
+        <text x="450" y="74" className="matrixNumber">-0.21</text>
+        <text x="550" y="74" className="matrixNumber">0.30</text>
+        <text x="650" y="74" className="matrixNumber">-0.39</text>
+        <text x="730" y="74" className="matrixNumber">0.96</text>
+        <text x="450" y="104" className="matrixNumber">0.13</text>
+        <text x="550" y="104" className="matrixNumber">-0.68</text>
+        <text x="650" y="104" className="matrixNumber">0.36</text>
+        <text x="730" y="104" className="matrixNumber">-0.74</text>
+        <text x="450" y="134" className="matrixNumber">0.29</text>
+        <text x="550" y="134" className="matrixNumber">-0.03</text>
+        <text x="650" y="134" className="matrixNumber">-0.56</text>
+        <text x="730" y="134" className="matrixNumber">-1.15</text>
+
+        <text x="790" y="106" className="matrixSymbol">=</text>
+
+        <text x="960" y="30" className="matrixLabel">scores</text>
+        <path className="matrixBracket" d="M820 44 H808 V156 H820" />
+        <path className="matrixBracket" d="M1100 44 H1112 V156 H1100" />
+        <text x="880" y="74" className="matrixNumber">-0.08</text>
+        <text x="960" y="74" className="matrixNumber">0.00</text>
+        <text x="1040" y="74" className="matrixNumber">0.08</text>
+        <text x="1080" y="74" className="matrixNumber">0.31</text>
+        <text x="880" y="104" className="matrixNumber">-0.10</text>
+        <text x="960" y="104" className="matrixNumber">-0.54</text>
+        <text x="1040" y="104" className="matrixNumber">0.76</text>
+        <text x="1080" y="104" className="matrixNumber">0.21</text>
+        <text x="880" y="134" className="matrixNumber">0.36</text>
+        <text x="960" y="134" className="matrixNumber">-0.33</text>
+        <text x="1040" y="134" className="matrixNumber">-0.04</text>
+        <text x="1080" y="134" className="matrixNumber">-1.53</text>
+        <text x="880" y="164" className="matrixNumber">0.26</text>
+        <text x="960" y="164" className="matrixNumber">-0.15</text>
+        <text x="1040" y="164" className="matrixNumber">-0.09</text>
+        <text x="1080" y="164" className="matrixNumber">-1.08</text>
+      </svg>
+    </figure>
+     Burada, biraz önce elde ettiğimiz Q ve K matrislerini birbiriyle çarparız. Bu çarpımın sonucu olan scores matrisi, her token’ın diğer token’lar için ne kadar “önemli” olduğunu sayısal olarak ifade eder. Satırlar “şu anki token”ı, sütunlar ise “bakılan token”ı temsil eder. Ancak bu tablo, attention mekanizmasının henüz normalize edilmemiş, 'ham' ilgisini gösterir.
+
+     **Ve model bu skorları doğrudan kullanmaz**. Çünkü bu scores matrisinde iki temel problem var:
+
+     **Birinci problem:** Bu matris, gelecekteki token’ların geçmişi etkilemesine izin veriyor. 
+
+     Örneğin en üst satıra bakalım. Bu satır, ikinci kelime üretilirken (ya da değerlendirilirken) hangi kelimelere ne kadar bakıldığını temsil ediyor. Ancak bu noktada modelin bildiği tek kelime ilk kelime. Dolayısıyla bu satırda sadece ilk token’ın etkili olması gerekir. Aynı durum ikinci satır için de geçerli: model artık ilk iki kelimeyi biliyor ama üçüncüyü henüz bilmiyor. Yani yalnızca ilk iki token bağlama katkı yapabilmeli.
+     
+     Bunu sağlamak için **triangular mask** uygulanır. Bu maske, gelecekteki token’lara karşılık gelen hücreleri sıfırlamak yerine negatif sonsuz (-∞) yapar. (Birazdan neden sıfır değil de -∞ kullandığımızı göreceğiz.)
+
+    <figure className="writingArticle__matrixCard">
+      <svg className="writingArticle__matrixViz" viewBox="0 0 1040 180" role="img" aria-label="Masking attention scores">
+        <rect x="0" y="0" width="1040" height="180" rx="14" />
+
+        <text x="60" y="112" className="matrixLabel">mask(</text>
+
+        <text x="300" y="30" className="matrixLabel">scores</text>
+        <path className="matrixBracket" d="M210 44 H198 V156 H210" />
+        <path className="matrixBracket" d="M510 44 H522 V156 H510" />
+        <text x="240" y="74" className="matrixNumber">-0.08</text>
+        <text x="320" y="74" className="matrixNumber">0.00</text>
+        <text x="400" y="74" className="matrixNumber">0.08</text>
+        <text x="480" y="74" className="matrixNumber">0.31</text>
+        <text x="240" y="104" className="matrixNumber">-0.10</text>
+        <text x="320" y="104" className="matrixNumber">-0.54</text>
+        <text x="400" y="104" className="matrixNumber">0.76</text>
+        <text x="480" y="104" className="matrixNumber">0.21</text>
+        <text x="240" y="134" className="matrixNumber">0.36</text>
+        <text x="320" y="134" className="matrixNumber">-0.33</text>
+        <text x="400" y="134" className="matrixNumber">-0.04</text>
+        <text x="480" y="134" className="matrixNumber">-1.53</text>
+        <text x="240" y="164" className="matrixNumber">0.26</text>
+        <text x="320" y="164" className="matrixNumber">-0.15</text>
+        <text x="400" y="164" className="matrixNumber">-0.09</text>
+        <text x="480" y="164" className="matrixNumber">-1.08</text>
+
+        <text x="540" y="112" className="matrixLabel">)</text>
+        <text x="600" y="112" className="matrixSymbol">=</text>
+
+        <text x="780" y="30" className="matrixLabel">masked</text>
+        <path className="matrixBracket" d="M690 44 H678 V156 H690" />
+        <path className="matrixBracket" d="M1010 44 H1022 V156 H1010" />
+        <text x="720" y="74" className="matrixNumber">-0.08</text>
+        <text x="800" y="74" className="matrixNumber">-∞</text>
+        <text x="880" y="74" className="matrixNumber">-∞</text>
+        <text x="960" y="74" className="matrixNumber">-∞</text>
+        <text x="720" y="104" className="matrixNumber">-0.10</text>
+        <text x="800" y="104" className="matrixNumber">-0.54</text>
+        <text x="880" y="104" className="matrixNumber">-∞</text>
+        <text x="960" y="104" className="matrixNumber">-∞</text>
+        <text x="720" y="134" className="matrixNumber">0.36</text>
+        <text x="800" y="134" className="matrixNumber">-0.33</text>
+        <text x="880" y="134" className="matrixNumber">-0.04</text>
+        <text x="960" y="134" className="matrixNumber">-∞</text>
+        <text x="720" y="164" className="matrixNumber">0.26</text>
+        <text x="800" y="164" className="matrixNumber">-0.15</text>
+        <text x="880" y="164" className="matrixNumber">-0.09</text>
+        <text x="960" y="164" className="matrixNumber">-1.08</text>
+      </svg>
+    </figure>
+
+    **İkinci problem:** Bu skorlar hâlâ keyfi sayılar. Negatif olabilirler, pozitif olabilirler ve toplamları herhangi bir anlama gelmez.
+
+    Oysa bizim ihtiyacımız olan şey, her satırın toplamı 1 olsun ve her sayı 0 ile 1 arasında olsun. Yani gerçekten “ne kadar dikkat ediyorum?” sorusuna cevap veren yüzdesel bir dağılım elde edelim. İşte softmax fonksiyonu tam olarak bunu yapar. Detaylarına girmeye gerek yok, önemli olan sonuç: Softmax’ten sonra her satır bir olasılık dağılımına dönüşür.
+
+    <figure className="writingArticle__matrixCard">
+      <svg className="writingArticle__matrixViz" viewBox="0 0 1040 180" role="img" aria-label="Softmax weights from masked scores">
+        <rect x="0" y="0" width="1040" height="180" rx="14" />
+
+        <text x="60" y="112" className="matrixLabel">softmax(</text>
+
+        <text x="330" y="30" className="matrixLabel">masked</text>
+        <path className="matrixBracket" d="M240 44 H228 V156 H240" />
+        <path className="matrixBracket" d="M560 44 H572 V156 H560" />
+        <text x="280" y="74" className="matrixNumber">-0.08</text>
+        <text x="360" y="74" className="matrixNumber">-∞</text>
+        <text x="440" y="74" className="matrixNumber">-∞</text>
+        <text x="520" y="74" className="matrixNumber">-∞</text>
+        <text x="280" y="104" className="matrixNumber">-0.10</text>
+        <text x="360" y="104" className="matrixNumber">-0.54</text>
+        <text x="440" y="104" className="matrixNumber">-∞</text>
+        <text x="520" y="104" className="matrixNumber">-∞</text>
+        <text x="280" y="134" className="matrixNumber">0.36</text>
+        <text x="360" y="134" className="matrixNumber">-0.33</text>
+        <text x="440" y="134" className="matrixNumber">-0.04</text>
+        <text x="520" y="134" className="matrixNumber">-∞</text>
+        <text x="280" y="164" className="matrixNumber">0.26</text>
+        <text x="360" y="164" className="matrixNumber">-0.15</text>
+        <text x="440" y="164" className="matrixNumber">-0.09</text>
+        <text x="520" y="164" className="matrixNumber">-1.08</text>
+
+        <text x="590" y="112" className="matrixLabel">)</text>
+        <text x="650" y="112" className="matrixSymbol">=</text>
+
+        <text x="820" y="30" className="matrixLabel">weights</text>
+        <path className="matrixBracket" d="M730 44 H718 V156 H730" />
+        <path className="matrixBracket" d="M1020 44 H1032 V156 H1020" />
+        <text x="770" y="74" className="matrixNumber">1.00</text>
+        <text x="850" y="74" className="matrixNumber">0.00</text>
+        <text x="930" y="74" className="matrixNumber">0.00</text>
+        <text x="1010" y="74" className="matrixNumber">0.00</text>
+        <text x="770" y="104" className="matrixNumber">0.61</text>
+        <text x="850" y="104" className="matrixNumber">0.39</text>
+        <text x="930" y="104" className="matrixNumber">0.00</text>
+        <text x="1010" y="104" className="matrixNumber">0.00</text>
+        <text x="770" y="134" className="matrixNumber">0.46</text>
+        <text x="850" y="134" className="matrixNumber">0.23</text>
+        <text x="930" y="134" className="matrixNumber">0.31</text>
+        <text x="1010" y="134" className="matrixNumber">0.00</text>
+        <text x="770" y="164" className="matrixNumber">0.38</text>
+        <text x="850" y="164" className="matrixNumber">0.25</text>
+        <text x="930" y="164" className="matrixNumber">0.27</text>
+        <text x="1010" y="164" className="matrixNumber">0.10</text>
+      </svg>
+    </figure>
+
+    Artık elimizde gerçek attention ağırlıkları var. Bu sayılar, modelin her token’a bağlam kurarken ne kadar önem verdiğini gösterir.
+
+    Burada önemli bir detayı tekrar hatırlatalım: Şu ana kadar gördüğümüz tüm matrislerde (embeddings, Q, K, scores), satırların sırası hiç değişmedi. Çünkü her bir satır, prompttaki belirli bir token’a karşılık geliyor.
+
+    Örneğin yeniden şu promptu düşünelim: “Kedi masanın üstünde uyuyordu.”
+
+    Tokenizer ve embedding aşamasından sonra bu cümle, modelin içinde kabaca şu sırayla temsil edilir:
+
+    1. kedi
+
+    2. masanın
+
+    3. üstünde
+
+    4. uyuyordu
+
+    Yan embedding matrisindeki:
+
+    1. satır → kedi
+
+    2. satır → masanın
+
+    3. satır → üstünde
+
+    4. satır → uyuyordu
+
+    Q ve K matrislerine geçtiğimizde de bu eşleşme korunur. Değişen şey, satırların anlamı değil, bu anlamların hangi bakış açısından temsil edildiğidir.
 ---

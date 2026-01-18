@@ -4,6 +4,8 @@ import { getPost } from '@/lib/md'
 import { getCopy } from '@/lib/static-copy'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { notFound } from 'next/navigation'
+import EmbeddingsDemo from '@/components/embeddings-demo'
+import TokenDemo from '@/components/token-demo'
 
 export default function Post({
   params,
@@ -40,7 +42,10 @@ export default function Post({
         </header>
 
         <div className="writingArticle__body">
-          <MDXRemote source={post.content} />
+          <MDXRemote
+            source={post.content}
+            components={{ TokenDemo, EmbeddingsDemo }}
+          />
         </div>
       </article>
 
