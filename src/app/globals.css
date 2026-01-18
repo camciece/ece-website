@@ -1916,8 +1916,8 @@ ol.writingArticle__TokenizerList {
 }
 
 .writingArticle__embedMatrixSvg {
-  width: 320px;
-  height: 200px;
+  width: 100%;
+  height: auto;
   display: block;
 }
 
