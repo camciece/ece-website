@@ -422,16 +422,7 @@ content:
 
     </div>
 
-    **Query (Q) matrisi nasıl elde edilir?**
-
-    Model, embedding matrisini alır ve onu WQ adlı öğrenilmiş bir matrisle çarpar. Bu örnekte boyutları küçük tutuyoruz:
-
-     <ul className="writingArticle__TokenizerList">
-      <li>Embeddings → 4 × 3 (yukarıdaki örneğe devam ediyoruz) </li>
-      <li>WQ → 3 × 3 (Örnek bir WQ matrisi düşünelim, tamamen temsili)</li>
-    </ul>
-
-
+    **Şimdi aynı örnek üzerinden Query (Q) ve Key (K) matrislerini hesaplayalım**
 
     <div className="writingArticle__codeRow">
       <div className="writingArticle__codeCard writingArticle__codeCard--matrix">
@@ -487,7 +478,41 @@ content:
       </div>
     </div>
 
+    **Scores: “Kim kime ne kadar bakıyor?”**
 
+    Şu ana kadar aynı embedding’leri iki farklı lensten geçirerek Q ve K matrislerini elde ettik. Yani aynı embedding’leri, iki farklı “lens”ten geçirerek Q ve K uzaylarına taşıdık. Bu, aynı bilginin farklı koordinat sistemlerindeki halleri demek. 
+    Q, her embedding’in “ne aradığını”; K ise her embedding’in “ne sunduğunu” temsil ediyor. Şimdi attention mekanizmasının asıl kritik sorusuna geliyoruz:
+    Bir embedding’in aradığı şeylerle, diğer embedding’lerin sundukları ne kadar uyuşuyor?
 
-              Burada embedding’leri WQ matrisiyle çarparak Query (Q) vektörlerini elde ediyoruz. Her satır hâlâ bir token’ı temsil ediyor, sadece artık “bu kelime diğerlerinde ne arıyor?” perspektifinden bakıyoruz. Boyutlar değişmiyor, sadece temsil şekli değişiyor.
+    Bu sorunun cevabı tek bir matris çarpımıyla hesaplanır: **Scores = Q × Kᵀ**
+
+    Burada yapılan şey oldukça mekaniktir. Q matrisi 4×3 boyutundadır; çünkü elimizde 4 embedding vardır ve her biri 3 boyutludur. K matrisinin transpozu ise 3×4’tür. Bu iki tabloyu çarptığımızda ortaya 4×4 boyutunda yeni bir tablo çıkar. Bu boyut tesadüf değil çünkü attention skorlarının boyutu token sayısıyla ilgilidir. Dört token varsa, attention tablosu dört satır ve dört sütundan oluşur.
+
+    Ortaya çıkan bu tabloyu şöyle okumak gerekir: Her satır “şu anki embedding”i, her sütun ise “bakılan embedding”i temsil eder. Yani bu tablo, her embedding’in diğer embedding’lerle ne kadar *ilişkili* olduğunu sayısal olarak ifade eder. Örneğin üçüncü satır ikinci sütundaki bir hücre, “yatır” embedding’inin “bankaya” embedding’ine ne kadar baktığını gösterir.
+
+    Bu hücrelerin her biri, ilgili Q vektörü ile ilgili K vektörünün dot product’ıdır. Yani burada yapılan şey, bir embedding’in aradığı sinyaller ile diğer embedding’in sunduğu sinyallerin ne kadar örtüştüğünü ölçmektir. Ortaya çıkan sayılar büyükse ilgi güçlüdür, sıfıra yakınsa ilişki zayıftır, negatifse ters yönde bir sinyal vardır.
+
+    Ancak çok önemli bir noktayı vurgulamak gerekir: Bu skorlar henüz “ağırlık” değildir. Olasılık değildir. Normalize edilmiş değerler değildir. Sadece ham benzerlik skorlarıdır. Attention mekanizmasının “ilgi” kısmı burada biter.
+
+    Bu aşamada doğal bir itiraz ortaya çıkabilir: “İlk embedding, kendisinden sonra gelen embedding’lere nasıl bakabiliyor?” Evet, şu an bakabiliyor. Çünkü bu noktada model henüz zaman kuralını uygulamamıştır. Buraya kadar yapılan işlem sadece “kim kime bakmak ister?” sorusunun cevabını çıkarmaktır. Zaman yönü, yani hangi embedding’in hangisine bakamayacağı, bir sonraki adımda devreye girer.
+
+    Şu ana kadar dikkat ederseniz, henüz anlam üretmedik, kelime seçmedik ya da output oluşturmadık. Sadece embedding’leri farklı uzaylara taşıdık, Q ve K üzerinden karşılaştırdık ve token’lar arasındaki *ham* ilgi tablosunu çıkardık. Bu yüzden scores matrisi, attention’ın henüz filtrelenmemiş, ham ilgisini temsil eder.
+
+    **Mask: “Kim kime bakamaz?”**
+
+    Elimizde artık scores matrisi var. Bu tablo, her embedding’in diğer embedding’lerle ne kadar ilişkili olduğunu söylüyor. Ama burada küçük gibi görünen, büyük bir problem var: Bu hâliyle scores matrisi, gelecek embedding’lerin geçmişi etkilemesine izin veriyor.
+
+    Bunu somutlaştıralım. Prompt’umuz hâlâ şu: “Parayı bankaya yatırdım”
+
+    Model “yatır” embedding’ini işlerken, doğal olarak “parayı” ve “bankaya” embedding’lerine bakabilir. Ama “dım” embedding’ine bakamaz. Çünkü henüz onu “görmedi”. Aynı şekilde ilk embedding olan “parayı”, kendisinden sonra gelen hiçbir embedding’den etkilenmemelidir. Ancak scores matrisi bu kuralı kendiliğinden bilmez. O sadece “kim kime benziyor?” tablosudur. Bu yüzden model, attention mekanizmasına çok basit ama çok kritik bir kural ekler: **mevcut embedding, gelecekteki embedding’lere bakamaz.** 
+
+    Mask’in yaptığı şey şudur:
+
+    Bir embedding’in bakmaması gereken tüm hücreleri geçersiz hâle getirir. Bunu “sıfırlayarak” değil, o hücreleri negatif sonsuz yaparak yapar. Neden sıfır değil de negatif sonsuz? Çünkü bir sonraki adımda softmax uygulanacaktır ve softmax’ta negatif sonsuz, pratikte “olasılığı sıfır” demektir.
+
+    Mask’ten sonra tabloyu şöyle düşünebiliriz: Her embedding sadece kendisinden önce gelen embedding’lere bakabilir. Kendisine bakabilir. Ama geleceğe bakamaz.
+
+    Bu noktada şunu netleştirelim: Mask yeni bir bilgi eklemez. Yeni bir ilişki yaratmaz. Sadece “olması mümkün olmayan” ilişkileri sistematik olarak devre dışı bırakır. Yani attention’a bir zaman disiplini kazandırır.
+
+    Henüz hâlâ ağırlık üretmedik. Hâlâ olasılıklara geçmedik. Elimizde sadece, kurallara uyan bir ilgi tablosu var.
 ---
