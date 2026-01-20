@@ -20,7 +20,7 @@ content:
   tr: |
     ChatGPT, Claude, Gemini… Bu yapay zeka araçlarının arayüzleri farklı, tonları farklı, hatta bazen cevap stilleri bile farklı. Ama içeride dönen ana makine büyük ölçüde aynı. Yani hepsi, bir metni alıp “buradan sonra en muhtemel kelime ne gelir?” sorusunu defalarca soran devasa bir matematik sistemi üzerine kurulu.
 
-    Bu yazıyı yazma sebebim de tam olarak bu. Her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bir yandan, bu kadar mekanik bir sistemin bize bu kadar “insansı” gelmesine şahit olurken, bir yandan da kendi zihnimizin nasıl çalıştığına dair daha şeffaf bir tabloyla karşı karşıyayız. Bu süreci anladığımızda, bu sistemlerin neden bazı konularda inanılmaz iyi, bazı konularda özgüvenle saçmalayabildiği çok daha net oturuyor.
+    Bu yazıyı yazma sebebim de tam olarak bu. Her gün kullandığımız bu araçlar bize sanki düşünüyor, plan yapıyor, niyet okuyormuş gibi hissettiriyor ama içeride olan şey çok daha mekanik, çok daha mühendislik kokan bir süreç. Ve bence asıl ilginç olan da bu. Çünkü bir yandan, bu kadar mekanik bir sistemin bize bu kadar “insansı” gelmesine şahit olurken, bir yandan da kendi zihnimizin nasıl çalıştığına dair daha şeffaf bir tabloyla karşı karşıyayız. Bu süreci anladığımızda, bu sistemlerin neden bazı konularda inanılmaz iyi, bazı konularda özgüvenle saçmalayabildiği çok daha net oturacak.
 
     <div className="writingArticle__callout">
       <div className="writingArticle__calloutTitle">
@@ -217,7 +217,7 @@ content:
 
      <h2>Embeddings</h2>
 
-     Tokenizer’dan çıkan Token ID’ler tek başına işe yaramaz, çünkü model bu noktada hâlâ sadece düz bir sayı dizisine bakıyordur ve tek boyutlu sayılarla yapılabilecek matematik çok sınırlıdır. Ne benzerlik ölçebilirsin, ne de “bunlar birbirine yakın mı?” gibi sorular sorabilirsin. Embeddings katmanının yaptığı şey tam olarak bunu değiştirmektir. Her Token ID, embedding tablosuna bakılarak **çok boyutlu bir vektöre dönüştürülür.**
+     Tokenizer’dan çıkan Token ID’ler tek başına işe yaramaz, çünkü model bu noktada hâlâ sadece düz bir sayı dizisine bakıyordur ve tek boyutlu sayılarla yapılabilecek matematik çok sınırlıdır. Ne benzerlik ölçebilirsin, ne de “bunlar birbirine yakın mı?” gibi sorular sorabilirsin. Embeddings katmanının yaptığı şey tam olarak bunu değiştirmektir. Her Token ID, embedding tablosuna bakılarak çok boyutlu bir vektöre dönüştürülür.
 
      **Bir embedding, n boyutlu bir uzaydaki bir konumu temsil eden, uzunluğu n olan bir sayı dizisidir.** Mesela n = 3 olsaydı, bir embedding [10, 4, 2] gibi görünebilirdi ve bu da 3 boyutlu bir uzayda x=10, y=4, z=2 noktasına karşılık gelirdi.
 
@@ -254,34 +254,43 @@ content:
      
     <h2 className="writingArticle__transformerTitle">Transformer</h2>
 
-    Bugün ChatGPT, Claude veya Gemini gibi modellerin bu kadar akıllı olmasının ana sebebi **transformer mimarisi**. Her şey 2017’de Google’daki bir araştırma ekibinin yayınladığı efsanevi **<a className="writingArticle__link" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noreferrer">“Attention is all you need”</a>** makalesiyle başladı. O zamana kadar modeller metni kelime kelime, sırayla “okumaya” çalışıyordu. Bu da hem yavaştı hem de uzun cümlelerde bağlamın kopmasına yol açıyordu. Attention (Dikkat) fikriyle birlikte model, ilk kez tüm cümleye aynı anda bakmayı ve “şu an gerçekten önemli olan ne?” sorusunu sormayı öğrendi. Bu da modelleri hem çok daha hızlı hem de çok daha bağlamlı hale getirdi. Eskiden bir cümleyi anlaması saniyeler süren modeller, artık devasa veri yığınlarını aynı anda işleyebilen süper zekalara dönüştü.
+     Her ne kadar asıl kırılma, sadece modellerin daha iyi sonuç üretmesi değil, yapay zekâyla kurduğumuz ilişkinin tamamen değişmesi olsa da, bugün büyük dil modellerinin bu kadar akıllı görünmesinin arkasında **Transformer mimarisi** var.
+     
+    Transformer’dan önce yapay zekâyla konuşmuyorduk. Prompt yazmak, serbestçe bir şey sormak, cevabın nasıl geleceğini merak etmek gibi bir deneyim yoktu. Yapay zekâ daha çok arka planda çalışan bir sistemdi: spam filtreleri, öneri motorları, basit çeviri ya da ses tanıma araçları. Kullanıcı olarak yaptığımız şey çoğu zaman bir butona basmak ya da çok sınırlı komutlar vermekten ibaretti.
+    Bu dönemde modeller, metni kelime kelime ve sırayla işlemeye çalışıyordu. Uzun cümlelerde bağlam kolayca kopuyor, model başta söylenenleri sonda hatırlayamıyordu. Bu haliyle doğal dili gerçek bir arayüz haline getirmek neredeyse imkansızdı.
 
-     **Statik Vektörden → Canlı Bağlama**
+    2017’de Google’daki bir araştırma ekibinin yayınladığı <a className="writingArticle__link" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noreferrer">Attention is All You Need</a> makalesiyle bu tablo değişti. Transformer mimarisi, modele metnin tamamına aynı anda bakma ve “şu anda gerçekten önemli olan ne?” sorusunu sorma yeteneği kazandırdı. Attention mekanizması sayesinde model, kelimeler arasındaki ilişkileri tek tek değil, bütün olarak değerlendirmeye başladı.
+    Böylece modeller hem çok daha hızlı hem de çok daha bağlamlı hale geldi. En önemlisi de doğal dil ilk kez ciddi anlamda bir arayüze dönüştü. Bugün bize çok normal gelen “bir şey yazayım, model anlasın” fikri, tam olarak bu mimari kırılmanın sonucu.
 
-     Embedding aşamasında kelimeleri koordinatlarına yerleştirmiştik. Ancak bu noktada, örneğin "banka" kelimesinın karşılığı olan vektör haritada hep aynı (statik) yerde duruyordu. Transformer katmanının asıl işi, bu statik vektörleri alıp cümledeki diğer kelimelerle etkileşime sokarak onları n-boyutlu uzayda yeniden konumlandırmaktır. Transformer bunu birkaç araçla yapar ama biz en kritik olanına, yani kalbine odaklanacağız: **Attention**.
 
-    **Attention: Kim, Kime, Ne Kadar Bakmalı?**
+     **Statik Vektörlerden → Bağlamı inşa eden dinamik vektörlere**
 
-    Attention mekanizmasının görevi çok net: “Bu cümleyi anlamak için şu an hangi kelimeler daha önemli?” 
+     Embedding aşamasında kelimeleri sayılara çevirmiş, onları n-boyutlu bir vektör uzayına yerleştirmiştik. Bu aşamada her kelimenin bir adresi vardı. Örneğin “banka” kelimesi, haritada hep aynı noktadaydı. Yani tek başına bakıldığında anlamı sabitti. Ama gerçek dil böyle çalışmıyor. “Nehir kenarındaki banka” ile “maaş bankaya yattı” dediğimizde, kelime aynı olsa da anlam tamamen değişiyor. Transformer katmanının asıl görevi tam burada başlıyor: Bu statik vektörleri alıp, cümledeki diğer kelimelerle etkileşime sokarak onları bağlama göre yeniden konumlandırıyor.
 
-    Model bir prompt'u işlerken yine adım adım (token token) ilerler. Ancak, örneğin “Parayı bankaya yatırdım” cümlesinde model "yatırdım" kelimesine ulaştığında, önceki kelimelere eşit davranmaz. Onları bir **"Weighted Combination" (Ağırlıklı Kombinasyon)** ile tartar:
+     Bunu yaparken birkaç farklı mekanizma kullanıyor ama biz en kritik olana, sistemin kalbine odaklanacağız: **Attention.** Çünkü kelimelerin hangi kelimelere, ne kadar bakacağına karar veren şey tam olarak bu.
 
+    **Attention: Hangi token, ne kadar önemli?**
+
+    Attention mekanizmasının görevi çok net: “Bu cümleyi anlamak için şu anda hangi token’lar daha kritik?”
+
+    Model prompt’u işlerken yine token token ilerler. Ama kritik fark şu: Bir tokene geldiğinde, geçmişteki tüm token’lara eşit ağırlık vermez. Onları bir ağırlıklı kombinasyon (weighted combination) ile tartar. Mesela “Parayı bankaya yatırdım” cümlesinde model “yatırdım” token’ına ulaştığında, önceki parçaları kabaca şöyle ağırlıklandırabilir:
     <ul className="writingArticle__TokenizerList">
-      <li>%48 → bankaya (eylemin “nereye” yapıldığını belirliyor)</li>
+      <li>%48 → bankaya (eylemin nereye yapıldığını belirliyor)</li>
       <li>%34 → parayı (neyin yatırıldığı)</li>
-      <li>%18 → yatırdım öncesi bağlam (gramer ve zaman uyumu gibi sinyaller)</li>
+      <li>%18 → yatırdım öncesi bağlam (gramer, zaman uyumu gibi sinyaller)</li>
     </ul>
 
-    Model, önceki kelimelerin embedding’lerini bu oranlarda harmanlayarak ortaya yepyeni ve bağlamsal bir vektör çıkarır. Bu vektör, “banka” kelimesinin bu cümlede finansal bir bağlamda kullanıldığını güçlü biçimde temsil eder. Bir sonraki aşamada model, işte bu bağlamsal temsile bakarak “yatırdım” gibi bir kelimenin daha olası olduğuna karar verir.
+    Model, önceki token’ların embedding’lerini bu oranlarda harmanlayıp yepyeni bir bağlamsal vektör üretir. Bu vektör, “banka” kelimesinin bu cümlede finansal anlamda kullanıldığını yansıtır. Bir sonraki adımda model, bu bağlamsal vektöre dayanarak “yatırdım” gibi bir devamın daha olası olduğuna karar verir.
 
-    **Peki attention mekanizması bu ağırlıkları nasıl hesaplıyor?** (Şimdi biraz matematiğe giriyoruz ama panik yok, amacım yine olup biteni daha çok sezgisel olarak gözünüzde canlandırabilmeniz)
+    Burada bir parantez açalım. Anlattığımız bu attention ve bağlamsal vektör oluşturma süreci, modelin yalnızca yanıt üretirken kullandığı bir şey değil. Model, sizin yazdığınız prompt’u anlarken de tam olarak aynı mekanizmayı çalıştırır. Model için “anlamak” ile “yanıt üretmek” ayrı aşamalar değildir. Prompt’taki token’lar bittiğinde sistem mod değiştirmez. Attention, embedding ve bağlamsal vektörler, baştan sona aynı akış içinde çalışmaya devam eder. Tek fark, bir noktadan sonra modelin kendi ürettiği token’lara da bakmaya başlamasıdır. Bu yüzden prompt ne kadar net bir bağlam kuruyorsa, modelin verdiği yanıt da o kadar tutarlı olur. Çünkü yanıt üretirken baktığı şey, prompt’u işlerken inşa ettiği bağlamsal vektörlerin devamıdır.
 
-    Az önce sezgisel olarak anlattığımız bu ağırlıklar (%48 - %34 - %18), modelin içinde tahminle ya da yaklaşık hesaplarla değil, tamamen deterministik **matris işlemleriyle** hesaplanır. Şimdi bunu kullandığımız prompt üzerinden adım adım görelim.
+    **Attention ağırlıkları nasıl hesaplıyor?**
 
+    Kısa bir matematik molası. Panik yok, hedef yine sezgiyi oturtmak. Az önce anlattığımız ağırlıklar (%48, %34, %18) modelin içinde tahminen oluşmuyor. Bunlar tamamen matris işlemleri ile adım adım hesaplanıyor. Şimdi aynı fikri, kullandığımız prompt üzerinden basitleştirilmiş bir örnekle görelim.
     <ul className="writingArticle__TokenizerList">
-      <li>Prompt’umuz: “Parayı bankaya yatırdım”</li>
+      <li>Prompt: “Parayı bankaya yatırdım”</li>
       <li>Tokenizer’ın bunu dört token’a böldüğünü varsayalım: [Parayı] [bankaya] [yatır] [dım]</li>
-      <li>Embedding boyutunu özellikle küçük tutalım (n = 3), böylece tabloları gözümüzde canlandırabilelim. (Gerçek modellerde bu boyut binlercedir. Burada küçük seçmemizin tek sebebi, olan biteni daha sade bir şekilde gösterebilmek. İsterseniz daha gerçekçi bir görselleştirmeyi şu interaktif <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a>’ı kurcalayabilirsiniz.)</li>
+      <li>Embedding boyutunu özellikle küçük tutalım (n = 3), böylece tabloları gözümüzde canlandırabilelim. (Gerçek modellerde bu boyut binlercedir. Burada küçük seçmemizin sebebi, mekanizmayı sade bir biçimde gösterebilmek. Daha gerçekçi bir görselleştirme için interaktif <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> gibi araçlar iyi gider.)</li>
     </ul>
 
      <div className="writingArticle__codeRow">
@@ -345,16 +354,65 @@ content:
       <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
       <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} />
      </div> 
-      Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding'i alır ve onu üç farklı “lens”ten geçirir. Yani üç farklı matematiksel (**Q, K, V**) dönüşümden geçirir. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
+      Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding’i alır ve onu üç farklı “lens”ten geçirir. Bu lens’ler, Q, K ve V olarak adlandırılan üç farklı matematiksel dönüşümdür. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
            
      <div className="writingArticle__callout">
     <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-      <li>**Query (Q)** “Bu embedding, diğer embedding’lerde hangi özellikleri *arıyor*?”</li>
-      <li>**Key (K)** “Bu embedding, kendisiyle ilgili *hangi sinyalleri sunuyor*?”</li>
-      <li>**Value (V)** “Bu embedding’den *bağlama hangi bilgi taşınmalı*?”</li>
+      <li>**Query (Q)** “Bu token, cümleyi doğru anlamak için diğer token’larda hangi özelliklere dikkat etmeli?”</li>
+
+     Yani Q bir istek vektörüdür. Token’ın çevresinden neye ihtiyaç duyduğunu kodlar.
+
+     “yatırdım” token’ını düşünün. Bu token için model şunu merak eder:
+      
+      <ul className="writingArticle__TokenizerList">
+      <li>Nereye yatırıldı?</li>
+      <li>Ne yatırıldı?</li>
+      <li>Bu eylemle ilişkili bir yer var mı?</li>
+    </ul>
+
+    İşte “yatırdım”ın Query’si, bu tür sinyalleri arayan bir vektördür. Bu vektör, “banka” ve “para” gibi token’larda güçlü eşleşmeler bulursa, onlara daha fazla dikkat verilmesini sağlar.
+
+      <li>**Key (K)** “Bu token, kendisiyle ilgili hangi sinyalleri dışarıya veriyor?”</li>
+
+    Yani Key bir etiket gibi düşünebilirsiniz. Token, “bende şu tür bilgi var” der.
+
+    Örneğin “bankaya” token’ı için bu şu anlama gelir:
+
+    <ul className="writingArticle__TokenizerList">
+      <li>Yer bilgisi sunuyorum</li>
+      <li>Finansal bağlam sinyali taşıyorum</li>
+      <li>Eylemlerle ilişkilendirilebilirim</li>
+    </ul>
+
+    Key vektörü, token’ın “ben buyum” demesinin matematiksel halidir.
+
+      <li>**Value (V)** “Bu token'dan bağlama hangi bilgi taşınmalı?”</li>
       </ol>
 
-     Bu üç farklı bakış açısı, matematikte embedding matrisinin üç farklı öğrenilmiş matris ile çarpılmasıyla elde edilir:
+      Yani Value, token’ın içeriğidir. Q ve K, “kime bakmalıyım?” sorusunu çözer; V ise “baktıysan, benden neyi alacaksın?” sorusunun cevabıdır.
+
+      “bankaya” token’ını düşünelim. Bu token:
+
+      <ul className="writingArticle__TokenizerList">
+      <li>Finansal bağlam bilgisi taşır</li>
+      <li>Yer bilgisi taşır</li>
+      <li>“yatırmak” gibi eylemlerle anlamlı şekilde bağlanır</li>
+    </ul>
+
+    Value vektörü, işte bu taşınabilir bilginin matematiksel temsilidir.
+
+    **Q ve K karar verir, V aktarılır**
+
+    Özetle Attention süreci üç aşamada çalışır:
+
+    <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+      <li>Q ile ne arandığı belirlenir</li>
+      <li>K ile kimlerin bu aranan şeye uygun olduğu ölçülür</li>
+      <li> V ile bu uygun token’lardan hangi bilginin ne kadar taşınacağı belirlenir</li>
+      </ol>
+    Yani Q ve K bir seçim mekanizmasıdır. V ise seçilen bilginin kendisidir.
+
+     Bu üç farklı bakış açısı, matematikte embedding matrisinin üç farklı *öğrenilmiş matris** ile çarpılmasıyla elde edilir:
      <div className="writingArticle__codeCard">
         <pre className="writingArticle__codeBlock">
           <code>
@@ -385,89 +443,153 @@ content:
         </pre>
       </div>
 
-    Buradaki **WQ**, **WK** ve **WV** matrisleri, modelin eğitim sırasında öğrendiği parametrelerdir. Bunlara “öğrenilmiş matris” (learned matrix) denmesinin sebebi; model eğitiminin en başında bu matrislerin içi tamamen **rastgele sayılarla** doldurulur. Yani başlangıçta model, embedding’lere nasıl bakması gerektiği konusunda hiçbir fikre sahip değildir. Çünkü modelin öğrenebilmesi için her şeyin aynı olmaması, her şeyin sıfırdan başlamaması, farklı yönlere hareket edebilmesi gerekir. Rastgele başlatmak, modele şunu demektir: “Hiçbir şey bilmiyorsun, ama öğrenmeye açıksın.”  Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre WQ, WK ve WV içindeki sayıları çok küçük adımlarla günceller. Bu işlem milyarlarca örnek üzerinde tekrarlandıkça, bu matrisler yavaş yavaş şu sorulara iyi cevap verecek hâle gelir:
-
+     Buradaki WQ, WK ve WV matrisleri, modelin eğitim sırasında öğrendiği parametrelerdir. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doldurulur. Bunun sebebi, modelin en başta herhangi bir ön kabule sahip olmamasıdır.
+     
+     Eğitim boyunca model, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre WQ, WK ve WV içindeki sayıları çok küçük adımlarla günceller. Bu işlem milyarlarca örnek üzerinde tekrarlandıkça, matrisler yavaş yavaş şu sorulara daha iyi cevap verir hale gelir:
      <ul className="writingArticle__TokenizerList">
       <li>Hangi embedding özellikleri birbirini gerçekten ilgilendiriyor?</li>
       <li>Hangi sinyaller bağlam için önemli, hangileri gürültü?</li>
       <li>Hangi özellikler karıştırılmalı, hangileri bastırılmalı?</li>
     </ul>
-    Bu yüzden bu matrislere “öğrenilmiş” denir ve modelin “bilgisi”, büyük ölçüde bu matrislerin içindeki ondalıklı sayılarda saklıdır. O çok duyduğumuz “parametre” kavramı bu yüzden bu kadar önemlidir. Bir model için “175 milyar parametre” dendiğinde, bu sayıların büyük bir kısmı tam olarak bu tür matrislerin içindeki ondalıklı değerlerdir. Yani modelin içinde, eğitim sırasında oynatılan 175 milyar ayrı sayı var demektir. Her biri tek başına anlamsızken, birlikte devasa bir davranış bütünü oluştururlar. Tıpkı tek tek nöronların hiçbir şey ifade etmeyip, birlikte düşünce üretmesi gibi.
+    *Bu yüzden bu matrislere “öğrenilmiş” denir ve modelin “bilgisi”, büyük ölçüde bu matrislerin içindeki ondalıklı sayılarda saklıdır. O çok duyduğumuz “parametre” kavramı bu yüzden bu kadar önemlidir. Bir model için “175 milyar parametre” dendiğinde, bu sayıların büyük bir kısmı tam olarak bu tür matrislerin içindeki ondalıklı değerlerdir. Yani modelin içinde, eğitim sırasında ayarlanan 175 milyar ayrı sayı vardır. Her biri tek başına anlamsızken, birlikte devasa bir davranış bütünü oluştururlar. Tıpkı tek tek nöronların hiçbir şey ifade etmeyip, birlikte düşünce üretmesi gibi.
 
-    Eğitim bittiğinde bu matrisler artık sabitlenir. Inference sırasında model yeni bir şey öğrenmez; sadece bu öğrenilmiş lens’leri kullanarak embedding’leri tartar, karşılaştırır ve harmanlar.
+    *Eğitim bittiğinde bu matrisler artık sabitlenir. Inference sırasında model yeni bir şey öğrenmez. Sadece eğitimde öğrendiği bu lens’leri kullanarak embedding’leri tartar, karşılaştırır ve harmanlar.
 
     </div>
 
     **Şimdi aynı örnek üzerinden Query (Q) ve Key (K) matrislerini hesaplayalım**
 
+    Bu aşamada yaptığımız şey, attention hesaplamak değil. Her token’ın “aradığını” (Q) ve “sunduğunu” (K) iki ayrı matematiksel dönüşümle aynı uzayda ifade etmek.
     <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embeddings" }}/>
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"WQ" }} />
+      <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"WQ" }} />
       <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Q"}}/>
+      <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q"}}/>
     </div>
 
      <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embeddings" }}/>
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"WK" }}/>
+      <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"WK" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"K" }}/>
+      <Matrix values={[[-0.1, -0.1, 0.6], [-0.1, -0.5, -1.0], [-0.6, 0.1, -0.8], [-0.4, 0.4, 0.6]]} title={{ text:"K" }}/>
     </div>
 
-    Şu ana kadar aynı aynı embedding’leri, iki farklı “lens”ten geçirerek Q ve K uzaylarına taşıdık. Q, her embedding’in “ne aradığını”; K ise her embedding’in “ne sunduğunu” temsil ediyor. Şimdi attention mekanizmasının asıl kritik sorusuna geliyoruz: Bir embedding’in aradığı şeylerle, diğer embedding’lerin sundukları ne kadar uyuşuyor?
+    Q ve K matrislerinin boyutları bilinçli olarak aynıdır. Bunun sebebi, birazdan bu iki temsili doğrudan birbiriyle matematiksel olarak ilişkilendirecek olmamızdır. Yani bu adımda henüz “kim kime ne kadar dikkat ediyor?” sorusunu sormuyoruz. Sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
 
+    Bir sonraki adımda, Q ile K’yi karşı karşıya getirip token’lar arasındaki ilişkileri sayısal olarak ölçmeye başlayacağız.
 
-    **Scores: Kim kime ne kadar bakıyor? (ham ilgi)**
+    **Scores: Token'lar Arası Benzerlikler**
 
-    Bu sorunun cevabı tek bir matris çarpımıyla hesaplanır: **Scores = Q × Kᵀ**
-
+      Bu aşamada yaptığımız şey, token’ların birbirleriyle ne kadar ilişkili olduğunu ölçmek. Bu ilişki, Query (Q) vektörleri ile Key (K) vektörlerinin karşılaştırılmasıyla bulunur. Matematikte bu karşılaştırma, tek bir matris çarpımıyla ifade edilir: **Scores = Q × Kᵀ**
       <div className="writingArticle__codeRow">
-      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Q" }}/>
+      <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Transpose (K)" }}/>
+      <Matrix values={[[-0.1, -0.1, -0.6, -0.4], [-0.1, -0.5, 0.1, 0.4], [0.6, -0.1, -0.8, 0.6]]} title={{ text:"transpose (Kᵀ)" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Scores" }}/>
+      <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0.0, -0.1], [0.2, -0.2, 0.0, 0.6]]} title={{ text:"scores" }}/>
     </div>
 
-    Burada olan şey tamamen mekanik. Elimizde 4 embedding var ve her biri 3 boyutlu olduğu için Q = 4×3. K’nin transpozu 3×4 olunca, Q × Kᵀ çarpımından otomatik olarak 4×4 bir tablo çıkıyor. Bu 4×4’lük tablo tesadüf değil: attention skorları embedding boyutuyla değil, prompt’taki parça sayısıyla ilgili. Yani 4 token varsa tablo 4’e 4, 20 token varsa 20’ye 20.
+    Ortaya çıkan tablo, her token’ın diğer token’larla ne kadar örtüştüğünü sayısal olarak gösterir.
 
-    Ortaya çıkan bu tabloyu şöyle okumak gerekir: Her satır “şu anki embedding”i, her sütun ise “bakılan embedding”i temsil eder. Yani bu tablo, her embedding’in diğer embedding’lerle ne kadar *ilişkili* olduğunu sayısal olarak ifade eder. Örneğin üçüncü satır ikinci sütundaki bir hücre, “yatır” embedding’inin “bankaya” embedding’ine ne kadar baktığını gösterir. ilgili Q vektörü ile ilgili K vektörünün dot product’ıdır. Yani burada yapılan şey, bir embedding’in aradığı sinyaller ile diğer embedding’in sunduğu sinyallerin ne kadar örtüştüğünü ölçmektir. Ortaya çıkan sayılar büyükse ilgi güçlüdür, sıfıra yakınsa ilişki zayıftır, negatifse ters yönde bir sinyal vardır.
+    Elimizde 4 token olduğu için Q matrisi 4×3, K’nin transpozu 3×4 boyutundadır. Bu çarpım sonucunda otomatik olarak 4×4’lük bir skor tablosu elde ederiz. Bu tablo tesadüf değildir. Skor matrisinin boyutu embedding boyutuyla değil, prompt’taki token sayısıyla ilgilidir. Yani 4 token varsa 4×4, 20 token varsa 20×20 bir tablo oluşur.
 
-    **Önemli not #1:** Bu skorlar henüz “ağırlık” değildir. Olasılık değildir. Normalize edilmiş değerler değildir. Sadece ham benzerlik skorlarıdır.
+    Bu tabloyu şöyle okumak gerekir:Her satır “şu anki token’ı”, her sütun ise “bakılan token’ı” temsil eder. Tabloya girilen her hücre, bir token’ın başka bir token’la ne kadar ilişkili olduğunu gösterir. Bu değerler, ilgili Q vektörü ile K vektörünün noktasal çarpımıdır.
 
-    **Önemli not #2:** Aklınıza şu soru gelebilir: “İlk embedding, kendisinden *sonra* gelen embedding’lere nasıl bakabiliyor?” Evet, şu an bakabiliyor. Çünkü henüz zaman kuralı uygulanmadı. Bu aşamada model sadece şunu hesaplıyor: “Hangi embedding, hangisiyle ne kadar ilgili olabilir?” Yani ortada henüz yasaklı bakışlar yok. Kim kime bakamaz sorusu, bir sonraki adımda, maske uygulandığında devreye giriyor.
+    Ortaya çıkan sayı ne kadar büyükse, iki token arasındaki ilişki o kadar güçlüdür. Sıfıra yaklaştıkça ilişki zayıflar. Negatif değerler ise ters yönde bir sinyal olduğunu gösterir.
 
-    **Mask: Geleceği göremezsin!**
+    **Önemli not #1:** Bu skorlar henüz ağırlık değildir. Olasılık değildir. Normalize edilmemiştir. Sadece ham benzerlik ölçümleridir.
 
-    Bunu somutlaştıralım. Prompt’umuz hâlâ şu: “Parayı bankaya yatırdım”
+    **Önemli not #2:** Bu aşamada zaman kuralı henüz uygulanmamıştır. Yani token’lar, kendilerinden sonra gelen token’lara da bakabilir. Model şu an sadece şunu hesaplar: “Hangi token, hangisiyle ne kadar ilişkili?” Kimin kime bakamayacağı sorusu, bir sonraki adımda maske uygulandığında devreye girer.
 
-    Model “yatır” embedding’ini işlerken, doğal olarak “parayı” ve “bankaya” embedding’lerine bakabilir. Ama “dım” embedding’ine bakamaz. Çünkü henüz onu “görmedi”. Aynı şekilde ilk embedding olan “parayı”, kendisinden sonra gelen hiçbir embedding’den etkilenmemelidir. Ancak scores matrisi bu kuralı kendiliğinden bilmez. O sadece “kim kime benziyor?” tablosudur. Bu yüzden model, attention mekanizmasına çok basit ama çok kritik bir kural ekler: **mevcut embedding, gelecekteki embedding’lere bakamaz.** 
+    **Mask: Hangi Token, Hangi Token'a Bakamaz**
 
-    Mask’in yaptığı şey şu: Bir embedding’in bakmaması gereken tüm hücreleri geçersiz hâle getirir. Bunu “sıfırlayarak” değil, o hücreleri negatif sonsuz yaparak yapar. Neden sıfır değil de negatif sonsuz? Çünkü bir sonraki adımda softmax uygulanacaktır ve softmax’ta negatif sonsuz, pratikte “olasılığı sıfır” demektir.
+    Şu ana kadar token’lar arasındaki benzerlikleri tamamen serbest bir şekilde hesapladık. Yani her token, diğer tüm token’lara bakabiliyor. Buna gelecekteki token’lar da dahil. Ama burada ciddi bir problem var: Dil modelleri metni soldan sağa üretir. Yani model “yatırdım” kelimesini üretirken, henüz yazılmamış olan kelimeleri bilmemelidir. Aksi halde model, cevabı önceden görmüş olur. Bu da öğrenmeyi anlamsız hale getirir.
 
+    Bu noktada **mask** devreye girer. Mask'ın görevi: Bir token’ın, kendisinden sonra gelen token’lara bakmasını engellemek. Bunu matematiksel olarak şöyle yaparız:
     <div className="writingArticle__codeRow">
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Scores" }} prefix={{ text: "Mask(" }} suffix={{ text: ")" }}/>
+      <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0, -0.1], [0.2, -0.2, 0, 0.6]]} title={{ text:"scores" }} prefix={{ text: "mask(" }} suffix={{ text: ")" }}/>
       <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
-      <Matrix values={[[0.5, -0.2, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.2, 0.9]]} title={{ text:"Masked" }}/>
+      <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }}/>
     </div>
 
-    Mask’ten sonra tabloyu şöyle düşünebiliriz: Her embedding sadece kendisinden önce gelen embedding’lere bakabilir. Kendisine bakabilir. Ama geleceğe bakamaz.
+    Scores matrisinde, “bakılması yasak” olan hücreleri özel bir değerle işaretleriz. Pratikte bu değer genellikle −∞ (eksi sonsuz) olarak alınır. Böylece bu hücreler, bir sonraki adımda etkisiz hale gelir.
 
     Bu noktada şunu netleştirelim: Mask yeni bir bilgi eklemez. Yeni bir ilişki yaratmaz. Sadece “olması mümkün olmayan” ilişkileri sistematik olarak devre dışı bırakır. Yani attention’a bir zaman disiplini kazandırır.
 
-    Henüz hâlâ ağırlık üretmedik. Hâlâ olasılıklara geçmedik. Elimizde sadece, kurallara uyan bir ilgi tablosu var.
+    **Softmax: Skorları Ağırlıklara Dönüştürmek**
 
-    **Softmax: Hadi bunu yüzdeye dökelim**
+    Mask uygulandıktan sonra elimizde hâlâ bir skor tablosu var. Bu skorlar, token’lar arasındaki benzerliği ölçüyor ama hâlâ ham hâlde. Negatif olabilirler, pozitif olabilirler, büyüklükleri karşılaştırılması zor olabilir. Oysa modelin bir sonraki adımda ihtiyacı olan şey: Her token için, diğer token’lara ne kadar dikkat edileceğini açık ve karşılaştırılabilir bir şekilde ifade etmek. **Softmax** tam olarak bunu yapar.
 
-    Scores matrisiyle birlikte artık embedding’ler arasındaki ham ilişkiyi çıkardık. Hangi embedding’in hangisine daha yakın olduğu, hangisinin hangisiyle daha fazla örtüştüğü sayısal olarak elimizde. Ancak bu tablo hâlâ doğrudan kullanılamaz. Çünkü scores değerleri karşılaştırma içindir; bir “dağılım” değildir. Negatif olabilirler, toplamları belirsizdir ve “bu embedding diğerlerine ne kadar bakıyor?” sorusuna net bir yüzde cevabı vermezler.
+    Softmax, her satırı ayrı ayrı ele alır ve o satırdaki skorları:
 
-    Attention mekanizmasının ihtiyacı olan şey, her embedding için sınırlı bir dikkat bütçesinin nasıl paylaştırılacağını bilmektir. İşte softmax tam olarak burada devreye girer. Softmax, scores matrisini satır satır ele alır ve her satırı, toplamı 1 olan bir ağırlık dağılımına dönüştürür. Böylece her embedding için şu soru cevaplanmış olur: “Diğer embedding’lere ne oranda bakıyorum?”
+    <ul className="writingArticle__TokenizerList">
+      <li>0 ile 1 arasına sıkıştırır</li>
+      <li>Toplamları 1 olacak şekilde normalize eder</li>
+    </ul>
 
-    Mask aşamasında geçersiz kıldığımız hücreler burada kritik rol oynar. Mask sırasında negatif sonsuza çekilen skorlar, softmax sonrası pratikte sıfıra dönüşür. Yani model, bakmaması gereken embedding’lere gerçekten hiç bakmaz. Bu yüzden mask ve softmax birlikte çalışır; biri kuralları koyar, diğeri bu kurallara uyan bir dağılım üretir.
+    Böylece her satır, “dikkatin nasıl dağıtıldığı”nı gösteren bir ağırlık vektörüne dönüşür.
+         <div className="writingArticle__codeRow">
+      <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }} prefix={{ text: "softmax(" }} suffix={{ text: ")" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
+    </div>
 
-    Bu noktadan sonra scores artık sadece “ilgi” değildir. Softmax’tan sonra ortaya çıkan tablo, attention’ın gerçek çıktılarından biridir: normalize edilmiş, karşılaştırılabilir ve karıştırmaya hazır ağırlıklar. Yazının başında sezgisel olarak bahsettiğimiz “%48 – %34 – %18” gibi oranlar, tam olarak bu aşamada ortaya çıkar. Bu oranlar, embedding’lerin birbirine ne kadar bakacağını belirleyen nihai kararlardır.
+    Bu adımda büyük skorlar daha da öne çıkar, küçük skorlar bastırılır. Mask ile −∞ olarak işaretlenmiş hücreler ise softmax sonrası otomatik olarak 0 ağırlık alır. Yani model, bu token’lara fiilen hiç bakmaz.
 
-    Artık elimizde iki şey var: embedding’ler ve bu embedding’lerin birbirine bakma oranları. Bir sonraki ve son adımda, bu ağırlıkları Value (V) matrisiyle birleştirerek yeni, bağlamsal embedding’leri üreteceğiz. İşte attention’ın gerçekten “anlamı harmanladığı” yer tam olarak orasıdır.
+    Ortaya çıkan sonuç artık bir **attention ağırlık matrisidir**. Bu matris, her token’ın diğer token’lardan ne kadar bilgi alacağını belirler.
+
+    Bu ağırlık matrisini şöyle okumak gerekir: Her satır, “şu anki token’ı”; her sütun ise “bakılan token’ı” temsil eder. Satırdaki değerler, bu token’ın dikkatini diğer token’lara nasıl paylaştırdığını gösterir. Örneğin üçüncü satıra baktığımızda, modelin bu token için dikkatini birden fazla önceki token arasında dağıttığını görürüz. Dördüncü sütundaki 0 değeri ise, bu token’a hiç bakılmadığını gösterir. Bu, mask’in doğrudan sonucudur.
+
+    **Önemli bir nokta:** Softmax yeni bir ilişki yaratmaz. Skorların sırasını değiştirmez. Sadece onları anlamlı, karşılaştırılabilir ve kullanılabilir hale getirir.
+
+    **Value (V) ve Output'un Oluşması** 
+
+    Şimdiye kadar yaptığımız tüm adımlar, aslında tek bir soruya hazırlanıyordu: Seçilen token’lardan hangi bilgi ne kadar taşınacak?
+
+    Bu sorunun cevabı **Value (V) matrisinde**.
+
+    V matrisini, embedding’lerin “taşınabilir içerik” hâli gibi düşünebiliriz. Bu adımda artık “ne arıyoruz?” ya da “kim uygun?” soruları yoktur. Sadece içerik vardır. Daha önce olduğu gibi, burada da eğitim sırasında öğrenilmiş bir WV matrisi vardır. Bu matrisi kullanarak token embedding’lerini V matrisine dönüştürürüz:
+
+    <div className="writingArticle__codeRow">
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+      <Matrix values={[[0.6, -0.2, 0.1], [0.3, 0.7, -0.4], [-0.5, 0.2, 0.8]]} title={{ text:"WV" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
+    </div>
+
+    Elimizde artık üç şey hazır:
+
+    <ul className="writingArticle__TokenizerList">
+      <li>Hangi token’ların önemli olduğuna karar veren **attention ağırlıkları**</li>
+      <li>Her token’ın taşıdığı içeriği temsil eden **V vektörleri**</li>
+      <li>Ve bu ikisini birleştirecek **son adım**</li>
+    </ul>
+
+    Bu son adım, attention ağırlıkları ile V matrisinin çarpılmasıdır:
+     <div className="writingArticle__codeRow">
+      <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+      <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+      <Matrix values={[[-0.3, 0.0, 0.6], [0.3, 0.0, 0.1], [0.3, 0.2, 0.0], [0.0, 0.2, 0.3]]} title={{ text:"output" }}/>
+    </div>
+
+    Ortaya çıkan output vektörü, artık tek bir token’a değil, cümledeki bağlamın tamamına göre şekillenmiş bir vektördür. Model artık sadece “banka”, “para” ya da “yatırmak” kelimelerini ayrı ayrı ele almaz. “Parayı bankaya yatırdım” ifadesinin, o token için ne anlama geldiğini kodlayan bir vektör üretir.
+
+    <div className="writingArticle__callout">
+      
+    Bu yazıda Transformer’ın içindeki attention mekanizmasını parça parça açtık. Token’lar nasıl embedding’e dönüşüyor, Q, K ve V ile bağlam nasıl kuruluyor, mask ve softmax bu işin neresinde duruyor… Hepsini adım adım yürüdük.
+
+    Sizin de gördüğünüz gibi, model dili “anlamıyor”. Ama kelimeler arasındaki ilişkileri sayılar üzerinden o kadar iyi tartıyor ki, biz onu anlamış gibi algılıyoruz. Bugünkü büyük dil modellerinin gücü de buradan geliyor. Ortada sihir ya da bilinç yok. Eğitim sırasında ayarlanmış bir sürü parametre var.
+
+    Asıl ilginç kısım şu: Bu sistem tek seferlik bir hesap makinesi gibi çalışmıyor. Cevabı bir defada üretmiyor. Kelime kelime (token token) üretiyor. Ve her yeni token geldiğinde, model başa dönüp “prompt + şimdiye kadar yazdığım cevap” bütününe tekrar bakıyor. Attention yeniden çalışıyor, ağırlıklar yeniden dağılıyor, bağlam yeniden toparlanıyor. Yani model her adımda şunu yapıyor: “Şu ana kadar elimde ne var ve buradan sonra en mantıklısı ne?”
+
+    Bugün gündemimizde olan agentic AI kısmı da buradan filizleniyor. Modelin kendi çıktısını tekrar girişe katıp, bir sonraki adımı ona göre seçebilmesi, “plan yapıyor gibi” görünmesinin temel nedeni. Tek cümlelik cevaplardan, adım adım ilerleyen davranışlara geçişin arkasında bu döngü var.
+
+    Bir sonraki yazıda buradan devam edip daha güncel ve somut bir yere gidelim: Agentic Commerce. Modelin sadece öneren değil, ürün arayan, seçenekleri kıyaslayan, ödeme akışına kadar işi götüren bir “alışveriş ajanı” gibi çalışması neyi değiştiriyor? Orada konuşacağız.
+
+    </div>
 ---

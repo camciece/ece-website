@@ -1900,6 +1900,13 @@ ol.writingArticle__TokenizerList {
   flex-wrap: wrap;
 }
 
+@media (min-width: 1200px) {
+  .writingArticle__codeRow {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
+
 .writingArticle__codeSymbol {
   align-self: center;
   color: var(--matrix-colour);
@@ -2965,7 +2972,7 @@ ol.writingArticle__TokenizerList {
     padding: 20px var(--frame-pad);
   }
 
-  .writingArticle__codeArrow {
+  .writingArticle__codeSymbol {
     margin: 0 33%;
   }
 }
@@ -3082,7 +3089,7 @@ ol.writingArticle__TokenizerList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     transform: none;
   }
-  .writingArticle__codeArrow {
+  .writingArticle__codeSymbol {
     width: 100%;
     text-align: center;
   }

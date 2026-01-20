@@ -1,7 +1,9 @@
 'use client'
 
+type MatrixValue = number | string
+
 type MatrixProps = {
-  values: number[][]
+  values: MatrixValue[][]
   title?: LabelProps
   prefix?: LabelProps
   suffix?: LabelProps
