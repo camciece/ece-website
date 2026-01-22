@@ -1042,6 +1042,7 @@ body.text-\[--text\] {
 
 .writingCard__summary {
   margin: 0;
+  padding-left: 10px;
   color: #2f2a25;
   font-size: 16px;
   line-height: 1.7;
@@ -1148,6 +1149,7 @@ body.text-\[--text\] {
 .writingCard p {
   color: #4a4a4a;
   margin: 0;
+  padding-left: 10px;
   line-height: 1.6;
   font-family:
     'Google Sans',
@@ -1431,7 +1433,7 @@ body.text-\[--text\] {
 }
 
 .writingArticle__media img {
-  width: 500px;
+  width: 800px;
   max-width: 100%;
   height: auto;
   display: block;

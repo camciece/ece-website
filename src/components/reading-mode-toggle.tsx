@@ -13,6 +13,13 @@ function applyReadingMode(mode: ReadingMode) {
   }
 }
 
+function applyGraphTheme(mode: ReadingMode) {
+  const nextSrc = mode === 'dark' ? '/graph-dark.svg' : '/graph.svg'
+  document.querySelectorAll<HTMLImageElement>('img[data-graph]').forEach((img) => {
+    img.src = nextSrc
+  })
+}
+
 export default function ReadingModeToggle() {
   const [mode, setMode] = useState<ReadingMode>('dark')
 
@@ -22,12 +29,14 @@ export default function ReadingModeToggle() {
       stored === 'light' || stored === 'dark' ? stored : 'dark'
     setMode(initial)
     applyReadingMode(initial)
+    applyGraphTheme(initial)
   }, [])
 
   const toggleMode = () => {
     const nextMode: ReadingMode = mode === 'dark' ? 'light' : 'dark'
     setMode(nextMode)
     applyReadingMode(nextMode)
+    applyGraphTheme(nextMode)
     localStorage.setItem(STORAGE_KEY, nextMode)
   }
 
