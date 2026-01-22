@@ -1296,6 +1296,10 @@ body.text-\[--text\] {
   color: #d7dbe3;
 }
 
+.writingPage[data-reading-mode='dark'] .writingArticle h3 {
+  color: #d7dbe3;
+}
+
 .writingPage[data-reading-mode='dark'] .writingArticle__body a {
   color: #ff9b6b;
 }
