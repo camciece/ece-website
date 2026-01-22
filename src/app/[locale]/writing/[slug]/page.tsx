@@ -1,6 +1,7 @@
 import EmbeddingsDemo from '@/components/embeddings-demo'
 import Footer from '@/components/footer'
 import Matrix from '@/components/matrix'
+import ReadingModeToggle from '@/components/reading-mode-toggle'
 import TokenDemo from '@/components/token-demo'
 import type { Locale } from '@/lib/locale'
 import { getPost } from '@/lib/md'
@@ -24,6 +25,9 @@ export default function Post({
   return (
     <main className="writingPage">
       <article className="writingArticle">
+        <div className="readingModeToggleRow">
+          <ReadingModeToggle />
+        </div>
         <header className="writingHeader">
           <div className="writingArticle__tag">
             {post.frontmatter.tags?.[0] ?? 'AI'}

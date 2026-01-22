@@ -223,8 +223,32 @@ content:
 
     Model eğitilirken, her token bu uzayda rastgele bir başlangıç noktasına yerleştirilir. Eğitim süreci boyunca da bu noktalar yavaş yavaş sağa sola itilir; ta ki model, en iyi çıktıları üreten yerleşimi bulana kadar.
 
-    Bunu kafanızda canlandırmak için aşağıdaki "öncesi ve sonrası" tablosuna bakalım:
-     <EmbeddingsDemo />
+    Bunu daha net görmek için, token ID'lerden embedding vektörlerine geçişi doğrudan gösterelim:
+     <div className="writingArticle__codeRow">
+      <div className="writingArticle__codeCard writingArticle__codeCard--narrow">
+        <pre className="writingArticle__codeBlock">
+          <code>
+            <span className="codeLine">
+              <span className="codeConst">Token IDs</span>
+            </span>
+            <br />
+            <span className="codeLine">
+              <span className="codeOp">[ </span>
+              <span className="codeVar">75</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">305</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">284</span>
+              <span className="codeOp"> , </span>
+              <span className="codeVar">887</span>
+              <span className="codeOp"> ]</span>
+            </span>
+          </code>
+        </pre>
+      </div>
+      <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
+      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+     </div>
 
      <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
       <li>**Adım (Tokens):** Elimizde Tokenizer'dan gelen tamsayılar var. Bunlar sadece birer etiket; aralarında matematiksel bir ilişki yok.</li>

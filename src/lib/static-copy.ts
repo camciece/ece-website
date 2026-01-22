@@ -98,7 +98,7 @@ type SiteCopy = {
 const copy: Record<Locale, SiteCopy> = {
   en: {
     home: {
-      heroTitle: 'Hello World!',
+      heroTitle: 'Merhaba',
       heroBody:
         'This is a new tech blog where I document observations and experiments from working with AI. The focus is on what I’m learning along the way. Hope you enjoy!',
       heroCta: 'Read the first post',
@@ -161,7 +161,7 @@ const copy: Record<Locale, SiteCopy> = {
       send: 'Send',
     },
     disclaimer: {
-      eyebrow: 'Eces Notes Website',
+      eyebrow: "Ece's Notes Website",
       title: 'Disclaimer',
       bylineName: 'By Ece Camci',
       publishedOnPrefix: 'published on ',
@@ -236,12 +236,12 @@ const copy: Record<Locale, SiteCopy> = {
   },
   tr: {
     home: {
-      heroTitle: 'Hello World!',
+      heroTitle: 'Köşeme hoşgeldiniz!',
       heroBody:
-        'Yapay zekâ ile çalışırken yaptığım gözlemleri ve denemeleri paylaşıyorum. Odak noktam, yolda öğrendiklerim. Umarım faydalı bulursunuz.',
-      heroCta: 'İlk yazıyı oku',
+        'Burası yapay zekâyla çalışırken aldığım notları paylaştığım kişisel bir alan. Biraz teknik detaylar, biraz bu teknolojilerin neden önemli olduğunu ve nereye gittiğini birlikte düşünelim.',
       latestTitle: 'Son yazılar',
       viewAll: 'Tümünü gör',
+      heroCta: 'İlk yazıyı oku',
     },
     meet: {
       heroTitle: 'Ece ile Tanışın',

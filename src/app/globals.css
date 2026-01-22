@@ -923,7 +923,8 @@ body.text-\[--text\] {
   bottom: 60px;
   border-radius: 12px;
   border: 1px solid rgba(224, 217, 204, 0.8);
-  width: min(420px, 70%);
+  width: auto;
+  max-width: min(520px, 90%);
   padding: 22px 22px 20px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
   background: rgba(255, 255, 255, 0.82);
@@ -956,6 +957,10 @@ body.text-\[--text\] {
   margin: 0 0 14px;
   font-family: 'Google Sans';
   line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
 }
 
 .heroStage__link {
@@ -1224,6 +1229,103 @@ body.text-\[--text\] {
   top: 16px;
   z-index: 10;
   overflow-x: hidden;
+}
+
+.readingModeToggleRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.readingModeToggle {
+  border: 1px solid #d9d5cf;
+  background: #f7f4ef;
+  color: #2d2621;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.readingModeToggle:hover {
+  background: #efe9e2;
+}
+
+.writingPage[data-reading-mode='dark'] {
+  background: #0b0c0e;
+  color: #e6e9ee;
+  --matrix-colour: #d7dbe3;
+  --matrix-label-colour: #d7dbe3;
+  --matrix-affix-colour: #d7dbe3;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle {
+  background: #101217;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+  color: #e6e9ee;
+}
+
+.writingPage[data-reading-mode='dark'] .readingModeToggle {
+  border-color: #2a2f3a;
+  background: #151821;
+  color: #e6e9ee;
+}
+
+.writingPage[data-reading-mode='dark'] .readingModeToggle:hover {
+  background: #1c2230;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__tag {
+  color: #b9a79b;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__title {
+  color: #f5f6f8;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__deck,
+.writingPage[data-reading-mode='dark'] .writingAuthor {
+  color: #9aa0a6;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__body p,
+.writingPage[data-reading-mode='dark'] .writingArticle__TokenizerList li,
+.writingPage[data-reading-mode='dark'] .writingArticle__calloutList li {
+  color: #d7dbe3;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__body a {
+  color: #ff9b6b;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__callout {
+  background: #171a22;
+  border-color: #2a2f3a;
+  color: #d7dbe3;
+}
+
+.writingPage[data-reading-mode='dark'] .tokenDemo__stats {
+  color: #e6e9ee;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__matrixViz {
+  background: #101217;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__matrixViz rect {
+  fill: #101217;
+}
+
+.writingPage[data-reading-mode='dark'] .matrixLabel,
+.writingPage[data-reading-mode='dark'] .matrixNumber,
+.writingPage[data-reading-mode='dark'] .matrixSymbol {
+  fill: #d7dbe3;
+}
+
+.writingPage[data-reading-mode='dark'] .matrixBracket {
+  stroke: #d7dbe3;
 }
 
 .writingHeader {
@@ -3014,8 +3116,8 @@ ol.writingArticle__TokenizerList {
     align-self: stretch;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.82);
-
-    width: 664px;
+    width: auto;
+    max-width: min(680px, 92%);
     height: unset;
     position: relative;
     bottom: -80px;
@@ -3036,6 +3138,9 @@ ol.writingArticle__TokenizerList {
 @media (max-width: 899px) {
   .homeHeroFrame {
     background-position: right;
+  }
+  .heroStage__card p {
+    -webkit-line-clamp: 5;
   }
   .writingGrid__rows {
     grid-template-columns: 1fr;
@@ -3190,6 +3295,9 @@ ol.writingArticle__TokenizerList {
   .contactTitle {
     font-size: 28px;
   }
+  .heroStage__card p {
+    -webkit-line-clamp: 4;
+  }
 }
 @media (max-width: 767px) {
   .topBar__wrap {
@@ -3197,7 +3305,8 @@ ol.writingArticle__TokenizerList {
   }
 
   .heroStage__card {
-    width: 100%;
+    width: auto;
+    max-width: 100%;
   }
 }
 @media (min-width: 768px) and (max-width: 900px) {
@@ -3206,8 +3315,8 @@ ol.writingArticle__TokenizerList {
   }
 
   .heroStage__card {
-    width: 100%;
-    max-width: none;
+    width: auto;
+    max-width: min(680px, 92%);
   }
 }
 .writingCard--link:hover h3 {
