@@ -615,8 +615,140 @@ content:
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[-0.3, 0.0, 0.6], [0.3, 0.0, 0.1], [0.3, 0.2, 0.0], [0.0, 0.2, 0.3]]} title={{ text:"output" }}/>
        </div>
+      
+      Ortaya çıkan bu output vektörleri, embedding’lerin Transformer’a girmeden önceki, tek başına anlam taşımayan konumlarından; artık bağlam içinde, bir cümlenin parçası olarak anlam kazandıkları temsillere dönüşmüş hâlidir. Attention mekanizması bu noktada görevini tamamlar: Model, her token için cümlenin geri kalanından hangi bilginin ne kadar önemli olduğunu hesaplamış ve bu bilgiyi bağlamsal vektörler halinde kodlamıştır.
 
-       Ortaya çıkan output vektörü, artık tek bir token’a değil, cümledeki bağlamın tamamına göre şekillenmiş bir vektördür. Model artık sadece “banka”, “para” ya da “yatırmak” kelimelerini ayrı ayrı ele almaz. “Parayı bankaya yatırdım” ifadesinin, o token için ne anlama geldiğini kodlayan bir vektör üretir.
+     Ancak bu aşamada model hâlâ bir kelime üretmez. Ortaya çıkan vektörler, nihai bir karar değil; Transformer katmanının bir sonraki adımında daha da işlenmek üzere hazırlanmış ara temsillerdir.
+      
+      Bu katman, her token’ın bağlamsal vektörünü alır ve onu küçük bir sinir ağından geçirir. Aynı ağ, tüm token’lar için birebir aynıdır. Yani “parayı”, “bankaya” ve “yatırdım” token’larının her biri, aynı matematiksel dönüşüme tabi tutulur.
+       
+       **Feedforward: Bağlamı Yoğunlaştırmak**
+
+       Attention mekanizmasıyla her token için bağlama duyarlı bir temsil (vektör) oluşturduk. Yani model artık “hangi kelime, hangi kelimeyle ne kadar ilişkili?” sorusunun cevabını biliyor. Ancak bu bilgi hâlâ ham hâlde.
+       
+       Feedforward katmanının görevi, bu bilgiyi alıp daha yoğun, daha ifade gücü yüksek bir temsile dönüştürmek. Burada önemli bir fark var: Feedforward aşamasında token’lar artık birbirleriyle etkileşime girmez. Her token, kendi başına ele alınır.
+       
+       Bu dönüşüm genellikle şu adımlardan oluşur:
+        <ul className="writingArticle__TokenizerList">
+         <li>Bir lineer dönüşüm</li>
+         <li>Bir aktivasyon fonksiyonu (ReLU, GELU gibi)</li>
+         <li>Bir lineer dönüşüm daha</li>
+       </ul>
+
+       Teknik detayları bir kenara bırakırsak, feedforward katmanının yaptığı şey şudur: Attention ile toplanan bilgiden, gerçekten işe yarayan kombinasyonları çıkarmak.
+
+      **Not:** Feedforward katmanı yeni bir bağlam eklemez. Dikkati yeniden dağıtmaz. Token’lar arasında yeni ilişkiler kurmaz. Onun yaptığı şey, attention çıktısını daha anlamlı ve daha güçlü bir iç temsile dönüştürmektir. Bir benzetmeyle düşünürsek: Attention, hangi bilginin önemli olduğunu seçer; feedforward, seçilen bu bilgiyi yoğurur ve derinleştirir.
+
+     Bu yüzden Transformer mimarisinde bu iki adım her zaman birlikte çalışır. Attention bağlamı kurar, feedforward bu bağlamı işler.
+
+       **Bu noktada neredeyiz?**
+
+    Bu aşamada elimizde hâlâ bir kelime yok. Ortaya çıkan vektörler, modelin nihai cevabı değildir. Bunlar, Transformer katmanının ürettiği ara temsillerdir.
+
+    Ancak artık modelin ihtiyacı olan her şey hazırdır. Token’lar bağlama göre şekillenmiş, bu bağlam feedforward katmanında yoğunlaştırılmıştır. Sıradaki adımda model, ilk kez şu soruyu soracaktır:
+
+    “Buradan sonra en olası token hangisi?” İşte bu soru, bizi next token hesaplamasına götürür.
+
+    **From vectors to words: Next token nasıl seçiliyor?**
+
+    Feedforward katmanından çıktığımızda elimizde artık bağlama göre şekillenmiş vektörler var. Her token için, cümlenin tamamını hesaba katan, yoğunlaştırılmış bir temsil. Ama hâlâ ortada bir kelime yok.
+
+    Bu noktada modelin yapması gereken şey: Bu vektörlerden birini alıp, “kelime dağarcığındaki hangi token’a en çok benziyor?” sorusunu sormak.
+
+    **Vocabulary ile yüzleşme**
+
+    Modelin eğitimi sırasında oluşturulmuş sabit bir token sözlüğü (vocabulary) vardır. Bu sözlük genellikle on binlerce token içerir. Model, her yeni token üretirken aslında şu karşılaştırmayı yapar:
+
+    Elimdeki bu bağlamsal vektör, sözlükteki hangi token’la en iyi eşleşiyor? Bunu yapmak için, Transformer katmanının sonunda çok basit ama çok kritik bir adım gelir: **Linear projection**.
+      
+      **Linear layer: Vektörleri olasılıklara açmak**
+
+       Feedforward’dan çıkan her vektör, bir lineer katmandan geçirilir. Bu katman, vektörü alır ve onu vocabulary boyutunda bir skora dönüştürür.
+
+       Bu skorlar hâlâ hamdır. Pozitif olabilirler, negatif olabilirler, büyüklükleri karşılaştırılması zor olabilir. Ama artık çok önemli bir şey var: Her skor, sözlükteki tek bir token’a karşılık gelir. Başka bir deyişle model ilk kez şunu yapmıştır: “Şu anda önümde, tüm kelime dağarcığına yayılmış bir olasılık haritası var.”
+
+      **Softmax: Skorlardan olasılıklara**
+
+      Son adımda bu skorlar softmax fonksiyonundan geçirilir. Buradaki amaç tanıdık:
+
+       <ul className="writingArticle__TokenizerList">
+         <li>Değerleri 0 ile 1 arasına sıkıştırmak</li>
+         <li>Toplamları 1 olacak şekilde normalize etmek</li>
+       </ul>
+    Softmax’ten sonra artık elimizde gerçek anlamda bir olasılık dağılımı vardır. Model, her token için “şu an gelme ihtimali”ni açıkça ifade edebilir.
+
+    Örneğin, “yatırdım”dan sonra:
+    <ul className="writingArticle__TokenizerList">
+         <li>“hesaba” %32</li>
+         <li>“bankaya” %21</li>
+         <li>“parayı” %12</li>
+         <li>nokta %8</li>
+         <li>…</li>
+       </ul>
+
+    Bu noktada model artık matematikten dile geçmeye hazır.
+
+    **Peki hangi token seçiliyor?**
+
+    En basit senaryoda model, en yüksek olasılığa sahip token’ı seçer. Buna greedy decoding denir. Ama pratikte işler genellikle biraz daha esnektir. Sampling, temperature, top-k, top-p gibi tekniklerle modelin çıktıları çeşitlendirilir.
+
+    Ama hangi yöntem kullanılırsa kullanılsın, model, bir sonraki token’ı seçerken sadece olasılıklara bakar.
+
+    Seçilen token, cümlenin sonuna eklenir. **Ve sonra her şey baştan başlar**.
+
+    **Döngü burada kapanıyor**
+
+    Yeni token üretildiği anda:
+     <ul className="writingArticle__TokenizerList">
+         <li> Tokenizer devreye girmez</li>
+         <li>Embedding lookup yapılır</li>
+         <li>Attention ve feedforward katmanları tekrar çalışır</li>
+         <li>Yeni bağlam inşa edilir</li>
+       </ul>
+
+    Model, her kelimeyi üretirken aslında şunu yapar: “Şimdiye kadar yazdıklarımı tekrar okuyayım, bağlamı yeniden kurayım ve sıradaki en olası kelimeyi seçeyim.” Bu yüzden Transformer tek seferlik bir hesap yapıp bırakmaz. Her token’da bağlamı yeniden kurar. Ürettiği her çıktı, bir sonraki adımın girdisi olur.
+
+    **Multi-Head Attention: Neden tek bakış yetmiyor?**
+
+    Şimdiye kadar attention mekanizmasını tek bir dikkat haritası üzerinden düşündük. Yani her token için, diğer token’lara ne kadar bakılacağına tek bir açıdan karar verildiğini varsaydık. Ama gerçek dil, tek bir bakış açısıyla anlaşılabilecek kadar basit değil. Bir cümlede aynı anda birden fazla şey olur. Kim neyi yapıyor, eylem hangi nesneyle ilişkili, ton ciddi mi yoksa ironik mi, zaman ve neden-sonuç ilişkileri nasıl kuruluyor. Tüm bu sinyalleri tek bir attention mekanizmasının aynı anda yakalaması zordur.
+
+     İşte bu noktada multi-head attention devreye girer.
+
+    **Aynı cümleye birden fazla açıdan bakmak**
+
+    Multi-head attention’ın temel fikri basittir: Aynı embedding’lere tek bir Q, K ve V seti uygulamak yerine, birden fazla Q, K ve V seti uygulanır. Her “head”, cümleye farklı bir açıdan bakar.
+
+    Bazı head’ler özne–fiil ilişkilerine daha duyarlı olabilir. Bazıları nesne–eylem bağlarını, bazıları zaman, kip ya da uzun menzilli ilişkileri yakalayabilir. Model bu ayrımı önceden bilmez. Eğitim sırasında, hangi head’in hangi tür ilişkileri yakalamasının daha faydalı olduğunu kendi kendine öğrenir.
+
+    **Matematiksel olarak ne değişiyor?**
+
+    Multi-head attention’da yapılan şey şudur: Embedding’ler alınır ve her head için ayrı öğrenilmiş WQ, WK ve WV matrisleriyle dönüştürülür. Böylece her head, kendi Query, Key ve Value vektörlerini üretir ve kendi attention hesaplamasını yapar.
+
+    Bu head’ler paralel çalışır. Her biri genellikle daha düşük boyutlu temsillerle işlem yapar. Böylece model, farklı ilişki türlerini aynı anda yakalarken hesaplama maliyetini de kontrol altında tutar.
+
+    **Head’ler nasıl birleşiyor?**
+
+    Her head, cümle için kendi bağlamsal temsilini üretir. Model bu temsilleri ayrı ayrı bırakmaz. Tüm head’lerin çıktıları yan yana getirilir, tek bir vektörde birleştirilir ve bir lineer katmandan geçirilir.
+
+    Sonuçta model, aynı cümleye ait farklı bakış açılarını tek bir bağlamsal temsilde toplar.
+
+    Sezgisel olarak düşünecek olursak: Tek-head attention, cümleye tek bir kamera koymak gibidir. Multi-head attention ise aynı sahneyi farklı açılardan çeken birden fazla kamera kullanmak gibidir. Her kamera farklı bir detayı yakalar. Model bu görüntüleri birleştirerek daha zengin bir bağlam kurar.
+
+     **Neden bu kadar kritik?**
+
+    Multi-head attention olmadan model: Bazı ilişki türlerini kaçırmak zorunda kalır. Ya da farklı ilişki sinyallerini tek bir temsilde karıştırır
+
+    Multi-head yapı sayesinde model:
+
+     <ul className="writingArticle__TokenizerList">
+         <li>Aynı anda birden fazla ilişkiyi değerlendirebilir</li>
+         <li>Kısa ve uzun vadeli bağlamları birlikte ele alabilir</li>
+         <li>Dilin çok katmanlı yapısını daha tutarlı biçimde temsil edebilir</li>
+       </ul>
+
+    Bu yüzden Transformer mimarisinin gücü, sadece attention’da değil; attention’ın çoğul hâlinde yatıyor.
+
+    **Küçük ama önemli bir not:** Multi-head attention, modele yeni bir “zeka türü” eklemez.Sadece aynı problemi, paralel ve farklı açılardan ele alma imkânı verir. Bu da modelin daha esnek, daha bağlama duyarlı ve daha tutarlı çıktılar üretmesini sağlar.
 
        <div className="writingArticle__callout">
          
