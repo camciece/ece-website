@@ -708,47 +708,6 @@ content:
 
     Model, her kelimeyi üretirken aslında şunu yapar: “Şimdiye kadar yazdıklarımı tekrar okuyayım, bağlamı yeniden kurayım ve sıradaki en olası kelimeyi seçeyim.” Bu yüzden Transformer tek seferlik bir hesap yapıp bırakmaz. Her token’da bağlamı yeniden kurar. Ürettiği her çıktı, bir sonraki adımın girdisi olur.
 
-    **Multi-Head Attention: Neden tek bakış yetmiyor?**
-
-    Şimdiye kadar attention mekanizmasını tek bir dikkat haritası üzerinden düşündük. Yani her token için, diğer token’lara ne kadar bakılacağına tek bir açıdan karar verildiğini varsaydık. Ama gerçek dil, tek bir bakış açısıyla anlaşılabilecek kadar basit değil. Bir cümlede aynı anda birden fazla şey olur. Kim neyi yapıyor, eylem hangi nesneyle ilişkili, ton ciddi mi yoksa ironik mi, zaman ve neden-sonuç ilişkileri nasıl kuruluyor. Tüm bu sinyalleri tek bir attention mekanizmasının aynı anda yakalaması zordur.
-
-     İşte bu noktada multi-head attention devreye girer.
-
-    **Aynı cümleye birden fazla açıdan bakmak**
-
-    Multi-head attention’ın temel fikri basittir: Aynı embedding’lere tek bir Q, K ve V seti uygulamak yerine, birden fazla Q, K ve V seti uygulanır. Her “head”, cümleye farklı bir açıdan bakar.
-
-    Bazı head’ler özne–fiil ilişkilerine daha duyarlı olabilir. Bazıları nesne–eylem bağlarını, bazıları zaman, kip ya da uzun menzilli ilişkileri yakalayabilir. Model bu ayrımı önceden bilmez. Eğitim sırasında, hangi head’in hangi tür ilişkileri yakalamasının daha faydalı olduğunu kendi kendine öğrenir.
-
-    **Matematiksel olarak ne değişiyor?**
-
-    Multi-head attention’da yapılan şey şudur: Embedding’ler alınır ve her head için ayrı öğrenilmiş WQ, WK ve WV matrisleriyle dönüştürülür. Böylece her head, kendi Query, Key ve Value vektörlerini üretir ve kendi attention hesaplamasını yapar.
-
-    Bu head’ler paralel çalışır. Her biri genellikle daha düşük boyutlu temsillerle işlem yapar. Böylece model, farklı ilişki türlerini aynı anda yakalarken hesaplama maliyetini de kontrol altında tutar.
-
-    **Head’ler nasıl birleşiyor?**
-
-    Her head, cümle için kendi bağlamsal temsilini üretir. Model bu temsilleri ayrı ayrı bırakmaz. Tüm head’lerin çıktıları yan yana getirilir, tek bir vektörde birleştirilir ve bir lineer katmandan geçirilir.
-
-    Sonuçta model, aynı cümleye ait farklı bakış açılarını tek bir bağlamsal temsilde toplar.
-
-    Sezgisel olarak düşünecek olursak: Tek-head attention, cümleye tek bir kamera koymak gibidir. Multi-head attention ise aynı sahneyi farklı açılardan çeken birden fazla kamera kullanmak gibidir. Her kamera farklı bir detayı yakalar. Model bu görüntüleri birleştirerek daha zengin bir bağlam kurar.
-
-     **Neden bu kadar kritik?**
-
-    Multi-head attention olmadan model: Bazı ilişki türlerini kaçırmak zorunda kalır. Ya da farklı ilişki sinyallerini tek bir temsilde karıştırır
-
-    Multi-head yapı sayesinde model:
-
-     <ul className="writingArticle__TokenizerList">
-         <li>Aynı anda birden fazla ilişkiyi değerlendirebilir</li>
-         <li>Kısa ve uzun vadeli bağlamları birlikte ele alabilir</li>
-         <li>Dilin çok katmanlı yapısını daha tutarlı biçimde temsil edebilir</li>
-       </ul>
-
-    Bu yüzden Transformer mimarisinin gücü, sadece attention’da değil; attention’ın çoğul hâlinde yatıyor.
-
-    **Küçük ama önemli bir not:** Multi-head attention, modele yeni bir “zeka türü” eklemez.Sadece aynı problemi, paralel ve farklı açılardan ele alma imkânı verir. Bu da modelin daha esnek, daha bağlama duyarlı ve daha tutarlı çıktılar üretmesini sağlar.
 
        <div className="writingArticle__callout">
          
