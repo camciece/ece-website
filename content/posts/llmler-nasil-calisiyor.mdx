@@ -261,7 +261,7 @@ content:
         
         Embedding aşamasında her kelime, cümleden bağımsız olarak uzayda tek bir noktaya karşılık geliyordu. Örneğin “banka” kelimesi, hangi cümlede geçerse geçsin aynı koordinattaydı. Tek başına bakıldığında anlamı sabitti. Ama gerçek dil böyle çalışmaz.
 
-    “Nehir kenarındaki banka” ile “maaş bankaya yattı” cümlelerinde kelime aynı olsa da, anlam tamamen farklıdır.
+    “Parktaki banka oturdum” ile “maaş bankaya yattı” cümlelerinde kelime aynı olsa da, anlam tamamen farklıdır.
 
     Transformer’ın yaptığı şey, bu farkı matematiksel olarak görünür kılmak. Statik embedding’leri alır, cümledeki diğer kelimelerle etkileştirir ve her token’ı bulunduğu bağlama göre yeniden konumlandırır. Böylece her kelime, artık sadece “ne olduğu” ile değil, diğer kelimelerle kurduğu ilişki üzerinden temsil edilir.
 
@@ -296,7 +296,8 @@ content:
          <li>Tokenizer’ın bunu dört token’a böldüğünü varsayalım: [Parayı] [bankaya] [yatır] [dım]</li>
          <li>       Görselleştirmeyi kolaylaştırmak için embedding boyutunu bilinçli olarak küçük tutalım (n = 3). Gerçek modellerde bu boyut binlercedir; burada amaç mekanizmayı çıplak gözle görebilmek. (Daha interaktif bir görselleştirme için <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> gibi araçları kurcalayabilirsiniz.)</li>
        </ul>
-
+    Her token için embedding’lerimiz şöyle olsun:
+       
         <div className="writingArticle__codeRow">
          <div className="writingArticle__codeCard writingArticle__codeCard--narrow">
            <pre className="writingArticle__codeBlock">
@@ -310,9 +311,12 @@ content:
                <br />
                <br />
                <span className="codeLine">
-                <span className="codeConst">Embedding 1:</span>
+                <span className="codeConst">Token 1:</span>
                 <span className="codeVar"> Parayı</span>
-                 <span className="codeOp">   → [ </span>
+                 <span className="codeOp">  → </span>
+                 <span className="codeConst">Embedding 1</span>
+                 <span className="codeConst">:</span>
+                 <span className="codeOp">[ </span>
                  <span className="codeVar">0.2</span>
                  <span className="codeOp"> , </span>
                  <span className="codeVar">-0.1</span>
@@ -322,9 +326,12 @@ content:
                </span>
                <br />
                <span className="codeLine">
-                <span className="codeConst">Embedding 2:</span>
+                <span className="codeConst">Token 2:</span>
                 <span className="codeVar"> bankaya</span>
-                 <span className="codeOp"> → [ </span>
+                 <span className="codeOp"> → </span>
+                 <span className="codeConst">Embedding 2</span>
+                 <span className="codeConst">:</span>
+                 <span className="codeOp">[ </span>
                  <span className="codeVar">0.9</span>
                  <span className="codeOp"> , </span>
                  <span className="codeVar">0.3</span>
@@ -334,9 +341,12 @@ content:
                </span>
                <br />
                <span className="codeLine">
-                <span className="codeConst">Embedding 3:</span>
+                <span className="codeConst">Token 3:</span>
                 <span className="codeVar"> yatır</span>
-                 <span className="codeOp">   → [ </span>
+                 <span className="codeOp">   → </span>
+                 <span className="codeConst">Embedding 3</span>
+                 <span className="codeConst">:</span>
+                 <span className="codeOp">[ </span>
                  <span className="codeVar">0.4</span>
                  <span className="codeOp"> , </span>
                  <span className="codeVar">0.8</span>
@@ -346,9 +356,12 @@ content:
                </span>
                <br />
                <span className="codeLine">
-                <span className="codeConst">Embedding 4:</span>
+                <span className="codeConst">Token 4:</span>
                 <span className="codeVar"> dım</span>
-                 <span className="codeOp">     → [ </span>
+                 <span className="codeOp">     → </span>
+                 <span className="codeConst">Embedding 4</span>
+                 <span className="codeConst">:</span>
+                 <span className="codeOp">[ </span>
                  <span className="codeVar">-0.3</span>
                  <span className="codeOp">, </span>
                  <span className="codeVar">0.2</span>
@@ -362,8 +375,8 @@ content:
          <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
          <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embedding Matrix" }} />
         </div> 
-         Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding’i alır ve onu üç farklı “lens”ten geçirir. Bu lens’ler, Q, K ve V olarak adlandırılan üç farklı matematiksel dönüşümdür. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
-              
+         Bu noktada attention mekanizması, bu embedding’lere tek bir açıdan bakmaz. Aynı embedding’i alır ve onu üç farklı matematiksel dönüşümden geçirir. Bu üç dönüşüm, Query (Q), Key (K) ve Value (V) olarak adlandırılır.
+                      
         <div className="writingArticle__callout">
        <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
          <li>**Query (Q)** “Bu token, cümleyi doğru anlamak için diğer token’larda hangi özelliklere dikkat etmeli?”</li>
