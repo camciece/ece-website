@@ -57,7 +57,6 @@ content:
                 <span className="codeString">"Ghosting yapmadığımı anlatan ikna edici bir mesaj yaz"</span>
               </span>
               <br />
-              <br />
               <span className="codeLine">
                 <span className="codeVar">tokens</span>
                 <span className="codeEq"> = </span>
@@ -66,61 +65,80 @@ content:
                 <span className="codeVar">prompt</span>
                 <span className="codeOp">);</span>
               </span>
-              <br />
               <span className="codeLine">
                 <span className="codeKw">while</span>
                 <span className="codeOp"> (</span>
                 <span className="codeConst">true</span>
                 <span className="codeOp">) &#123;</span>
               </span>
-
               <span className="codeLine">
-
-                <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">embed</span><span className="codeOp">(</span><span className="codeVar">tokens</span><span className="codeOp">);</span>
+                <span className="codeVar">  embeddings</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">embed</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">tokens</span>
+                <span className="codeOp">);</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeKw">for</span><span className="codeOp"> ([</span><span className="codeVar">attention</span><span className="codeOp">, </span><span className="codeVar">feedforward</span><span className="codeOp">] of </span><span className="codeVar">transformers</span><span className="codeOp">) &#123;</span>
+                <span className="codeKw">  for</span>
+                <span className="codeOp"> ([</span>
+                <span className="codeVar">attention</span>
+                <span className="codeOp">, </span>
+                <span className="codeVar">feedforward</span>
+                <span className="codeOp">] of </span>
+                <span className="codeVar">transformers</span>
+                <span className="codeOp">) &#123;</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">attention</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+                <span className="codeVar">    embeddings</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">attention</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">embeddings</span>
+                <span className="codeOp">);</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeVar">embeddings</span><span className="codeEq"> = </span><span className="codeFn">feedforward</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+                <span className="codeVar">    embeddings</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">feedforward</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">embeddings</span>
+                <span className="codeOp">);</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeOp">&#125;</span>
+                <span className="codeOp">  &#125;</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeVar">output_token</span><span className="codeEq"> = </span><span className="codeFn">output</span><span className="codeOp">(</span><span className="codeVar">embeddings</span><span className="codeOp">);</span>
+                <span className="codeVar">  output_token</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">output</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">embeddings</span>
+                <span className="codeOp">);</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeKw">if</span><span className="codeOp"> (</span><span className="codeVar">output_token</span><span className="codeEq"> === </span><span className="codeConst">END_TOKEN</span><span className="codeOp">) &#123;</span>
+                <span className="codeKw">  if</span>
+                <span className="codeOp"> (</span>
+                <span className="codeVar">output_token</span>
+                <span className="codeEq"> === </span>
+                <span className="codeConst">END_TOKEN</span>
+                <span className="codeOp">) &#123;</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeKw">break</span>
+                <span className="codeKw">    break</span>
                 <span className="codeOp">;</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeOp">&#125;</span>
+                <span className="codeOp">  &#125;</span>
               </span>
-              <br />
               <span className="codeLine">
-                <span className="codeVar">tokens</span>
+                <span className="codeVar">  tokens</span>
                 <span className="codeOp">.</span>
                 <span className="codeFn">push</span>
                 <span className="codeOp">(</span>
                 <span className="codeVar">output_token</span>
                 <span className="codeOp">);</span>
               </span>
-              <br />
               <span className="codeLine">
                 <span className="codeOp">&#125;</span>
               </span>
