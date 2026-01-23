@@ -287,11 +287,14 @@ content:
        
        **Attention bunu matematiksel olarak nasıl yapıyor? → Q, K, V**
 
-       Kısa bir matematik molası. Panik yok, hedef yine sezgiyi oturtmak. Az önce anlattığımız ağırlıklar (%48, %34, %18) modelin içinde tahminen oluşmuyor. Bunlar tamamen matris işlemleri ile adım adım hesaplanıyor. Şimdi aynı fikri, kullandığımız prompt üzerinden basitleştirilmiş bir örnekle görelim.
+       Kısa bir matematik molası. Panik yok, buradaki amaç formülleri ezberletmek değil, modelin neyi nasıl hesapladığını sezgisel olarak görmek. 
+       
+      Az önce verdiğimiz dikkat oranları (%48, %34, %18) modelin içinde tahminen oluşmaz. Bunlar tamamen matematiksel işlemlerle, adım adım hesaplanır. Aynı fikri küçük ve sade bir örnekle görelim.
+
        <ul className="writingArticle__TokenizerList">
-         <li>Prompt: “Parayı bankaya yatırdım”</li>
+         <li> Prompt’umuz şu olsun: “Parayı bankaya yatırdım”</li>
          <li>Tokenizer’ın bunu dört token’a böldüğünü varsayalım: [Parayı] [bankaya] [yatır] [dım]</li>
-         <li>Embedding boyutunu özellikle küçük tutalım (n = 3), böylece tabloları gözümüzde canlandırabilelim. (Gerçek modellerde bu boyut binlercedir. Burada küçük seçmemizin sebebi, mekanizmayı sade bir biçimde gösterebilmek. Daha gerçekçi bir görselleştirme için interaktif <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> gibi araçlar iyi gider.)</li>
+         <li>       Görselleştirmeyi kolaylaştırmak için embedding boyutunu bilinçli olarak küçük tutalım (n = 3). Gerçek modellerde bu boyut binlercedir; burada amaç mekanizmayı çıplak gözle görebilmek. (Daha interaktif bir görselleştirme için <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> gibi araçları kurcalayabilirsiniz.)</li>
        </ul>
 
         <div className="writingArticle__codeRow">
@@ -307,7 +310,8 @@ content:
                <br />
                <br />
                <span className="codeLine">
-                 <span className="codeVar">Parayı</span>
+                <span className="codeConst">Embedding 1:</span>
+                <span className="codeVar"> Parayı</span>
                  <span className="codeOp">   → [ </span>
                  <span className="codeVar">0.2</span>
                  <span className="codeOp"> , </span>
@@ -318,7 +322,8 @@ content:
                </span>
                <br />
                <span className="codeLine">
-                 <span className="codeVar">bankaya</span>
+                <span className="codeConst">Embedding 2:</span>
+                <span className="codeVar"> bankaya</span>
                  <span className="codeOp"> → [ </span>
                  <span className="codeVar">0.9</span>
                  <span className="codeOp"> , </span>
@@ -329,7 +334,8 @@ content:
                </span>
                <br />
                <span className="codeLine">
-                 <span className="codeVar">yatır</span>
+                <span className="codeConst">Embedding 3:</span>
+                <span className="codeVar"> yatır</span>
                  <span className="codeOp">   → [ </span>
                  <span className="codeVar">0.4</span>
                  <span className="codeOp"> , </span>
@@ -340,7 +346,8 @@ content:
                </span>
                <br />
                <span className="codeLine">
-                 <span className="codeVar">dım</span>
+                <span className="codeConst">Embedding 4:</span>
+                <span className="codeVar"> dım</span>
                  <span className="codeOp">     → [ </span>
                  <span className="codeVar">-0.3</span>
                  <span className="codeOp">, </span>
@@ -353,7 +360,7 @@ content:
            </pre>
          </div>
          <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
-         <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} />
+         <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embedding Matrix" }} />
         </div> 
          Attention mekanizması bu embedding’lere tek bir açıdan bakmaz. Aynı embedding’i alır ve onu üç farklı “lens”ten geçirir. Bu lens’ler, Q, K ve V olarak adlandırılan üç farklı matematiksel dönüşümdür. Ve her dönüşümle embedding'e farklı bir soru sorar. Bu sorular şunlardır:
               
