@@ -517,7 +517,9 @@ content:
 
        Q ve K matrislerinin boyutları bilinçli olarak aynıdır. Bunun sebebi, birazdan bu iki temsili doğrudan birbiriyle matematiksel olarak ilişkilendirecek olmamızdır. Yani bu adımda henüz “kim kime ne kadar dikkat ediyor?” sorusunu sormuyoruz. Sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
 
-       Bir sonraki adımda, Q ile K’yi karşı karşıya getirip token’lar arasındaki ilişkileri sayısal olarak ölçmeye başlayacağız.
+       Bir sonraki adımda, Q ile K’yi karşı karşıya getirip token’lar arasındaki ilişkileri sayısal olarak ölçmeye başlayacağız. 
+       
+       **Score'lara geçmeden önce burada önemli bir not:** Bu ölçüm, modele göre farklı sayıda head'lere bölünerek paralel olarak yapılır. Buna **multi-head attention** denir. Multi-head attention’ın temel fikri şudur: Aynı embedding’lere tek bir Q, K ve V seti uygulamak yerine, birden fazla Q, K ve V seti uygulanır. Her “head”, cümleye farklı bir açıdan bakar.
 
        **Scores: Token'lar Arası Benzerlikler**
 
@@ -708,6 +710,7 @@ content:
 
     Model, her kelimeyi üretirken aslında şunu yapar: “Şimdiye kadar yazdıklarımı tekrar okuyayım, bağlamı yeniden kurayım ve sıradaki en olası kelimeyi seçeyim.” Bu yüzden Transformer tek seferlik bir hesap yapıp bırakmaz. Her token’da bağlamı yeniden kurar. Ürettiği her çıktı, bir sonraki adımın girdisi olur.
 
+    Bu döngü yeterince çalıştığında da ortaya bize anlamlı gelen yanıt ortaya çıkar. 
 
        <div className="writingArticle__callout">
          
