@@ -10,6 +10,8 @@ import { getPost } from '@/lib/md'
 import { getCopy } from '@/lib/static-copy'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { notFound } from 'next/navigation'
+import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
 
 export default function Post({
   params,
@@ -57,6 +59,12 @@ export default function Post({
               Matrix,
               Note,
               Scatterplot3DDemo,
+            }}
+            options={{
+              mdxOptions: {
+                remarkPlugins: [remarkMath],
+                rehypePlugins: [rehypeKatex],
+              },
             }}
           />
         </div>
