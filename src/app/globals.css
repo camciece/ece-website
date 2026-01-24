@@ -1316,6 +1316,41 @@ body.text-\[--text\] {
   color: #e6e9ee;
 }
 
+.writingPage[data-reading-mode='dark'] .writingNote {
+  background: #1c1a14;
+  border-color: #3a2f1e;
+  color: #e7dcc5;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz rect {
+  fill: #0f1218;
+  stroke: #2a2f3a;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordGrid line {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordAxes line,
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordAxes path {
+  stroke: rgba(255, 255, 255, 0.6);
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordPoints circle {
+  fill: #ffb08a;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordPoints text,
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordLabels text,
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordLegend text {
+  fill: #d7dbe3;
+}
+
+.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordLegend rect {
+  fill: rgba(255, 255, 255, 0.05);
+  stroke: #2a2f3a;
+}
+
 .writingPage[data-reading-mode='dark'] .writingArticle__embedTable {
   background: #0f1218;
   border-color: #2a2f3a;
@@ -1457,6 +1492,64 @@ body.text-\[--text\] {
   height: auto;
   display: block;
   margin-bottom: -18px;
+}
+
+.writingArticle__media--coord {
+  margin-top: 12px;
+}
+
+.writingArticle__coordViz {
+  width: min(820px, 100%);
+  height: auto;
+  display: block;
+}
+
+.writingArticle__coordViz rect {
+  fill: #12131a;
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.writingArticle__coordViz .coordGrid line {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.writingArticle__coordViz .coordAxes line,
+.writingArticle__coordViz .coordAxes path {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.writingArticle__coordViz .coordLabels text {
+  fill: #cfd5de;
+  font-size: 14px;
+  font-family:
+    'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+}
+
+.writingArticle__coordViz .coordPoints circle {
+  fill: #ff9b6b;
+}
+
+.writingArticle__coordViz .coordPoints text {
+  fill: #f4f6fb;
+  font-size: 14px;
+  font-family:
+    'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+}
+
+.writingArticle__coordViz .coordLegend rect {
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.writingArticle__coordViz .coordLegend text {
+  fill: #cfd5de;
+  font-size: 12px;
+  font-family: 'Google Sans', system-ui, sans-serif;
 }
 
 @media (max-width: 900px) {
@@ -1984,6 +2077,37 @@ ol.writingArticle__TokenizerList {
   padding-left: 3px;
   line-height: 1.7;
   font-family: 'Google Sans';
+}
+
+.writingNote {
+  margin: 14px 0 18px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #fff7e6;
+  border: 1px solid #f3d7a5;
+  color: #3b2f1f;
+  font-size: 15px;
+  line-height: 1.7;
+  box-shadow: 0 10px 22px rgba(20, 20, 20, 0.08);
+}
+
+.writingNote__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  border-radius: 999px;
+  background: #ffcf6b;
+  color: #3b2f1f;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.writingNote strong {
+  font-weight: 700;
 }
 
 .writingArticle__codeCard {

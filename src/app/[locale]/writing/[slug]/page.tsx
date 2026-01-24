@@ -1,6 +1,7 @@
 import EmbeddingsDemo from '@/components/embeddings-demo'
 import Footer from '@/components/footer'
 import Matrix from '@/components/matrix'
+import Note from '@/components/note'
 import ReadingModeToggle from '@/components/reading-mode-toggle'
 import TokenDemo from '@/components/token-demo'
 import type { Locale } from '@/lib/locale'
@@ -49,7 +50,7 @@ export default function Post({
         <div className="writingArticle__body">
           <MDXRemote
             source={post.content}
-            components={{ TokenDemo, EmbeddingsDemo, Matrix }}
+            components={{ TokenDemo, EmbeddingsDemo, Matrix, Note }}
           />
         </div>
       </article>
