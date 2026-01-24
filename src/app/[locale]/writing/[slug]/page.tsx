@@ -1,3 +1,4 @@
+import Scatterplot3DDemo from '@/components/3d-scatterplot-demo'
 import EmbeddingsDemo from '@/components/embeddings-demo'
 import Footer from '@/components/footer'
 import Matrix from '@/components/matrix'
@@ -50,7 +51,13 @@ export default function Post({
         <div className="writingArticle__body">
           <MDXRemote
             source={post.content}
-            components={{ TokenDemo, EmbeddingsDemo, Matrix, Note }}
+            components={{
+              TokenDemo,
+              EmbeddingsDemo,
+              Matrix,
+              Note,
+              Scatterplot3DDemo,
+            }}
           />
         </div>
       </article>
