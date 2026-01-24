@@ -192,25 +192,28 @@ content:
          
         <h2>Embeddings</h2>
 
-        Tokenizer’dan çıkan Token ID’ler, model için hâlâ sadece numaralardan ibaret. Bu numaralarla tek başına yapılabilecek şey çok sınırlı. Ne benzerlik ölçebilirsin, ne “bunlar birbirine yakın mı?” diye sorabilirsiniz. Anlamın inşa edilebilmesi için, bu etiketlerin karşılaştırılabilir bir forma dönüşmesi gerekir. Embeddings katmanının yaptığı şey tam olarak budur.
+        Geldik işin mutfağına. Tokenizer’dan çıkan o ID’ler model için aslında hala sadece birer "numaradan" ibaret. Bu kuru rakamlarla tek başına yapabileceğimiz şey ise maalesef çok kısıtlı. Ne kelimelerin benzerliğini ölçebiliriz ne de "Acaba bunlar birbirine yakın mı?" diye sorabiliriz. Anlamın gerçekten inşa edilebilmesi için, bu sayıların birbirleriyle kıyaslanabilir, yani matematiksel bir ruhu olan forma dönüşmesi şart. İşte Embeddings katmanı tam olarak bu dönüşümü sağlıyor.
+        
+       Olayı şöyle hayal edebilirsiniz: Her Token ID, modelin içinde saklanan devasa bir sözlük tablosunda (embedding table) bir satıra karşılık geliyor. O satırdan çekip aldığımız o upuzun sayı listesi, artık o kelimenin çok boyutlu bir vektör olarak temsil edilmesini sağlıyor.
+
+       Tokenizer’dan çıkan Token ID’ler, model için hâlâ sadece numaralardan ibaret. Bu numaralarla tek başına yapılabilecek şey çok sınırlı. Ne benzerlik ölçebilirsin, ne “bunlar birbirine yakın mı?” diye sorabilirsiniz. Anlamın inşa edilebilmesi için, bu etiketlerin karşılaştırılabilir bir forma dönüşmesi gerekir. Embeddings katmanının yaptığı şey tam olarak budur.
        
-         Her Token ID, modelin içinde tutulan büyük bir embedding tablosunda bir satıra karşılık gelir. Bu satırdan alınan uzun sayı listesi, token’ın çok boyutlu bir vektör olarak temsil edilmesini sağlar.       
-       
-       Bir embedding’i, çok boyutlu (n) bir uzaydaki bir konum gibi düşünebilirsiniz. Mesela n = 3 olsaydı, bir embedding [10, 4, 2] gibi görünebilirdi ve bu da 3 boyutlu bir uzayda x=10, y=4, z=2 noktasına karşılık gelirdi. Gerçekte bu uzay, binlerce boyuta sahip.
+       Peki, nedir bu vektör? Bir embedding’i, devasa bir uzaydaki koordinat gibi düşünebilirsiniz. Mesela sadece 3 boyutlu bir dünyada, bir kelimenin embedding’i [10, 4, 2] gibi bir şey olurdu; yani bizi x=10, y=4, z=2 noktasına götürürdü. Ama gerçekte bu uzay öyle üçle beşle sınırlı değil, binlerce farklı boyuta sahip! Kelimeler, bu uçsuz bucaksız uzayda anlamlarına göre birbirlerine yaklaşıyor, uzaklaşıyor ya da kümeleniyorlar.
        
          <div className="writingArticle__callout">
            <div className="writingArticle__calloutTitle">Peki neden bu kadar çok boyut?</div>
            <div className="writingArticle__calloutBody">
-             İnsanlar olarak bir problemi çözerken çoğu zaman elimizde açık bir formül vardır. Örneğin sıcaklık dönüşümünde ne yapacağımızı biliriz. Büyük dil modellerinin önünde, kelimelerin nasıl ilişkilendirileceğini söyleyen hazır bir formül yok. Onlar, kelimeler arasındaki benzerlikleri ve ilişkileri doğrudan keşfetmek zorundalar.
-           </div>
-           <div className="writingArticle__calloutBody">
-             Bir cümleyi yalnızca “ne söylendiği” üzerinden değil; tonu, ritmi, resmi mi yoksa gündelik mi olduğu gibi pek çok farklı sinyal üzerinden değerlendirebilmek için bu çok boyutlu yapıya ihtiyaç duyarlar. Bu yüzden her bir token, tek bir eksende değil, binlerce farklı eksende aynı anda temsil edilir.
-           </div>
-           <div className="writingArticle__calloutBody">
-             Güncel modellerde bu vektörlerin boyutu binlerle ifade edilir. Bu da her bir kelimenin, tek bir anlam yerine, çok sayıda özelliğin birlikte oluşturduğu bir konuma yerleştirilmesi demektir.
+           Biz insanlar bir problemi çözerken genelde elimizde net bir formül olur. Mesela santigratı fahrenheit’a çevirirken ne yapacağımız bellidir. Ama büyük dil modellerinin (LLM) elinde kelimelerin nasıl eşleşeceğini söyleyen hazır bir rehber yok. Onlar dildeki o devasa örüntüleri ve gizli ilişkileri sıfırdan keşfetmek zorunda.
+
+         Bir cümleyi sadece "ne dendiği" üzerinden değil; tonu, ritmi, resmi mi yoksa mahalle ağzı mı olduğu gibi binlerce farklı sinyal üzerinden okuyorlar. Bu yüzden her bir kelime (token), tek bir çizgi üzerinde değil, binlerce farklı eksende aynı anda temsil ediliyor.
+
+     Ama işin en ilginç ve biraz da "garip" kısmı burası. Bu boyutların hiçbiri biz insanlar için "Hah, işte bu neşe demek" gibi net bir anlam taşımıyor. Modelin içinde "bu boyut resmiyeti ölçer" veya "şu eksen ironiyi temsil eder" gibi etiketler yok. Bu ayrımlar modelin derinliklerinde var, tıkır tıkır çalışıyor ve sonuç veriyor; ama bizim dünyamıza doğrudan tercüme edilemiyor.
+
+    Güncel modellerde bu boyutlar binlerle ifade ediliyor. Yani her kelime tek bir anlam değil, sayısız özelliğin üst üste binmesiyle oluşan bir "koordinatta" yaşıyor. Anlam dediğimiz şey de o uzaydaki tek bir noktada değil, o devasa ilişkiler ağının içinde doğuyor.
+
+    Modellerin en "büyülü" tarafı belki de bu: Matematiksel adımlarla ilerliyorlar ama oluşturdukları dünya bizim dilimize tam olarak çevrilemeyecek kadar derin ve çok boyutlu.
            </div>
          </div>
-
        Bu tabloda gördüğünüz değerler, token ID’lerin modelin embedding tablosundan aldığı karşılıklardır. Her satır bir token’a ait embedding vektörünü, her sütun ise bu vektörün bir boyutunu temsil eder.
         <div className="writingArticle__embedTable">
          <div className="writingArticle__embedTableHeader">
@@ -253,7 +256,7 @@ content:
                         **Not:** Her bir embedding, eğitim başlamadan önce bu uzayda rastgele bir noktadan başlar. Eğitim süreci boyunca model, hata sinyaline göre bu noktaları yavaş yavaş ayarlar. Birbirine benzer bağlamlarda kullanılan token’lar bu uzayda yakınlaşır; alakasız olanlar ise uzaklaşır.       
 
 
-         Bu noktada token’lar ilk kez birbirleriyle karşılaştırılabilir hale gelir. Anlam hâlâ doğrudan ortaya çıkmış değildir, ama anlamın kurulabileceği matematiksel zemin hazırlanmıştır.         Bir token’ın embedding’i, cümleden bağımsızdır. “Banka” kelimesi, tek başına ele alındığında hep aynı noktaya düşer. Bu nokta, kelimenin hangi bağlamda kullanıldığını henüz ayırt edemez. Nehir kenarındaki banka ile maaşın yattığı banka burada hâlâ aynıdır.
+         Bu noktada token’lar ilk kez birbirleriyle karşılaştırılabilir hale gelir. Anlam hâlâ doğrudan ortaya çıkmış değildir, ama anlamın kurulabileceği matematiksel zemin hazırlanmıştır.         Bir token’ın embedding’i, cümleden bağımsızdır. “Banka” kelimesi, tek başına ele alındığında hep aynı noktaya düşer. Bu nokta, kelimenin hangi bağlamda kullanıldığını henüz ayırt edemez. “Parktaki banka oturdum“ ile “maaşın yattığı banka“ burada hâlâ aynıdır.
 
         Embeddings’in yaptığı şey, token’ları bir haritaya yerleştirmektir. Ama bu harita statiktir.
 
@@ -519,11 +522,13 @@ content:
 
        Bir sonraki adımda, Q ile K’yi karşı karşıya getirip token’lar arasındaki ilişkileri sayısal olarak ölçmeye başlayacağız. 
        
-       **Score'lara geçmeden önce burada önemli bir not:** Bu ölçüm, modele göre farklı sayıda head'lere bölünerek paralel olarak yapılır. Buna **multi-head attention** denir. Multi-head attention’ın temel fikri şudur: Aynı embedding’lere tek bir Q, K ve V seti uygulamak yerine, birden fazla Q, K ve V seti uygulanır. Her “head”, cümleye farklı bir açıdan bakar.
-
+       Puanlara dalmadan önce ufak ama çok kritik bir detaydan bahsedelim: Bu ölçüm işlemi aslında tek bir koldan değil, modelin yapısına göre birkaç farklı parçaya bölünerek, yani paralel olarak ilerliyor. Biz buna Multi-Head Attention diyoruz. Elimizdeki veriye (embedding) sadece bir tane soru-cevap seti (Q, K ve V) uygulamak yerine, birden fazla set uyguluyoruz. Böylece her bir "başlık" (head), cümleye bambaşka bir perspektiften bakıyor; biri dilbilgisine odaklanırken diğeri anlam derinliğini yakalıyor.
+       
        **Scores: Token'lar Arası Benzerlikler**
 
-         Bu aşamada yaptığımız şey, token’ların birbirleriyle ne kadar ilişkili olduğunu ölçmek. Bu ilişki, Query (Q) vektörleri ile Key (K) vektörlerinin karşılaştırılmasıyla bulunur. Matematikte bu karşılaştırma, tek bir matris çarpımıyla ifade edilir: **Scores = Q × Kᵀ**
+         Bu aşamada yaptığımız şey, token’ların birbirleriyle ne kadar ilişkili olduğunu ölçmek. Bu ilişki, Query (Q) vektörleri ile Key (K) vektörlerinin karşılaştırılmasıyla bulunur. Matematikte bu karşılaştırma, tek bir matris çarpımıyla ifade edilir: 
+         
+         **Scores = Q × Kᵀ**
          <div className="writingArticle__codeRow">
          <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
