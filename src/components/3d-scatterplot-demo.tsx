@@ -5,10 +5,12 @@ import { useEffect, useRef, useState } from 'react'
 
 interface Scatterplot3DDemoProps {
   points?: number[][][]
+  labels?: string[]
 }
 
 export default function Scatterplot3DDemo({
   points = [],
+  labels = [],
 }: Scatterplot3DDemoProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const scriptLoadedRef = useRef(false)
@@ -18,6 +20,7 @@ export default function Scatterplot3DDemo({
     if (!containerRef.current || scriptLoadedRef.current)
       return // Store points data globally for the script to access
     ;(window as any).scatterplot3dPoints = points
+    ;(window as any).scatterplot3dLabels = labels
     ;(window as any).scatterplot3dCurrentIndex = currentIndex
 
     // Create the SVG element that the script expects
@@ -54,9 +57,10 @@ export default function Scatterplot3DDemo({
         script.parentNode.removeChild(script)
       }
       delete (window as any).scatterplot3dPoints
+      delete (window as any).scatterplot3dLabels
       delete (window as any).scatterplot3dCurrentIndex
     }
-  }, [points])
+  }, [points, labels])
 
   // Re-initialize when currentIndex changes
   useEffect(() => {

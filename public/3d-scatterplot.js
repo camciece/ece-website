@@ -99,6 +99,29 @@ import {
 
     points.exit().remove()
 
+    /* ----------- POINT LABELS ----------- */
+
+    const pointLabels = svg.selectAll('text.pointLabel').data(data[1], key)
+
+    pointLabels
+      .enter()
+      .append('text')
+      .attr('class', 'd3-3d pointLabel')
+      .attr('font-family', 'system-ui, sans-serif')
+      .attr('font-size', '10px')
+      .attr('font-weight', 'bold')
+      .attr('text-anchor', 'middle')
+      .attr('opacity', 0)
+      .merge(pointLabels)
+      .transition()
+      .duration(tt)
+      .attr('opacity', (d) => (d.label ? 1 : 0))
+      .attr('x', (d) => d.projected.x)
+      .attr('y', (d) => d.projected.y - 8)
+      .text((d) => d.label || '')
+
+    pointLabels.exit().remove()
+
     /* ----------- y-Scale ----------- */
 
     const yScale = svg.selectAll('path.yScale').data(data[2])
@@ -151,6 +174,7 @@ import {
 
     // Check if custom points are provided
     const allPoints = window.scatterplot3dPoints
+    const labels = window.scatterplot3dLabels || []
     const currentIndex = window.scatterplot3dCurrentIndex || 0
 
     if (allPoints && allPoints.length > 0) {
@@ -162,6 +186,7 @@ import {
           y: point[1],
           z: point[2],
           id: 'point-' + idx,
+          label: labels[idx] || '',
         })
       })
     } else {
