@@ -4,7 +4,6 @@
 import {
   color,
   drag,
-  randomUniform,
   range,
   scaleOrdinal,
   schemeCategory10,
@@ -19,7 +18,7 @@ import {
 } from 'https://cdn.skypack.dev/d3-3d@1.0.0'
 ;(() => {
   const origin = { x: 360, y: 280 }
-  const j = 10
+  const rows = 10
   const scale = 20
   const key = (d) => d.id
   const startAngle = Math.PI / 4
@@ -40,7 +39,7 @@ import {
     .append('g')
 
   const grid3d = gridPlanes3D()
-    .rows(j * 2 + 1)
+    .rows(rows * 2 + 1)
     .origin(origin)
     .rotateY(startAngle)
     .rotateX(-startAngle)
@@ -57,6 +56,11 @@ import {
     .rotateY(startAngle)
     .rotateX(-startAngle)
     .scale(scale)
+
+  function round(num, places = 2) {
+    const mult = Math.pow(10, places)
+    return Math.round((num + Number.EPSILON) * mult) / mult
+  }
 
   function processData(data, tt) {
     /* ----------- GRID ----------- */
@@ -153,7 +157,7 @@ import {
       })
       .attr('x', (d) => d.projected.x)
       .attr('y', (d) => d.projected.y)
-      .text((d) => (d.y !== 0 ? `_ ${d.y}` : ''))
+      .text((d) => (d.y !== 0 ? `_ ${round(-d.y)}` : ''))
 
     yText.exit().remove()
 
@@ -178,42 +182,56 @@ import {
     const labels = window.scatterplot3dLabels || []
     const currentIndex = window.scatterplot3dCurrentIndex || 0
 
+    // Calculate maxValue from all points
+    let calculatedMaxValue = 1
     if (allPoints && allPoints.length > 0) {
-      // Use provided points at current index
-      const customPoints = allPoints[currentIndex] || allPoints[0]
-      customPoints.forEach((point, idx) => {
-        scatter.push({
-          x: point[0],
-          y: point[1],
-          z: point[2],
-          id: 'point-' + idx,
-          label: labels[idx] || '',
-        })
-      })
-    } else {
-      // Generate random points (original behavior)
-      let cnt = 0
-      for (let z = -j; z < j; z++) {
-        for (let x = -j; x < j; x++) {
-          scatter.push({
-            x: x,
-            y: randomUniform(0, -10)(),
-            z: z,
-            id: 'point-' + cnt++,
-          })
-        }
-      }
+      const flatPoints = allPoints.flat()
+      const allValues = flatPoints.flatMap((point) => [
+        Math.abs(point[0]),
+        Math.abs(point[1]),
+        Math.abs(point[2]),
+      ])
+      calculatedMaxValue = Math.ceil(Math.max(...allValues))
     }
 
+    // Update grid and scale parameters
+    const increment = calculatedMaxValue / rows
+    const scale = 200 / calculatedMaxValue
+
+    // Update 3D projections with new scale
+    grid3d.rows(rows * 2 + 1).scale(scale)
+    points3d.scale(scale)
+    yScale3d.scale(scale)
+
+    // Use provided points at current index
+    const customPoints = allPoints[currentIndex] || allPoints[0]
+    customPoints.forEach((point, idx) => {
+      scatter.push({
+        x: point[0],
+        y: -point[1],
+        z: point[2],
+        id: 'point-' + idx,
+        label: labels[idx] || '',
+      })
+    })
+
     // Create grid
-    for (let z = -j; z <= j; z++) {
-      for (let x = -j; x <= j; x++) {
+    for (let z = -calculatedMaxValue; z <= calculatedMaxValue; z += increment) {
+      for (
+        let x = -calculatedMaxValue;
+        x <= calculatedMaxValue;
+        x += increment
+      ) {
         xGrid.push({ x: x, y: 0, z: z })
       }
     }
 
-    range(-j, j + 1, 1).forEach((d) => {
-      yLine.push({ x: 0, y: -d, z: 0 })
+    range(
+      -calculatedMaxValue,
+      calculatedMaxValue + increment,
+      increment,
+    ).forEach((d) => {
+      yLine.push({ x: 0, y: d, z: 0 })
     })
 
     const data = [grid3d(xGrid), points3d(scatter), yScale3d([yLine])]
