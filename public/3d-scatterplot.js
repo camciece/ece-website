@@ -40,7 +40,7 @@ import {
     .append('g')
 
   const grid3d = gridPlanes3D()
-    .rows(j * 2)
+    .rows(j * 2 + 1)
     .origin(origin)
     .rotateY(startAngle)
     .rotateX(-startAngle)
@@ -146,13 +146,14 @@ import {
       .append('text')
       .attr('class', 'd3-3d yText')
       .attr('font-family', 'system-ui, sans-serif')
+      .attr('font-size', '10px')
       .merge(yText)
       .each(function (d) {
         d.centroid = { x: d.rotated.x, y: d.rotated.y, z: d.rotated.z }
       })
       .attr('x', (d) => d.projected.x)
       .attr('y', (d) => d.projected.y)
-      .text((d) => (d.y <= 0 ? d.y : ''))
+      .text((d) => (d.y !== 0 ? `_ ${d.y}` : ''))
 
     yText.exit().remove()
 
@@ -205,13 +206,13 @@ import {
     }
 
     // Create grid
-    for (let z = -j; z < j; z++) {
-      for (let x = -j; x < j; x++) {
-        xGrid.push({ x: x, y: 1, z: z })
+    for (let z = -j; z <= j; z++) {
+      for (let x = -j; x <= j; x++) {
+        xGrid.push({ x: x, y: 0, z: z })
       }
     }
 
-    range(-1, j + 1, 1).forEach((d) => {
+    range(-j, j + 1, 1).forEach((d) => {
       yLine.push({ x: 0, y: -d, z: 0 })
     })
 
