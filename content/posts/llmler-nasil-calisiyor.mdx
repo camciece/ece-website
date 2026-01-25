@@ -325,8 +325,8 @@ content:
         Embedding aşamasında her kelime, cümleden bağımsız olarak uzayda tek bir noktaya karşılık geliyordu. Örneğin "banka" kelimesi, hangi cümlede geçerse geçsin başlangıçta aynı koordinattaydı. Ancak gerçek dil böyle çalışmaz:
 
         <ul className="writingArticle__ArchitectureList">
-           <li>*"Parktaki banka oturdum."*</li>
-           <li>*"Maaşım bankaya yattı."*</li>
+           <li>*"Parktaki eski bir banka oturup dinlendi."*</li>
+           <li>*"Banka şubesine giderek yeni bir hesap açtı."*</li>
          </ul>
 
          Bu iki cümlede kelime aynı olsa da anlamlar dünyalar kadar farklıdır. Transformer’ın yaptığı sihir, bu farkı matematiksel olarak görünür kılmaktır. Statik embedding’leri alır, cümledeki diğer kelimelerle bir nevi "konuşturur" ve her token’ı bulunduğu bağlama göre haritada yeniden konumlandırır. Artık her kelime sadece "ne olduğu" ile değil, diğer kelimelerle kurduğu ilişki üzerinden temsil edilir.
@@ -472,64 +472,36 @@ content:
 
        Value vektörü, işte bu taşınabilir bilginin matematiksel temsilidir.
 
-       **Matematiksel Dönüşüm: W<sub>Q</sub>, W<sub>K</sub>, W<sub>V</sub> Matrisleri**
+       **Matematiksel Dönüşüm: W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub> Matrisleri**
 
-       Burada kritik bir teknik detay var: Bu Q, K ve V vektörleri gökten inmiyor. Bunlar, elimizdeki Embedding matrisinin üç farklı "öğrenilmiş matris" ile çarpılmasıyla elde edilir:
+       Burada kritik bir teknik detay var: Bu $\mathit{Q}$, $\mathit{K}$ ve $\mathit{V}$ vektörleri gökten inmiyor. Bunlar, elimizdeki **Embedding** matrisinin üç farklı "öğrenilmiş matris" ile çarpılmasıyla elde edilir:
 
-
-       Buradaki W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub>  matrisleri, modelin eğitimi sırasında öğrendiği asıl parametrelerdir. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doludur; çünkü model en başta herhangi bir dil kuralı bilmez.
-
-       Eğitim boyunca model, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre matrislerin içindeki sayıları milim milim günceller. Milyarlarca örnekten sonra bu matrisler artık şu sorulara harika cevap verir hale gelir:
-
-        <ul className="writingArticle__TokenizerList">
-         <li>"Hangi özellikler birbiriyle gerçekten ilgili?"</li>
-         <li>*"Hangi sinyaller bağlam için önemli, hangileri gürültü?"</li>
-       </ul>
-
-       Sıkça duyduğumuz "175 milyar parametre" kavramı aslında bu matrislerin içindeki o küçücük ondalıklı sayılardır. Her biri tek başına bir şey ifade etmez ama birlikte çalıştıklarında, tıpkı beynimizdeki nöronlar gibi, devasa bir davranış bütünü ve "anlam" oluştururlar.
-
-
-
-
-
-
-       Özetle Attention süreci üç aşamada çalışır:
-
-       <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-         <li>Q ile ne arandığı belirlenir</li>
-         <li>K ile kimlerin bu aranan şeye uygun olduğu ölçülür</li>
-         <li> V ile bu uygun token’lardan hangi bilginin ne kadar taşınacağı belirlenir</li>
-         </ol>
-       Yani Q ve K bir seçim mekanizmasıdır. V ise seçilen bilginin kendisidir.
-
-        Bu üç farklı bakış açısı, matematikte embedding matrisinin üç farklı *öğrenilmiş matris** ile çarpılmasıyla elde edilir:
         <div className="writingArticle__mathLines">
           <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
           <div className="writingArticle__mathLine">$K = Embeddings \times W_{K}$</div>
           <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
         </div>
 
-        Buradaki W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub> matrisleri, modelin eğitim sırasında öğrendiği parametrelerdir. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doldurulur. Bunun sebebi, modelin en başta herhangi bir ön kabule sahip olmamasıdır.
-        
-        Eğitim boyunca model, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub> içindeki sayıları çok küçük adımlarla günceller. Bu işlem milyarlarca örnek üzerinde tekrarlandıkça, matrisler yavaş yavaş şu sorulara daha iyi cevap verir hale gelir:
-        <ul className="writingArticle__TokenizerList">
-         <li>Hangi embedding özellikleri birbirini gerçekten ilgilendiriyor?</li>
-         <li>Hangi sinyaller bağlam için önemli, hangileri gürültü?</li>
-         <li>Hangi özellikler karıştırılmalı, hangileri bastırılmalı?</li>
-       </ul>
-       *Bu yüzden bu matrislere “öğrenilmiş” denir ve modelin “bilgisi”, büyük ölçüde bu matrislerin içindeki ondalıklı sayılarda saklıdır. O çok duyduğumuz “parametre” kavramı bu yüzden bu kadar önemlidir. Bir model için “175 milyar parametre” dendiğinde, bu sayıların büyük bir kısmı tam olarak bu tür matrislerin içindeki ondalıklı değerlerdir. Yani modelin içinde, eğitim sırasında ayarlanan 175 milyar ayrı sayı vardır. Her biri tek başına anlamsızken, birlikte devasa bir davranış bütünü oluştururlar. Tıpkı tek tek nöronların hiçbir şey ifade etmeyip, birlikte düşünce üretmesi gibi.
 
-       *Eğitim bittiğinde bu matrisler artık sabitlenir. Inference sırasında model yeni bir şey öğrenmez. Sadece eğitimde öğrendiği bu lens’leri kullanarak embedding’leri tartar, karşılaştırır ve harmanlar.
+       Buradaki $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$ ve $\mathit{W\scriptsize{V}}$  matrisleri, modelin eğitimi sırasında öğrendiği asıl parametrelerdir. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doludur; çünkü model en başta herhangi bir dil kuralı bilmez; zaten bilmesine gerek de yoktur. Modelin herhangi bir ön kabulle kısıtlanmaması, dildeki kalıpları ve kuralları tamamen kendi deneyimiyle, özgürce keşfetmesini sağlar. Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre matrislerin içindeki sayıları milim milim günceller. Milyarlarca örnekten sonra bu matrisler artık şu sorulara harika cevap verir hale gelir:
+
+        <ul className="writingArticle__TokenizerList">
+         <li>"Hangi özellikler birbiriyle gerçekten ilgili?"</li>
+         <li>"Hangi sinyaller bağlam için önemli, hangileri gürültü?"</li>
+       </ul>
+
+       Sıkça duyduğumuz "175 milyar parametre" kavramı aslında bu matrislerin içindeki o küçücük ondalıklı sayılardır. Her biri tek başına bir şey ifade etmez ama birlikte çalıştıklarında, tıpkı beynimizdeki nöronlar gibi, devasa bir davranış bütünü ve "anlam" oluştururlar.
 
        </div>
 
-       **Şimdi aynı örnek üzerinden Query (Q) ve Key (K) matrislerini hesaplayalım**
+       **Şimdi matematik konuşsun: Q ve K matrislerini hesaplayalım**
 
-       Bu aşamada yaptığımız şey, attention hesaplamak değil. Her token’ın “aradığını” (Q) ve “sunduğunu” (K) iki ayrı matematiksel dönüşümle aynı uzayda ifade etmek.
+       Buraya kadar her şey teorikti. Şimdi bu "sorgu" ve "anahtar" mantığının mutfağına girelim. Bu aşamada yaptığımız şey aslında henüz bir dikkat (attention) hesaplamak değil; her token’ın "aradığını" ($Q$) ve "sunduğunu" ($K$) iki ayrı matematiksel dönüşümle aynı evrensel uzayda ifade etmek.
+
        <div className="writingArticle__codeRow">
          <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-         <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"W_Q" }} />
+         <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"WQ" }} />
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q"}}/>
        </div>
@@ -537,22 +509,25 @@ content:
         <div className="writingArticle__codeRow">
          <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-         <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"W_K" }}/>
+         <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"WK" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[-0.1, -0.1, 0.6], [-0.1, -0.5, -1.0], [-0.6, 0.1, -0.8], [-0.4, 0.4, 0.6]]} title={{ text:"K" }}/>
        </div>
 
+       Görseldeki matrislere bakarsanız, $\mathit{Q}$ ve $\mathit{K}$ matrislerinin boyutlarının özellikle aynı tutulduğunu fark edeceksiniz. Bunun çok bilinçli bir sebebi var: Birazdan bu iki temsili doğrudan birbiriyle matematiksel bir "tokalaşmaya" sokacağız. Yani bu adımda henüz "Kim kime ne kadar dikkat ediyor?" sorusunu sormuyoruz; sadece bu soruyu sorabilmek için gerekli teknik oyun alanını kuruyoruz.
+       
        Q ve K matrislerinin boyutları bilinçli olarak aynıdır. Bunun sebebi, birazdan bu iki temsili doğrudan birbiriyle matematiksel olarak ilişkilendirecek olmamızdır. Yani bu adımda henüz “kim kime ne kadar dikkat ediyor?” sorusunu sormuyoruz. Sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
 
        Bir sonraki adımda, Q ile K’yi karşı karşıya getirip token’lar arasındaki ilişkileri sayısal olarak ölçmeye başlayacağız. 
-       
-       Puanlara dalmadan önce ufak ama çok kritik bir detaydan bahsedelim: Bu ölçüm işlemi aslında tek bir koldan değil, modelin yapısına göre birkaç farklı parçaya bölünerek, yani paralel olarak ilerliyor. Biz buna Multi-Head Attention diyoruz. Elimizdeki veriye (embedding) sadece bir tane soru-cevap seti (Q, K ve V) uygulamak yerine, birden fazla set uyguluyoruz. Böylece her bir "başlık" (head), cümleye bambaşka bir perspektiften bakıyor; biri dilbilgisine odaklanırken diğeri anlam derinliğini yakalıyor.
-       
-       **Scores: Token'lar Arası Benzerlikler**
+              
+       **$Q$ ve $K$ nihayet karşı karşıya: Matrislerin tokalaşması**
 
-         Bu aşamada yaptığımız şey, token’ların birbirleriyle ne kadar ilişkili olduğunu ölçmek. Bu ilişki, Query (Q) vektörleri ile Key (K) vektörlerinin karşılaştırılmasıyla bulunur. Matematikte bu karşılaştırma, tek bir matris çarpımıyla ifade edilir: 
+       Altyapıyı kurduk; her token için elimizde ne aradığını bilen bir Query ($Q$) ve ne sunduğunu söyleyen bir Key ($K$) var. Şimdi asıl büyüleyici kısma geliyoruz: Bu iki matrisin birbiriyle çarpılmasıyla elde edilen **Attention Scores (Dikkat Skorları)**.
+
+       Matematiksel olarak yaptığımız şey, $Q$ matrisi ile $K$ matrisinin transpozunu çarpmaktır ($Q \times K^T$). Bu işlem aslında şu anlama gelir: Model, "A kelimesinin aradığı özellikler, B kelimesinin sunduğu etiketlerle ne kadar örtüşüyor?" sorusuna her bir kelime çifti için sayısal bir puan verir.
+
+       Bu çarpım sonucunda karşımıza her kelimenin diğer her kelimeyle olan "alaka düzeyini" gösteren dev bir tablo (skor matrisi) çıkar.
          
-         **Scores = Q × Kᵀ**
          <div className="writingArticle__codeRow">
          <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
@@ -561,13 +536,14 @@ content:
          <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0.0, -0.1], [0.2, -0.2, 0.0, 0.6]]} title={{ text:"scores" }}/>
        </div>
 
-       Ortaya çıkan tablo, her token’ın diğer token’larla ne kadar örtüştüğünü sayısal olarak gösterir.
-
-       Elimizde 4 token olduğu için Q matrisi 4×3, K’nin transpozu 3×4 boyutundadır. Bu çarpım sonucunda otomatik olarak 4×4’lük bir skor tablosu elde ederiz. Bu tablo tesadüf değildir. Skor matrisinin boyutu embedding boyutuyla değil, prompt’taki token sayısıyla ilgilidir. Yani 4 token varsa 4×4, 20 token varsa 20×20 bir tablo oluşur.
-
-       Bu tabloyu şöyle okumak gerekir:Her satır “şu anki token’ı”, her sütun ise “bakılan token’ı” temsil eder. Tabloya girilen her hücre, bir token’ın başka bir token’la ne kadar ilişkili olduğunu gösterir. Bu değerler, ilgili Q vektörü ile K vektörünün noktasal çarpımıdır.
-
-       Ortaya çıkan sayı ne kadar büyükse, iki token arasındaki ilişki o kadar güçlüdür. Sıfıra yaklaştıkça ilişki zayıflar. Negatif değerler ise ters yönde bir sinyal olduğunu gösterir.
+       <ul className="writingArticle__TokenizerList">  
+         <li>**Satırlar ve Sütunlar:** Scores tablosundaki her bir satır "şu anki token’ı", her bir sütun ise "bakılan token’ı" temsil eder. Yani tabloya baktığınızda, modelin o satırdaki kelimeyi anlamlandırmak için diğer sütunlardaki kelimelere ne kadar "danıştığını" görürsünüz.</li>
+          <li>**Noktasal Çarpım (Dot Product):** Tablodaki her bir hücre, ilgili iki vektörün ($Q$ ve $K$) noktasal çarpımıdır. Bu işlem, iki vektörün uzayda ne kadar aynı yöne baktığını ölçer; yani matematiksel bir "hizalanma" skorudur.</li>
+         <li>**Skorlar ne anlatıyor?** Aslında burada yaptığımız şey, token’lar arası bir "uyum testi". Ortaya çıkan sayı ne kadar büyükse, iki kelime arasındaki bağ o kadar güçlüdür. Örneğin; "yatırdım" token’ının sorgusu ($Q$) ile "bankaya" token’ının anahtarı ($K$) çarpıldığında yüksek bir skor çıkması, modelin bu iki kelimeyi bağlamsal olarak birbiriyle çok alakalı bulduğunu gösterir. Sayı sıfıra yaklaştıkça bu alaka zayıflar, negatif değerler ise bu kelimelerin anlam evreninde birbirini ittiği ve farklı yönlere baktığı bir sinyal gibi okunur.</li>
+         <li>Elimizde 4 token olduğu için Q matrisi 4×3, K’nin transpozu 3×4 boyutundadır. Bu çarpım sonucunda otomatik olarak 4×4’lük bir skor tablosu elde ederiz. Bu tablo tesadüf değildir. Skor matrisinin boyutu embedding boyutuyla değil, prompt’taki token sayısıyla ilgilidir. Yani 4 token varsa 4×4, 20 token varsa 20×20 bir tablo oluşur.</li>
+          <li>Bu tabloyu şöyle okumak gerekir:Her satır “şu anki token’ı”, her sütun ise “bakılan token’ı” temsil eder. Tabloya girilen her hücre, bir token’ın başka bir token’la ne kadar ilişkili olduğunu gösterir. Bu değerler, ilgili Q vektörü ile K vektörünün noktasal çarpımıdır.</li>
+          <li> Ortaya çıkan sayı ne kadar büyükse, iki token arasındaki ilişki o kadar güçlüdür. Sıfıra yaklaştıkça ilişki zayıflar. Negatif değerler ise ters yönde bir sinyal olduğunu gösterir.</li>
+       </ul>
 
        **Önemli not #1:** Bu skorlar henüz ağırlık değildir. Olasılık değildir. Normalize edilmemiştir. Sadece ham benzerlik ölçümleridir.
 

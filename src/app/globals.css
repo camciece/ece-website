@@ -1328,26 +1328,50 @@ body.text-\[--text\] {
   stroke: #2a2f3a;
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordGrid line {
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordGrid
+  line {
   stroke: rgba(255, 255, 255, 0.08);
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordAxes line,
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordAxes path {
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordAxes
+  line,
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordAxes
+  path {
   stroke: rgba(255, 255, 255, 0.6);
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordPoints circle {
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordPoints
+  circle {
   fill: #ffb08a;
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordPoints text,
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordLabels text,
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordLegend text {
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordPoints
+  text,
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordLabels
+  text,
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordLegend
+  text {
   fill: #d7dbe3;
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__coordViz .coordLegend rect {
+.writingPage[data-reading-mode='dark']
+  .writingArticle__coordViz
+  .coordLegend
+  rect {
   fill: rgba(255, 255, 255, 0.05);
   stroke: #2a2f3a;
 }
@@ -2126,13 +2150,13 @@ ol.writingArticle__TokenizerList {
 }
 
 .writingArticle__mathLines {
-  margin: 16px 0 20px;
+  margin: 16px 50px 20px;
   display: grid;
   gap: 10px;
 }
 
 .writingArticle__mathLine {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .writingArticle__embedTable {
