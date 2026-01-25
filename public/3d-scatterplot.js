@@ -38,6 +38,21 @@ import {
     .call(drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd))
     .append('g')
 
+  // Create tooltip
+  const tooltip = select('body')
+    .append('div')
+    .attr('class', 'scatterplot-tooltip')
+    .style('position', 'absolute')
+    .style('padding', '8px')
+    .style('background', 'rgba(0, 0, 0, 0.8)')
+    .style('color', 'white')
+    .style('border-radius', '4px')
+    .style('font-size', '12px')
+    .style('font-family', 'system-ui, sans-serif')
+    .style('pointer-events', 'none')
+    .style('opacity', 0)
+    .style('z-index', 1000)
+
   const grid3d = gridPlanes3D()
     .rows(rows * 2 + 1)
     .origin(origin)
@@ -91,6 +106,23 @@ import {
       .attr('opacity', 0)
       .attr('cx', posPointX)
       .attr('cy', posPointY)
+      .on('mouseover', function (event, d) {
+        select(this).attr('r', 5)
+        tooltip.transition().duration(200).style('opacity', 1)
+        tooltip
+          .html(
+            `<strong>id: ${d.label || '?'}</strong><br/>` +
+              `d1: ${round(d.x)}<br/>` +
+              `d2: ${round(-d.y)}<br/>` +
+              `d3: ${round(d.z)}`,
+          )
+          .style('left', event.pageX + 10 + 'px')
+          .style('top', event.pageY - 10 + 'px')
+      })
+      .on('mouseout', function () {
+        select(this).attr('r', 3)
+        tooltip.transition().duration(200).style('opacity', 0)
+      })
       .merge(points)
       .transition()
       .duration(tt)
