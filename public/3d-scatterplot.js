@@ -106,7 +106,7 @@ import {
   function getGridColor() {
     const writingPage = document.querySelector('.writingPage')
     const isDarkMode = writingPage?.getAttribute('data-reading-mode') === 'dark'
-    return isDarkMode ? '#3a3f4a' : 'black'
+    return isDarkMode ? '#d7dbe3' : '#2d2f34'
   }
 
   function processData(data, tt) {
@@ -122,7 +122,7 @@ import {
       .attr('stroke', getGridColor())
       .attr('stroke-width', 0.3)
       .attr('fill', (d) => (d.ccw ? '#eee' : '#aaa'))
-      .attr('fill-opacity', 0.9)
+      .attr('fill-opacity', 0)
       .attr('d', grid3d.draw)
 
     xGrid.exit().remove()
