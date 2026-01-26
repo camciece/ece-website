@@ -332,10 +332,7 @@ content:
          Bu dönüşüm birkaç farklı mekanizma üzerinden yapılsa da, sistemin kalbinde tek bir altın kural var: **Her kelime eşit derecede önemli değildir.** İşte tam bu noktada, modelin hangi kelimeye ne kadar odaklanacağını seçtiği o meşhur **Attention (Dikkat)** mekanizması devreye girer.
         
 
-
-
-
-       **Attention: Hangi token, ne kadar önemli?**
+       <h33 className="writingArticle__transformerTitle">Attention: Hangi token, ne kadar önemli?</h33>
 
        Attention mekanizması aslında şu basit ama hayati soruyu sorar: "Bu cümleyi doğru anlamak için, şu anda hangi token’lara, ne kadar odaklanmalıyım?"
 
@@ -588,117 +585,90 @@ content:
          <Matrix values={[[-0.3, 0.0, 0.6], [0.3, 0.0, 0.1], [0.3, 0.2, 0.0], [0.0, 0.2, 0.3]]} title={{ text:"output" }}/>
        </div>
 
-       **Sonuç: Pişmiş bir "Bağlamsal Vektör"**
+       **Sonuç: Hazır bir "Bağlamsal Vektör"**
       
       Bu çarpımın sonucunda elimize geçen Output vektörleri, artık Transformer’a giren o ilk "statik" kelimeler değildir. Bunlar:
 
       <ul className="writingArticle__TokenizerList">  
          <li>Cümlenin parçası olarak anlam kazanmış,</li>
-          <li>Bağlamın içinde "pişmiş",</li>
+          <li>Bağlamın içine yerleştirilmiş,</li>
          <li>Hangi kelimenin ne kadar önemli olduğu bilgisiyle yoğurulmuş **dinamik temsillerdir**.</li>
        </ul>
      
-     Ancak heyecanlanmayın, model hala bir kelime üretmedi! Bu çıkan vektörler nihai karar değil; sadece bir sonraki aşamada (FFN) daha da işlenmek üzere hazırlanmış, anlamı derinleşmiş ara temsilcilerdir.
+     Ancak heyecanlanmayın, model hala bir kelime üretmedi! Bu çıkan vektörler nihai karar değil; sadece bir sonraki aşamada **(Feedforward (FFN))** daha da işlenmek üzere hazırlanmış, anlamı derinleşmiş ara temsilcilerdir.
              
-       **Feedforward: Bağlamı Yoğunlaştırmak**
+                <h33 className="writingArticle__transformerTitle">Feedforward: Anlamın pişirildiği mutfak</h33>
 
-       Attention mekanizmasıyla her token için bağlama duyarlı bir temsil (vektör) oluşturduk. Yani model artık “hangi kelime, hangi kelimeyle ne kadar ilişkili?” sorusunun cevabını biliyor. Ancak bu bilgi hâlâ ham hâlde.
-       
-       Feedforward katmanının görevi, bu bilgiyi alıp daha yoğun, daha ifade gücü yüksek bir temsile dönüştürmek. Burada önemli bir fark var: Feedforward aşamasında token’lar artık birbirleriyle etkileşime girmez. Her token, kendi başına ele alınır.
-       
-       Bu dönüşüm genellikle şu adımlardan oluşur:
-        <ul className="writingArticle__TokenizerList">
-         <li>Bir lineer dönüşüm</li>
-         <li>Bir aktivasyon fonksiyonu (ReLU, GELU gibi)</li>
-         <li>Bir lineer dönüşüm daha</li>
-       </ul>
-
-       Teknik detayları bir kenara bırakırsak, feedforward katmanının yaptığı şey şudur: Attention ile toplanan bilgiden, gerçekten işe yarayan kombinasyonları çıkarmak.
-
-      **Not:** Feedforward katmanı yeni bir bağlam eklemez. Dikkati yeniden dağıtmaz. Token’lar arasında yeni ilişkiler kurmaz. Onun yaptığı şey, attention çıktısını daha anlamlı ve daha güçlü bir iç temsile dönüştürmektir. Bir benzetmeyle düşünürsek: Attention, hangi bilginin önemli olduğunu seçer; feedforward, seçilen bu bilgiyi yoğurur ve derinleştirir.
-
-     Bu yüzden Transformer mimarisinde bu iki adım her zaman birlikte çalışır. Attention bağlamı kurar, feedforward bu bağlamı işler.
-
-       **Bu noktada neredeyiz?**
-
-    Bu aşamada elimizde hâlâ bir kelime yok. Ortaya çıkan vektörler, modelin nihai cevabı değildir. Bunlar, Transformer katmanının ürettiği ara temsillerdir.
-
-    Ancak artık modelin ihtiyacı olan her şey hazırdır. Token’lar bağlama göre şekillenmiş, bu bağlam feedforward katmanında yoğunlaştırılmıştır. Sıradaki adımda model, ilk kez şu soruyu soracaktır:
-
-    “Buradan sonra en olası token hangisi?” İşte bu soru, bizi next token hesaplamasına götürür.
-
-    **From vectors to words: Next token nasıl seçiliyor?**
-
-    Feedforward katmanından çıktığımızda elimizde artık bağlama göre şekillenmiş vektörler var. Her token için, cümlenin tamamını hesaba katan, yoğunlaştırılmış bir temsil. Ama hâlâ ortada bir kelime yok.
-
-    Bu noktada modelin yapması gereken şey: Bu vektörlerden birini alıp, “kelime dağarcığındaki hangi token’a en çok benziyor?” sorusunu sormak.
-
-    **Vocabulary ile yüzleşme**
-
-    Modelin eğitimi sırasında oluşturulmuş sabit bir token sözlüğü (vocabulary) vardır. Bu sözlük genellikle on binlerce token içerir. Model, her yeni token üretirken aslında şu karşılaştırmayı yapar:
-
-    Elimdeki bu bağlamsal vektör, sözlükteki hangi token’la en iyi eşleşiyor? Bunu yapmak için, Transformer katmanının sonunda çok basit ama çok kritik bir adım gelir: **Linear projection**.
+      Attention mekanizması görevini tamamlayıp her token için diğer kelimelerle harmanlanmış o bağlamsal matrisi (Output) önümüze koyduğunda, aslında sadece "kimin kiminle ne kadar ilişkili olduğunu" çözmüş oluruz. Ancak sadece konuşmak yetmez; bu konuşmadan çıkan mesajın işlenmesi, rafine edilmesi ve kalıcı bir "bilgiye" dönüşmesi gerekir.  
       
-      **Linear layer: Vektörleri olasılıklara açmak**
-
-       Feedforward’dan çıkan her vektör, bir lineer katmandan geçirilir. Bu katman, vektörü alır ve onu vocabulary boyutunda bir skora dönüştürür.
-
-       Bu skorlar hâlâ hamdır. Pozitif olabilirler, negatif olabilirler, büyüklükleri karşılaştırılması zor olabilir. Ama artık çok önemli bir şey var: Her skor, sözlükteki tek bir token’a karşılık gelir. Başka bir deyişle model ilk kez şunu yapmıştır: “Şu anda önümde, tüm kelime dağarcığına yayılmış bir olasılık haritası var.”
-
-      **Softmax: Skorlardan olasılıklara**
-
-      Son adımda bu skorlar softmax fonksiyonundan geçirilir. Buradaki amaç tanıdık:
-
-       <ul className="writingArticle__TokenizerList">
-         <li>Değerleri 0 ile 1 arasına sıkıştırmak</li>
-         <li>Toplamları 1 olacak şekilde normalize etmek</li>
-       </ul>
-    Softmax’ten sonra artık elimizde gerçek anlamda bir olasılık dağılımı vardır. Model, her token için “şu an gelme ihtimali”ni açıkça ifade edebilir.
-
-    Örneğin, “yatırdım”dan sonra:
-    <ul className="writingArticle__TokenizerList">
-         <li>“hesaba” %32</li>
-         <li>“bankaya” %21</li>
-         <li>“parayı” %12</li>
-         <li>nokta %8</li>
-         <li>…</li>
+      **Feedforward (FFN)** katmanı tam olarak burasıdır. Attention'dan çıkan o bağlamsal vektörleri alır ve onları adeta bir mutfağa sokar:
+        <ul className="writingArticle__TokenizerList">
+         <li>**Bireysel işleme** - Attention tüm token’lara bir bütün olarak, aralarındaki ilişkiyi tartarak bakarken; Feedforward her bir token’ı (vektörü) kendi özelinde ele alır. "Senin diğer kelimelerle ilişkin bu, şimdi bu yeni kimliğini daha derin bir mantık süzgecinden geçirelim" der.</li>
+         <li>**Derinleştirme ve dünya bilgisi** - Birçok araştırmacı, modellerin eğitim sırasında öğrendiği "Türkiye’nin başkenti Ankara’dır" gibi temel dünya bilgilerinin büyük oranda bu Feedforward katmanlarındaki ağırlıklarda saklandığını düşünüyor. Burası, modelin basit bir istatistiksel eşleşmeden çıkıp, kavramsal bir derinlik kazandığı yerdir.</li>
+         <li>**Doğrusal olmayan (Non-linear) dokunuş** - Bu katmanda veriler karmaşık matematiksel fonksiyonlardan (genellikle ReLU veya GELU) geçer. Bu sayede model, dilin içindeki o düz olmayan, karmaşık ve çok katmanlı mantık yapılarını taklit etme yeteneği kazanır.</li>
        </ul>
 
-    Bu noktada model artık matematikten dile geçmeye hazır.
+       Özetle; **Attention** "ilişkiyi" kurar, **Feedforward** o ilişkiden çıkan "anlamı" inşa eder.
 
-    **Peki hangi token seçiliyor?**
+        <Note>
+          <span className="writingNote__icon" aria-hidden="true">!</span>
+          Teknik detayları bir kenara bırakırsak: Feedforward katmanının yaptığı
+          şey, Attention ile toplanan bilgiden gerçekten işe yarayan
+          kombinasyonları çıkarmak.
+      
+          Unutmamak gerekir ki; Feedforward katmanı yeni bir bağlam eklemez.
+          Dikkati yeniden dağıtmaz veya token’lar arasında yeni ilişkiler
+          kurmaz. Tek görevi, Attention çıktısını daha anlamlı ve daha
+          güçlü bir iç temsile dönüştürmek.
 
-    En basit senaryoda model, en yüksek olasılığa sahip token’ı seçer. Buna greedy decoding denir. Ama pratikte işler genellikle biraz daha esnektir. Sampling, temperature, top-k, top-p gibi tekniklerle modelin çıktıları çeşitlendirilir.
+          Özetle: Attention, hangi bilginin önemli olduğunu
+          seçer; Feedforward, seçilen bu bilgiyi yoğurur ve derinleştirir. Bu
+          yüzden Transformer mimarisinde bu iki adım her zaman ayrılmaz bir ikili
+          olarak çalışır; biri bağı kurar, diğeri o bağı işler.
+        </Note>
 
-    Ama hangi yöntem kullanılırsa kullanılsın, model, bir sonraki token’ı seçerken sadece olasılıklara bakar.
+      <h33 className="writingArticle__transformerTitle">Transformer Blokları (Attention + Feedforward): Döngünün defalarca tekrarlanması</h33>
 
-    Seçilen token, cümlenin sonuna eklenir. **Ve sonra her şey baştan başlar**.
+      Bu noktada durup bir perspektif kazanalım: Bir Transformer bloğu (Attention + Feedforward) bittiğinde süreç hemen sona ermiyor. <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Paylaştığımız o interaktif görsellerdeki</a> "11 more identical Transformer Blocks" ifadesi, bu sürecin dikey bir maraton olduğunu fısıldıyor.
 
-    **Döngü burada kapanıyor**
+    Her bir bloktan geçen veri, bir üstteki blokta tekrar Attention ve Feedforward süzgeçlerinden geçiyor. Bu dikey yolculuk sırasında anlam her katmanda biraz daha rafine ediliyor, soyutlaşıyor ve derinleşiyor. Bu işlem binlerce kez tekrarlandığında, karşımıza o her şeyi bilen, mantık yürütebilen devasa zeka çıkıyor. En alt katmanlarda sadece kelime ilişkilerini çözen model, en üst katmanlara çıktığında artık cümlenin tonunu, niyetini ve mantıksal kurgusunu tam olarak kavramış oluyor.
 
-    Yeni token üretildiği anda:
-     <ul className="writingArticle__TokenizerList">
-         <li> Tokenizer devreye girmez</li>
-         <li>Embedding lookup yapılır</li>
-         <li>Attention ve feedforward katmanları tekrar çalışır</li>
-         <li>Yeni bağlam inşa edilir</li>
+        <h2>Transformer'dan çıkış: Olasılıkların sahnesi </h2>
+
+    Tüm katmanlardaki "maraton" bittikten sonra, elimizdeki vektörler artık en olgun haline ulaştı. Ama hala birer sayı dizisiler. İşte bu noktada Transformer’dan çıkıp Output (Probabilities) katmanına, yani modelin bize bir cevap vereceği son aşamaya geçiyoruz:
+
+    <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+         <li>**Sözlükle Vedalaşma (Linear Layer)** - Model, bu olgunlaşmış vektörü alır ve onu sahip olduğu on binlerce kelimelik devasa hazinesine yansıtır. Her bir kelime için "Bir sonraki parça ben olabilirim!" diyen bir adaylık puanı hesaplanır.</li>
+
+         Örneğin; "Parayı bankaya..." diye başlayan bir cümlede, bir sonraki token için [yatırdım], [gönderdim], [bıraktım] gibi adaylar yüksek puanlar alırken, [elma] gibi alakasız adaylar listenin en sonunda kalır.
+
+         <li>**Olasılık Filtresi (Softmax)** - Bu puanlar Softmax süzgecinden geçerek, toplamı %100 eden net yüzdelere dönüşür:</li>
+             <ul className="writingArticle__TokenizerList">
+         <li>[yatırdım] -> %88</li>
+         <li>[gönderdim] -> %7</li>
+         <li>[havale ettim] -> %4</li>
+          <li>...</li>
        </ul>
+         <li>**Kelimelerin Doğuşu (Sampling & Temperature)** - Model her zaman en yüksek olasılıklı kelimeyi seçmez. Sampling (örnekleme) stratejileri tam burada devreye girer. Temperature (Sıcaklık) ayarıyla modelin ne kadar "yaratıcı" veya "risk alan" bir seçim yapacağını belirlersiniz. Top-k ve Top-p gibi tekniklerle de olasılığı çok düşük olan "mantıksız" kelimeler elenir ve modelin tutarlı ama doğal bir cevap vermesi sağlanır.</li>
+         </ol>
 
-    Model, her kelimeyi üretirken aslında şunu yapar: “Şimdiye kadar yazdıklarımı tekrar okuyayım, bağlamı yeniden kurayım ve sıradaki en olası kelimeyi seçeyim.” Bu yüzden Transformer tek seferlik bir hesap yapıp bırakmaz. Her token’da bağlamı yeniden kurar. Ürettiği her çıktı, bir sonraki adımın girdisi olur.
+          <h2>Ve döngü tamamlanır: Otoregresif süreç</h2>
 
-    Bu döngü yeterince çalıştığında da ortaya bize anlamlı gelen yanıt ortaya çıkar. 
+          Buradaki asıl "zeka" illüzyonu şurada gizli: Model tek seferde koca bir paragraf üretmiyor. Sadece tek bir kelime (token) seçiyor. Örneğin [yatırdım] kelimesini seçtiyse, şimdi bu kelimeyi alıyor ve kendi girdi (input) kısmının en sonuna ekliyor: "Parayı bankaya yatırdım..."
+          
+          Şimdi tüm bu devasa işlem bandı (Tokenizer -> Embedding -> Attention -> FFN), cümleye devam edecek bir sonraki kelimeyi (belki bir nokta, belki "ve" bağlacı) bulmak için saniyeler içinde tekrar koşturuyor. Siz akıcı bir cevap okurken arka planda bu "tahmin motoru" her bir parça için en baştan ter döküyor.
 
        <div className="writingArticle__callout">
-         
-       Bu yazıda Transformer’ın içindeki attention mekanizmasını parça parça açtık. Token’lar nasıl embedding’e dönüşüyor, Q, K ve V ile bağlam nasıl kuruluyor, mask ve softmax bu işin neresinde duruyor… Hepsini adım adım yürüdük.
-
-       Sizin de gördüğünüz gibi, model dili “anlamıyor”. Ama kelimeler arasındaki ilişkileri sayılar üzerinden o kadar iyi tartıyor ki, biz onu anlamış gibi algılıyoruz. Bugünkü büyük dil modellerinin gücü de buradan geliyor. Ortada sihir ya da bilinç yok. Eğitim sırasında ayarlanmış bir sürü parametre var.
-
-       Asıl ilginç kısım şu: Bu sistem tek seferlik bir hesap makinesi gibi çalışmıyor. Cevabı bir defada üretmiyor. Kelime kelime (token token) üretiyor. Ve her yeni token geldiğinde, model başa dönüp “prompt + şimdiye kadar yazdığım cevap” bütününe tekrar bakıyor. Attention yeniden çalışıyor, ağırlıklar yeniden dağılıyor, bağlam yeniden toparlanıyor. Yani model her adımda şunu yapıyor: “Şu ana kadar elimde ne var ve buradan sonra en mantıklısı ne?”
-
-       Bugün gündemimizde olan agentic AI kısmı da buradan filizleniyor. Modelin kendi çıktısını tekrar girişe katıp, bir sonraki adımı ona göre seçebilmesi, “plan yapıyor gibi” görünmesinin temel nedeni. Tek cümlelik cevaplardan, adım adım ilerleyen davranışlara geçişin arkasında bu döngü var.
-
-       Bir sonraki yazıda buradan devam edip daha güncel ve somut bir yere gidelim: Agentic Commerce. Modelin sadece öneren değil, ürün arayan, seçenekleri kıyaslayan, ödeme akışına kadar işi götüren bir “alışveriş ajanı” gibi çalışması neyi değiştiriyor? Orada konuşacağız.
+       
+       📝 **Yazarın notu: Neden buradayız?** 
+       
+       Büyük Dil Modelleri (LLM) dünyasında her gün yeni bir model, yeni bir benchmark ve yeni bir heyecan dalgasıyla karşılaşıyoruz. Ancak bu devasa makinenin altındaki çarkların nasıl döndüğünü anlamak; sadece teknolojiyi kullanmakla, ona yön vermek arasındaki o ince çizgiyi belirliyor.
+       
+       Bu yazıda; bir kelimenin sayıya dönüşmesinden, milyarlarca matrisin birbiriyle 'konuşarak' anlam yaratmasına kadar olan o büyüleyici yolculuğu birlikte izledik. Amacım, bu karmaşık görünen dünyayı biraz daha şeffaf ve anlaşılır kılarak, hepimizi bekleyen o büyük geleceğe hazırlamaktı.
+       
+       Peki, bu temel mimariyi neden bu kadar detaylı konuştuk? Çünkü bir sonraki duraklarda, bu 'kelime tahmin motorlarının' sadece konuşan botlar olmaktan çıkıp, bizim yerimize kararlar alan ve aksiyon geçen Agentic AI sistemlerine nasıl dönüştüğünü konuşacağız. Çünkü gelecek, sadece tahmin edenlerin değil, o tahminleri hedeflere dönüştüren ajanların olacak.
+       
+       Bir sonraki yazıda, bu mimarinin üzerine inşa edilen o akıllı dünyada buluşmak üzere!
 
        </div>
 ---
