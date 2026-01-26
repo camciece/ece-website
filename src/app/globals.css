@@ -26,6 +26,11 @@
   --token-73963: var(--ece-green);
   --token-10709: var(--ece-blue);
 
+  --token-796: var(--ece-yellow);
+  --token-35569: var(--ece-red);
+  --token-6922: var(--ece-green);
+  --token-5094: var(--ece-blue);
+
   --matrix-row-1: var(--token-684);
   --matrix-row-2: var(--token-704);
   --matrix-row-3: var(--token-73963);
@@ -2184,8 +2189,7 @@ ol.writingArticle__TokenizerList {
   margin: 18px 0 10px;
   padding: 18px 20px;
   border-radius: 16px;
-  background: #171726;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.5px solid var(--muted);
   box-shadow: none;
   color: #e1e5f2;
   display: inline-block;
@@ -2438,7 +2442,7 @@ ol.writingArticle__TokenizerList {
 }
 
 .codeString {
-  color: #26d07c;
+  color: var(--ece-green);
 }
 
 .codeConst {
