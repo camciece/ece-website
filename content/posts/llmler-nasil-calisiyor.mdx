@@ -241,8 +241,9 @@ content:
 
       **Sayıların koordinata dönüştüğü yer**
 
-      Görseldeki tabloya bir göz atalım: Buradaki her bir satır, aslında bir kelimenin (token’ın) modelin içindeki devasa "anlam sözlüğünden" aldığı karşılığı gösteriyor. Her bir sütun ise o kelimenin karakterini belirleyen farklı bir boyutu temsil ediyor.
-        <div className="writingArticle__embedTable">
+      Görseldeki tabloya bir göz atalım: Buradaki her bir satır, aslında bir kelimenin (token’ın) modelin içindeki devasa "anlam sözlüğünden" aldığı karşılığı gösteriyor. Her bir sütun ise o kelimenin karakterini belirleyen farklı bir boyutu temsil ediyor.       
+        <div className="writingArticle__embedVisualization">
+         <div className="writingArticle__embedTable">
          <div className="writingArticle__embedTableHeader">
            <span>Token ID</span>
            <span>d1</span>
@@ -275,12 +276,14 @@ content:
         </div>
        </div>
        <Scatterplot3DDemo 
+        width={640}
+        height={360}
         points={[
-          [[-11.1, 7.3, -5.1], [8.6, -5.4, 9.5], [-3.2, 6.1, 0.7], [-10.1, -1.4, -8.9]],
-          [[6.4, 4.8, 10.3], [9.1, 3.2, 9.6], [4.7, 1.3, 0.6], [0.5, 1.4, 7.5]]
+          [[-11.1, 7.3, -5.1], [8.6, -5.4, 9.5], [-3.2, 6.1, 0.7], [-10.1, -1.4, -8.9]]
          ]}
         labels={["684", "704", "73963", "10709"]}
        />
+       </div>
              Süreci adım adım hayal edersek:
 
         <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">

@@ -2194,6 +2194,30 @@ ol.writingArticle__TokenizerList {
   font-size: 16px;
 }
 
+.writingArticle__embedVisualization {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+@media (min-width: 1024px) {
+  .writingArticle__embedVisualization {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .writingArticle__embedVisualization .writingArticle__embedTable {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  .writingArticle__embedVisualization > div:last-child {
+    flex: 1;
+  }
+}
+
 .writingArticle__embedTable {
   margin: 18px 0 12px;
   border-radius: 16px;

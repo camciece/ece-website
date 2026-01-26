@@ -6,11 +6,15 @@ import { useEffect, useRef, useState } from 'react'
 interface Scatterplot3DDemoProps {
   points?: number[][][]
   labels?: string[]
+  width?: number
+  height?: number
 }
 
 export default function Scatterplot3DDemo({
   points = [],
   labels = [],
+  width = 720,
+  height = 480,
 }: Scatterplot3DDemoProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const scriptLoadedRef = useRef(false)
@@ -22,12 +26,14 @@ export default function Scatterplot3DDemo({
     ;(window as any).scatterplot3dPoints = points
     ;(window as any).scatterplot3dLabels = labels
     ;(window as any).scatterplot3dCurrentIndex = currentIndex
+    ;(window as any).scatterplot3dWidth = width
+    ;(window as any).scatterplot3dHeight = height
 
     // Create the SVG element that the script expects
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svg.setAttribute('id', 'scatterplot-3d-svg')
-    svg.setAttribute('width', '720')
-    svg.setAttribute('height', '480')
+    svg.setAttribute('width', String(width))
+    svg.setAttribute('height', String(height))
     svg.style.border = '1px solid #ddd'
     svg.style.borderRadius = '4px'
     containerRef.current.appendChild(svg)
@@ -59,8 +65,10 @@ export default function Scatterplot3DDemo({
       delete (window as any).scatterplot3dPoints
       delete (window as any).scatterplot3dLabels
       delete (window as any).scatterplot3dCurrentIndex
+      delete (window as any).scatterplot3dWidth
+      delete (window as any).scatterplot3dHeight
     }
-  }, [points, labels])
+  }, [points, labels, width, height])
 
   // Re-initialize when currentIndex changes
   useEffect(() => {
@@ -70,6 +78,36 @@ export default function Scatterplot3DDemo({
       ;(window as any).scatterplot3dInit()
     }
   }, [currentIndex])
+
+  // Re-render when reading mode changes
+  useEffect(() => {
+    if (!scriptLoadedRef.current) return
+
+    const writingPage = document.querySelector('.writingPage')
+    if (!writingPage) return
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'data-reading-mode'
+        ) {
+          if ((window as any).scatterplot3dInit) {
+            ;(window as any).scatterplot3dInit()
+          }
+        }
+      })
+    })
+
+    observer.observe(writingPage, {
+      attributes: true,
+      attributeFilter: ['data-reading-mode'],
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const handleNext = () => {
     if (points.length > 0) {

@@ -17,7 +17,9 @@ import {
   points3D,
 } from 'https://cdn.skypack.dev/d3-3d@1.0.0'
 ;(() => {
-  const origin = { x: 360, y: 280 }
+  const width = window.scatterplot3dWidth || 720
+  const height = window.scatterplot3dHeight || 480
+  const origin = { x: width / 2, y: height / 2 }
   const rows = 10
   const scale = 20
   const key = (d) => d.id
@@ -77,6 +79,36 @@ import {
     return Math.round((num + Number.EPSILON) * mult) / mult
   }
 
+  function getColorForPoint(d) {
+    // Try to get color from CSS custom property based on label
+    if (d.label) {
+      const cssVarName = `--token-${d.label}`
+      const cssColor = getComputedStyle(document.documentElement)
+        .getPropertyValue(cssVarName)
+        .trim()
+
+      if (cssColor) {
+        return cssColor
+      }
+    }
+
+    // Fallback to original color scheme
+    return colorScale(d.id)
+  }
+
+  function getTextColor() {
+    // Check for dark mode on the writingPage element
+    const writingPage = document.querySelector('.writingPage')
+    const isDarkMode = writingPage?.getAttribute('data-reading-mode') === 'dark'
+    return isDarkMode ? '#d7dbe3' : '#2d2f34'
+  }
+
+  function getGridColor() {
+    const writingPage = document.querySelector('.writingPage')
+    const isDarkMode = writingPage?.getAttribute('data-reading-mode') === 'dark'
+    return isDarkMode ? '#3a3f4a' : 'black'
+  }
+
   function processData(data, tt) {
     /* ----------- GRID ----------- */
 
@@ -87,7 +119,7 @@ import {
       .append('path')
       .attr('class', 'd3-3d grid')
       .merge(xGrid)
-      .attr('stroke', 'black')
+      .attr('stroke', getGridColor())
       .attr('stroke-width', 0.3)
       .attr('fill', (d) => (d.ccw ? '#eee' : '#aaa'))
       .attr('fill-opacity', 0.9)
@@ -127,8 +159,8 @@ import {
       .transition()
       .duration(tt)
       .attr('r', 3)
-      .attr('stroke', (d) => color(colorScale(d.id)).darker(3))
-      .attr('fill', (d) => colorScale(d.id))
+      .attr('stroke', (d) => color(getColorForPoint(d)).darker(3))
+      .attr('fill', (d) => getColorForPoint(d))
       .attr('opacity', 1)
       .attr('cx', posPointX)
       .attr('cy', posPointY)
@@ -152,6 +184,7 @@ import {
       .transition()
       .duration(tt)
       .attr('opacity', (d) => (d.label ? 1 : 0))
+      .attr('fill', getTextColor())
       .attr('x', (d) => d.projected.x)
       .attr('y', (d) => d.projected.y - 8)
       .text((d) => d.label || '')
@@ -167,7 +200,7 @@ import {
       .append('path')
       .attr('class', 'd3-3d yScale')
       .merge(yScale)
-      .attr('stroke', 'black')
+      .attr('stroke', getGridColor())
       .attr('stroke-width', 0.5)
       .attr('d', yScale3d.draw)
 
@@ -184,6 +217,7 @@ import {
       .attr('font-family', 'system-ui, sans-serif')
       .attr('font-size', '10px')
       .merge(yText)
+      .attr('fill', getTextColor())
       .each(function (d) {
         d.centroid = { x: d.rotated.x, y: d.rotated.y, z: d.rotated.z }
       })
