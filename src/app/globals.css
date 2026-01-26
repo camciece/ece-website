@@ -2429,6 +2429,10 @@ ol.writingArticle__TokenizerList {
   font-size: 14px;
 }
 
+.writingPage[data-reading-mode='light'] .codeVar {
+  color: #000;
+}
+
 .codeFn {
   color: #5aa8ff;
 }
@@ -2443,6 +2447,10 @@ ol.writingArticle__TokenizerList {
 
 .codeOp {
   color: #9aa3b6;
+}
+
+.writingPage[data-reading-mode='light'] .codeOp {
+  color: #000;
 }
 
 .codeEq {

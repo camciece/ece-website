@@ -116,7 +116,7 @@ export default function Scatterplot3DDemo({
   }
 
   return (
-    <div style={{ margin: '20px 0' }}>
+    <div>
       <div
         ref={containerRef}
         style={{ position: 'relative', display: 'inline-block' }}
