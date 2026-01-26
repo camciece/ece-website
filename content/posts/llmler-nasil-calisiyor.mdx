@@ -168,16 +168,17 @@ content:
            <span className="writingNote__icon" aria-hidden="true">!</span>
            <strong>Perde arkasındaki dev maraton: Neden bu kadar çok hesaplama?</strong>
            <br />
-           <br />
+           💡 Kendiniz deneyimleyin: Bu maratonun nasıl işlediğini (her bir head’in kelimelere nasıl baktığını ve olasılıkların nasıl hesaplandığını, vb.) interaktif olarak görmek isterseniz <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracını mutlaka kurcalayın. Sayılar arasındaki o çizgilerin nasıl canlandığını gördüğünüzde taşlar tam olarak yerine oturacak.
+
+           **Açıklama:**
+
            Bu hesaplar öyle bir kez yapılıp bitmiyor. Siz tek bir cümle kurarken bile, o meşhur Transformer katmanları aslında kendi içinde devasa bir maraton koşuyor. Bu süreci görseldeki detaylarla anlamlandırırsak:
            <ul className="writingArticle__ArchitectureList">
-             <li>**Dikey Tırmanış (Blocks):** Modelin içinde tek bir işlem katmanı yok. Görselin sağ üstünde gördüğünüz o "11 more identical Transformer Blocks" ifadesi, verinin aynı işlemlerden onlarca kez (bazı modellerde 96 katmana kadar çıkar) üst üste geçmesi demek.</li>
-             <li>**Paralel Bakış Açıları (Heads):** Her bir blokta, görseldeki gibi birden fazla "Head" (Kafa) aynı anda çalışıyor. Kimi dil bilgisine, kimi kelimeler arası mesafeye, kimi de anlam derinliğine odaklanıyor. Tek bir blokta bazen onlarca farklı "kafa" aynı anda hesaplama yapıyor.</li>
-             <li>**Adım Adım Üretim (Autoregressive):** En kritik döngü ise şu; model tek seferde bütün bir cümreyi üretmiyor. Her bir kelimeyi (token) bulabilmek için tüm bu katmanları ve "kafa"ları en baştan (veya önceki bilgileri tazeleyerek) tekrar tekrar kullanıyor.</li>
+             <li>**Dikey Tırmanış (Blocks):** Modelin içinde tek bir işlem katmanı yok. Transformer Explainer sayfasının sağ üstünde gördüğünüz o "11 more identical Transformer Blocks" ifadesi, verinin aynı işlemlerden onlarca kez (bazı modellerde 96 katmana kadar çıkar) üst üste geçmesi demek.</li>
+             <li>**Paralel Bakış Açıları (Heads):** Her bir blokta, sayfadaki gibi birden fazla "Head" aynı anda çalışıyor. Kimi dil bilgisine, kimi kelimeler arası mesafeye, kimi de anlam derinliğine odaklanıyor. Tek bir blokta bazen onlarca farklı "kafa" aynı anda hesaplama yapıyor.</li>
+             <li>**Adım Adım Üretim (Autoregressive):** En kritik döngü ise şu; model tek seferde bütün bir cümreyi üretmiyor. Her bir kelimeyi (token) bulabilmek için tüm bu katmanları ve "head"leri en baştan (veya önceki bilgileri tazeleyerek) tekrar tekrar kullanıyor.</li>
            </ul>
-           İşte bu yüzden LLM’lerde "devasa" olan şey algoritmanın içinden çıkılmaz karmaşıklığı değil; bu basit adımların (çarpma ve toplama) akıl almaz bir sayıyla tekrarlanmasıdır. Gereken bu devasa işlem gücü ve enerji maliyeti, büyük teknoloji şirketlerinin neden yeni nükleer enerji anlaşmaları peşinde koştuğunu da çok iyi açıklıyor.
-           <br />
-           💡 Kendiniz deneyimleyin: Bu karmaşık dansın nasıl işlediğini, her bir head’in kelimelere nasıl baktığını ve olasılıkların nasıl hesaplandığını interaktif olarak görmek isterseniz, bu yazıdaki görsellere de ilham veren <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracını mutlaka kurcalayın. Sayılar arasındaki o çizgilerin nasıl canlandığını gördüğünüzde, taşlar tam olarak yerine oturacak.
+           İşte bu yüzden LLM’lerde "devasa" olan şey algoritmanın içinden çıkılmaz karmaşıklığı değil; bu basit adımların (çarpma ve toplama) çok fazla kere tekrarlanmasıdır. Gereken bu devasa işlem gücü ve enerji maliyeti, büyük teknoloji şirketlerinin neden yeni nükleer enerji anlaşmaları peşinde koştuğunu da çok iyi açıklıyor.
          </Note>
 
 
@@ -226,7 +227,7 @@ content:
        <div className="writingArticle__callout">
            <div className="writingArticle__calloutTitle">Peki neden bu kadar çok boyut?</div>
            <div className="writingArticle__calloutBody">
-           Biz insanlar bir problemi çözerken genelde elimizde net bir formül olur. Mesela santigratı fahrenheit’a çevirirken ne yapacağımız bellidir. Ama büyük dil modellerinin (LLM) elinde kelimelerin nasıl eşleşeceğini söyleyen hazır bir rehber yok. Onlar dildeki o devasa örüntüleri ve gizli ilişkileri sıfırdan keşfetmek zorunda.
+           Büyük dil modellerinin (LLM) elinde kelimelerin nasıl eşleşeceğini söyleyen hazır bir rehber yok. Onlar dildeki o devasa örüntüleri ve gizli ilişkileri sıfırdan keşfetmek zorunda.
 
          Bir cümleyi sadece "ne dendiği" üzerinden değil; tonu, ritmi, resmi mi yoksa mahalle ağzı mı olduğu gibi binlerce farklı sinyal üzerinden okuyorlar. Bu yüzden her bir kelime (token), tek bir çizgi üzerinde değil, binlerce farklı eksende aynı anda temsil ediliyor.
 
@@ -304,8 +305,7 @@ content:
          
          Buradaki kilit nokta; Embedding’ler kelimeye özeldir, cümleye değil. "Banka" kelimesi, tek başına ele alındığında sözlükten hep aynı koordinatı çeker. Bu koordinat, kelimenin hangi bağlamda kullanıldığını henüz ayırt edemez. "Parktaki banka oturdum" ile "Maaşın yattığı banka" arasındaki farkı model bu aşamada hâlâ anlayamaz; çünkü her iki cümlede de "banka" kelimesi için aynı satırdaki aynı sayı listesini kullanır.
          
-         Embeddings'in yaptığı şey, token’ları devasa ama statik bir haritaya yerleştirmektir. Model bu noktada hâlâ şu kritik soruların cevabını bilmez: 
-        Artık elimizde şunlar var:
+         Embeddings'in yaptığı şey, token’ları devasa ama statik bir haritaya yerleştirmektir. Model bu noktada hâlâ şu kritik soruların cevabını bilmez:
            <ul className="writingArticle__ArchitectureList">
            <li>"Bu cümlede hangi kelime daha kritik?"</li>
            <li>"Şu an hangi kelimeye odaklanmalıyım?"</li>
@@ -454,7 +454,7 @@ content:
        <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
          <li>**Query (Q - Sorgu)** *“Bu token, cümleyi doğru anlamak için diğer token’larda hangi özelliklere dikkat etmeli?”*</li>
 
-         Örneğin "yatırdım" token'ını düşünün. Bu token için model şu soruların peşine düşer: "Nereye yatırıldı? Ne yatırıldı? Bu eylemle ilişkili bir yer var mı?" İşte bu "istek listesi" Query vektörüdür. Bu vektör, “banka” ve “para” gibi token’larda güçlü eşleşmeler bulursa, onlara daha fazla dikkat verilmesini sağlar.
+         Örneğin "yatırdım" token'ını düşünün. Bu token için model şu soruların peşine düşer: "Nereye yatırıldı? Ne yatırıldı? Bu eylemle ilişkili bir yer var mı?" İşte bu "istek listesi" Query vektörüdür. Bu vektör, “bankaya” ve “para” gibi token’larda güçlü eşleşmeler bulursa, onlara daha fazla dikkat verilmesini sağlar.
 
          <li>**Key (K - Anahtar)** *"Bu token, kendisiyle ilgili hangi sinyalleri dışarıya veriyor?"*</li>
 
@@ -540,7 +540,7 @@ content:
 
        **Masking: Geleceği görmeyi engellemek**
 
-     Skor tablosunu oluşturduk ama burada çok hayati bir kural devreye giriyor: Dürüstlük. Eğitim sırasında modelin bir sonraki kelimeyi tahmin etmesini istiyoruz. Eğer model, skor tablosunda kendisinden sonra gelen (yani henüz üretilmemiş) kelimelere bakabilirse, bu bir kopya çekme işlemi olur.
+     Skor tablosunu oluşturduk ama burada çok hayati bir kural devreye giriyor: Dürüstlük. Eğitim sırasında modelin bir sonraki kelimeyi tahmin etmesini istiyoruz. Eğer model, skor tablosunda kendisinden sonra gelen kelimelere bakabilirse, bu bir kopya çekme işlemi olur.
      
      Bunu engellemek için Masking mekanizmasını kullanıyoruz:
        <div className="writingArticle__codeRow">
@@ -669,6 +669,9 @@ content:
        Peki, bu temel mimariyi neden bu kadar detaylı konuştuk? Çünkü bir sonraki duraklarda, bu 'kelime tahmin motorlarının' sadece konuşan botlar olmaktan çıkıp, bizim yerimize kararlar alan ve aksiyon geçen Agentic AI sistemlerine nasıl dönüştüğünü konuşacağız. Çünkü gelecek, sadece tahmin edenlerin değil, o tahminleri hedeflere dönüştüren ajanların olacak.
        
        Bir sonraki yazıda, bu mimarinin üzerine inşa edilen o akıllı dünyada buluşmak üzere!
+                <br />
+
+       **P.S.** Bu yazının 'debug' sürecinde yanımda olan, teknik kısımlardaki pürüzleri birlikte giderdiğimiz developer arkadaşım <a className="writingArticle__link" href="https://www.linkedin.com/in/arindenizkoklu/" target="_blank" rel="noreferrer">Arın Deniz Köklü</a>’ye destekleri için teşekkürler!
 
        </div>
 ---

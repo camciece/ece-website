@@ -17,6 +17,14 @@
   --matrix-colour: black;
   --matrix-label-colour: black;
   --matrix-affix-colour: black;
+  --token-684: #f4c24d;
+  --token-704: #ff9b4a;
+  --token-73963: #49c487;
+  --token-10709: #ff6b6b;
+  --matrix-row-1: var(--token-684);
+  --matrix-row-2: var(--token-704);
+  --matrix-row-3: var(--token-73963);
+  --matrix-row-4: var(--token-10709);
 }
 
 /* Base */
@@ -1385,21 +1393,24 @@ body.text-\[--text\] {
 }
 
 .writingPage[data-reading-mode='dark'] .writingArticle__embedTable {
-  background: #0f1218;
-  border-color: #2a2f3a;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.16);
   color: #d7dbe3;
 }
 
 .writingPage[data-reading-mode='dark'] .writingArticle__embedTableHeader {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .writingPage[data-reading-mode='dark'] .writingArticle__embedTableRow {
-  border-top-color: #2a2f3a;
+  border-top-color: rgba(255, 255, 255, 0.12);
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__embedTableId {
-  color: #ffb08a;
+.writingPage[data-reading-mode='dark'] {
+  --token-684: #f8d56a;
+  --token-704: #ffb276;
+  --token-73963: #69e0a2;
+  --token-10709: #ff8b8b;
 }
 
 .writingPage[data-reading-mode='dark'] .writingArticle__matrixViz {
@@ -2022,6 +2033,22 @@ body.text-\[--text\] {
     'Liberation Mono', 'Courier New', monospace;
 }
 
+.embedMatrixNumber--row-0 {
+  fill: var(--matrix-row-1);
+}
+
+.embedMatrixNumber--row-1 {
+  fill: var(--matrix-row-2);
+}
+
+.embedMatrixNumber--row-2 {
+  fill: var(--matrix-row-3);
+}
+
+.embedMatrixNumber--row-3 {
+  fill: var(--matrix-row-4);
+}
+
 .matrixSymbol {
   fill: var(--matrix-colour);
   font-size: 28px;
@@ -2170,10 +2197,10 @@ ol.writingArticle__TokenizerList {
 .writingArticle__embedTable {
   margin: 18px 0 12px;
   border-radius: 16px;
-  background: #1b1d22;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 18px 38px rgba(12, 12, 28, 0.35);
-  color: #eef1f6;
+  background: transparent;
+  border: 1px solid rgba(20, 20, 20, 0.08);
+  box-shadow: none;
+  color: #2d2f34;
   max-width: 100%;
   margin: auto;
   overflow: hidden;
@@ -2196,17 +2223,33 @@ ol.writingArticle__TokenizerList {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   font-size: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .writingArticle__embedTableRow {
   font-size: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(20, 20, 20, 0.08);
 }
 
 .writingArticle__embedTableId {
-  color: #ff9b6b;
+  color: var(--matrix-row-1);
   font-weight: 600;
+}
+
+.writingArticle__embedTableRow:nth-of-type(1) .writingArticle__embedTableId {
+  color: var(--matrix-row-1);
+}
+
+.writingArticle__embedTableRow:nth-of-type(2) .writingArticle__embedTableId {
+  color: var(--matrix-row-2);
+}
+
+.writingArticle__embedTableRow:nth-of-type(3) .writingArticle__embedTableId {
+  color: var(--matrix-row-3);
+}
+
+.writingArticle__embedTableRow:nth-of-type(4) .writingArticle__embedTableId {
+  color: var(--matrix-row-4);
 }
 
 .writingArticle__matrixCard {

@@ -120,7 +120,7 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
                 key={`${rowIndex}-${colIndex}`}
                 x={rowOffset + bracketLeftX + colSpacing * (colIndex + 0.5)}
                 y={topMargin + rowSpacing * (rowIndex + 1)}
-                className="embedMatrixNumber"
+                className={`embedMatrixNumber embedMatrixNumber--row-${rowIndex}`}
                 fill="var(--matrix-colour)"
               >
                 {value}
