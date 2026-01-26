@@ -19,9 +19,9 @@ content:
 
   tr: |
 
-    Bugün yapay zeka dendiğinde Claude, Gemini ve GPT gibi dev isimlerin rekabetini konuşuyoruz. Claude; özellikle uzun doküman analizi ve kod yazımı gibi "disiplin" gerektiren iş akışlarında güvenilir bir liman olarak görülüyor. Gemini; Google’ın arama ve medya ekosisteminden gelen kas gücüyle, metinden videoya kadar her şeyi aynı anda anlamlandıran (multimodal) tarafta iddialı bir çizgi çekiyor. OpenAI ise GPT serisiyle, genel muhakeme yeteneği en dengeli ve geniş yetenek setine sahip modelleri konumlandırmaya devam ediyor.
+    Bugün yapay zeka dendiğinde Claude, Gemini ve GPT gibi dev isimlerin rekabetini konuşuyoruz. Claude, özellikle uzun doküman analizi ve kod yazımı gibi "disiplin" gerektiren iş akışlarında güvenilir bir liman olarak görülüyor. Gemini, Google’ın arama ve medya ekosisteminden gelen kas gücüyle, metinden videoya kadar her şeyi aynı anda anlamlandıran (multimodal) tarafta iddialı bir çizgi çekiyor. OpenAI GPT serisiyle, genel muhakeme yeteneği en dengeli ve geniş yetenek setine sahip modelleri konumlandırmaya devam ediyor.
 
-    Peki, bu modellerin cevap stillerini, güvenlik katmanlarını ve "karakterlerini" bu kadar farklı kılan ne? İşin mutfağına girdiğimizde; **Tokenizer** seçimlerinden eğitim verisindeki (pre-training) ağırlıklara, **RLHF** (İnsan Geri Bildirimiyle Pekiştirmeli Öğrenme) süreçlerinden güvenlik filtrelerine kadar pek çok değişkenin bu farkları yarattığını görüyoruz.
+    Peki, bu modellerin cevap stillerini, "karakterlerini", güvenlik katmanlarını, vb. bu kadar farklı kılan ne? İşin mutfağına girdiğimizde; **Tokenizer** seçimlerinden eğitim verisindeki (pre-training) ağırlıklara, **RLHF** (İnsan Geri Bildirimiyle Pekiştirmeli Öğrenme) süreçlerinden güvenlik filtrelerine kadar pek çok değişkenin bu farkları yarattığını görüyoruz.
 
     Ancak tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine var: Hepsi **Transformer** tabanlı ve özünde **"next token prediction"** (bir sonraki parçayı tahmin etme) ilkesiyle çalışıyorlar. Yani hepsi, önüne koyduğunuz metne bakıp *"Buradan sonra gelmesi en muhtemel parça nedir?"* sorusunu milyarlarca kez soran devasa birer olasılık motoru.
 
@@ -316,9 +316,7 @@ content:
        
        <h2 className="writingArticle__transformerTitle">Transformer</h2>
 
-      Embeddings aşamasında kelimeleri sayılara çevirdik ve her birini çok boyutlu bir haritadaki koordinatlarına yerleştirdik. Bu noktada her token’ın bir adresi var ama bu adres tek başına "anlam" demek değil.
-
-      İşte Transformer katmanının asıl görevi burada başlıyor: Bu ruhsuz ve statik vektörleri alıp, cümledeki diğer token’larla etkileşime sokmak ve onları bağlama göre yeniden şekillendirmek. Yani yapay zekanın o meşhur "anlamlandırma" yeteneği, ilk kez burada filizleniyor.
+      Embeddings aşamasında kelimeleri sayılara çevirdik ve her birini çok boyutlu bir haritadaki koordinatlarına yerleştirdik. Bu noktada her token’ın bir adresi var ama bu adres tek başına "anlam" demek değil. İşte Transformer katmanının görevi burada başlıyor: Bu ruhsuz ve statik vektörleri alıp, cümledeki diğer token’larla etkileşime sokmak ve onları bağlama göre yeniden şekillendirmek. Yani yapay zekanın o meşhur "anlamlandırma" yeteneği, ilk kez burada filizleniyor.
 
         ***Statik* vektörlerden → Bağlamı inşa eden *dinamik* vektörlere**
         
@@ -339,7 +337,7 @@ content:
 
        **Attention: Hangi token, ne kadar önemli?**
 
-       Attention mekanizması aslında şu basit ama hayati soruyu sorar: "Bu cümleyi doğru anlamak için, şu anda hangi token’lara ne kadar odaklanmalıyım?"
+       Attention mekanizması aslında şu basit ama hayati soruyu sorar: "Bu cümleyi doğru anlamak için, şu anda hangi token’lara, ne kadar odaklanmalıyım?"
 
        Model metni işlerken yine parça parça (token token) ilerler. Ancak buradaki kritik fark şudur: Model bir token'a geldiğinde, geçmişteki tüm token'lara eşit davranmaz. Onları önem derecelerine göre tartar ve ağırlıklı bir kombinasyon oluşturur.
 
@@ -356,7 +354,7 @@ content:
         <span className="writingNote__icon" aria-hidden="true">!</span>
         Bu dikkat süreci sadece yanıt üretirken çalışmaz. Model, sizin yazdığınız prompt’u anlamaya çalışırken de tam olarak aynı mekanizmayı çalıştırır. Siz ne kadar net ve detaylı bir çerçeve çizerseniz, modelin kurduğu o bağlamsal ağ da o kadar sağlam olur.
 
-      Tam da bu yüzden **Prompt Engineering** dediğimiz o çok değerli uzmanlık dalı doğdu. Yazdığınız her bir kelime, modelin "dikkatini" nereye odaklayacağına dair birer komut niteliğinde. Yani promptlarınızın kalitesi, aslında modelin içindeki o milyarlarca matris çarpımının ne kadar isabetli olacağını belirliyor. :)
+      Tam da bu yüzden **Prompt Engineering** dediğimiz uzmanlık dalı doğdu. Yazdığınız her bir kelime, modelin "dikkatini" nereye odaklayacağına dair birer komut niteliğinde. Yani promptlarınızın kalitesi, aslında modelin içindeki o milyarlarca matris çarpımının ne kadar isabetli olacağını belirliyor.
       </Note>
 
        
@@ -364,12 +362,12 @@ content:
 
        Kısa bir matematik molası veriyoruz. Ama hemen belirteyim; amacımız formüllere boğulmak değil, modelin bu "odaklanma" işini perde arkasında nasıl bir mantıkla hesapladığını sezgisel olarak kavramak.
 
-       Az önce bahsettiğimiz o "dikkat oranları" (%48, %34...) modelin içine vahiy yoluyla inmiyor; her şey tamamen matematiksel işlemlerle, adım adım hesaplanıyor. Gelin, bu süreci basitleştirilmiş bir örnek üzerinden görelim:
+       Az önce bahsettiğimiz o "dikkat oranları" (%48, %34...) modelin içine vahiy yoluyla inmiyor. Her şey tamamen matematiksel işlemlerle, adım adım hesaplanıyor. Şimdi bu süreci basitleştirilmiş bir örnek üzerinden görelim:
 
        <ul className="writingArticle__TokenizerList">
-         <li> **Prompt’umuz şu olsun:** “Parayı bankaya yatırdım”</li>
+         <li> **Prompt’umuz yine aynı olsun:** “Parayı bankaya yatırdım”</li>
          <li>**Token ID’ler hazır:** Tokenizer bu cümleyi dört parçaya böldü: [Parayı] [bankaya] [yatır] [dım]</li>
-         <li>**Embedding’ler sahne alıyor:** Görselleştirmeyi kolaylaştırmak için n=3 boyutlu bir dünyada olduğumuzu hayal edelim. Gerçekte bu binlerce boyuttur ama mekanizmayı anlamak için bu "mini" matris bize yeter</li>
+         <li>**Embedding’ler:** Görselleştirmeyi kolaylaştırmak için n=3 boyutlu bir dünyada olduğumuzu hayal edelim. (Gerçekte bu binlerce boyuttur ama mekanizmayı anlamak için bu mini matris bize yeter.)</li>
        </ul>
        
         <div className="writingArticle__codeRow">
@@ -449,10 +447,10 @@ content:
          <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
          <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embedding Matrix" }} />
         </div> 
-       Bu noktada Attention mekanizması devreye girer ve bu embedding’lere tek bir açıdan bakmaz. Model, her bir embedding’i alır ve onu üç farklı matematiksel dönüşümden geçirir. Bu üç dönüşüme biz **Query (Sorgu)**, **Key (Anahtar)** ve **Value (Değer)** diyoruz.                      
+       Bu noktada Attention mekanizması devreye girer ve bu embedding’lere 3 farklı lensten bakar. (Yani model, her bir embedding’i alır ve onu üç farklı matematiksel dönüşümden geçirir.) Bu üç dönüşüme **Query (Sorgu)**, **Key (Anahtar)** ve **Value (Değer)** diyoruz.                      
         <div className="writingArticle__callout">
 
-        **Q ve K Karar Verir, V Aktarılır**
+        **Q ve K karar verir, V aktarılır**
 
         Peki, bu üç farklı bakış açısı (Q, K, V) pratikte ne anlama geliyor? Gelin, "bankaya" ve "yatırdım" token'ları üzerinden bu matematiksel fısıldaşmayı tercüme edelim:
 
@@ -468,13 +466,11 @@ content:
          <li>**Value (V - Value)** *"Bu token'dan bağlama hangi bilgi taşınmalı?"*</li>
          </ol>
 
-         Yani Q ve K, "Kime bakmalıyım?" sorusunu çözer; V ise "Baktıysan, benden neyi alacaksın?" sorusunun cevabıdır. "bankaya" token'ı burada finansal anlamını ve yer bilgisini paketleyip bir sonraki aşamaya iletir.
-
-       Value vektörü, işte bu taşınabilir bilginin matematiksel temsilidir.
+         Yani Q ve K, "Kime bakmalıyım?" sorusunu çözer; V ise "Baktıysan, benden neyi alacaksın?" sorusunun cevabıdır. "bankaya" token'ı burada finansal anlamını ve yer bilgisini paketleyip bir sonraki aşamaya iletir. V (Value) vektörü, bu taşınabilir bilginin matematiksel temsilidir.
 
        **Matematiksel Dönüşüm: W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub> Matrisleri**
 
-       Burada kritik bir teknik detay var: Bu $\mathit{Q}$, $\mathit{K}$ ve $\mathit{V}$ vektörleri gökten inmiyor. Bunlar, elimizdeki **Embedding** matrisinin üç farklı "öğrenilmiş matris" ile çarpılmasıyla elde edilir:
+       Bu $\mathit{Q}$, $\mathit{K}$ ve $\mathit{V}$ vektörleri gökten inmiyor. Bunlar, elimizdeki **Embedding** matrisinin üç farklı "öğrenilmiş matris" ile çarpılmasıyla elde ediliyor:
 
         <div className="writingArticle__mathLines">
           <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
@@ -483,20 +479,20 @@ content:
         </div>
 
 
-       Buradaki $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$ ve $\mathit{W\scriptsize{V}}$  matrisleri, modelin eğitimi sırasında öğrendiği asıl parametrelerdir. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doludur; çünkü model en başta herhangi bir dil kuralı bilmez; zaten bilmesine gerek de yoktur. Modelin herhangi bir ön kabulle kısıtlanmaması, dildeki kalıpları ve kuralları tamamen kendi deneyimiyle, özgürce keşfetmesini sağlar. Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre matrislerin içindeki sayıları milim milim günceller. Milyarlarca örnekten sonra bu matrisler artık şu sorulara harika cevap verir hale gelir:
+       Buradaki $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$ ve $\mathit{W\scriptsize{V}}$  matrisleri, modelin eğitimi sırasında öğrendiği asıl parametreler. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doludur; çünkü model en başta herhangi bir dil kuralı bilmez; zaten bilmesine gerek de yoktur. Modelin herhangi bir ön kabulle kısıtlanmaması, dildeki kalıpları ve kuralları tamamen kendi deneyimiyle, özgürce keşfetmesini sağlar. Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre matrislerin içindeki sayıları milim milim günceller. Milyarlarca örnekten sonra bu matrisler artık şu sorulara harika cevap verir hale gelir:
 
         <ul className="writingArticle__TokenizerList">
          <li>"Hangi özellikler birbiriyle gerçekten ilgili?"</li>
          <li>"Hangi sinyaller bağlam için önemli, hangileri gürültü?"</li>
        </ul>
 
-       Sıkça duyduğumuz "175 milyar parametre" kavramı aslında bu matrislerin içindeki o küçücük ondalıklı sayılardır. Her biri tek başına bir şey ifade etmez ama birlikte çalıştıklarında, tıpkı beynimizdeki nöronlar gibi, devasa bir davranış bütünü ve "anlam" oluştururlar.
+       Sıkça duyduğumuz "175 milyar parametre" kavramı aslında bu matrislerin içindeki o küçük ondalıklı sayılardır. Her biri tek başına bir şey ifade etmez ama birlikte çalıştıklarında, tıpkı beynimizdeki nöronlar gibi, devasa bir davranış bütünü ve "anlam" oluştururlar.
 
        </div>
 
        **Şimdi matematik konuşsun: Q ve K matrislerini hesaplayalım**
 
-       Buraya kadar her şey teorikti. Şimdi bu "sorgu" ve "anahtar" mantığının mutfağına girelim. Bu aşamada yaptığımız şey aslında henüz bir dikkat (attention) hesaplamak değil; her token’ın "aradığını" ($Q$) ve "sunduğunu" ($K$) iki ayrı matematiksel dönüşümle aynı evrensel uzayda ifade etmek.
+      Bu aşamada yaptığımız şey henüz bir dikkat (attention) hesaplamak değil; her token’ın "aradığını" ($Q$) ve "sunduğunu" ($K$) iki ayrı matematiksel dönüşümle aynı evrensel uzayda ifade etmek.
 
        <div className="writingArticle__codeRow">
          <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
@@ -514,11 +510,7 @@ content:
          <Matrix values={[[-0.1, -0.1, 0.6], [-0.1, -0.5, -1.0], [-0.6, 0.1, -0.8], [-0.4, 0.4, 0.6]]} title={{ text:"K" }}/>
        </div>
 
-       Görseldeki matrislere bakarsanız, $\mathit{Q}$ ve $\mathit{K}$ matrislerinin boyutlarının özellikle aynı tutulduğunu fark edeceksiniz. Bunun çok bilinçli bir sebebi var: Birazdan bu iki temsili doğrudan birbiriyle matematiksel bir "tokalaşmaya" sokacağız. Yani bu adımda henüz "Kim kime ne kadar dikkat ediyor?" sorusunu sormuyoruz; sadece bu soruyu sorabilmek için gerekli teknik oyun alanını kuruyoruz.
-       
-       Q ve K matrislerinin boyutları bilinçli olarak aynıdır. Bunun sebebi, birazdan bu iki temsili doğrudan birbiriyle matematiksel olarak ilişkilendirecek olmamızdır. Yani bu adımda henüz “kim kime ne kadar dikkat ediyor?” sorusunu sormuyoruz. Sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
-
-       Bir sonraki adımda, Q ile K’yi karşı karşıya getirip token’lar arasındaki ilişkileri sayısal olarak ölçmeye başlayacağız. 
+       Matrislere bakarsanız, $\mathit{Q}$ ve $\mathit{K}$ matrislerinin boyutları bilinçli olarak aynı tutulur. Sebebi; birazdan bu iki temsili doğrudan birbiriyle matematiksel bir "tokalaşmaya" sokacağız. Yani bu adımda henüz "Kim kime ne kadar dikkat ediyor?" sorusunu sormuyoruz, sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
               
        **$Q$ ve $K$ nihayet karşı karşıya: Matrislerin tokalaşması**
 
