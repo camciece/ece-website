@@ -535,76 +535,51 @@ content:
          <li>**Scores matrsinin boyutu** - Embedding boyutuyla değil, prompt’taki token sayısıyla ilgilidir. Yani 4 token varsa 4×4, 20 token varsa 20×20 bir tablo oluşur.</li>
        </ul>
 
-       **Önemli not #1:** Bu skorlar henüz ağırlık değildir. Olasılık değildir. Normalize edilmemiştir. Sadece ham benzerlik ölçümleridir.
+        <Note>
+          <span className="writingNote__icon" aria-hidden="true">!</span> Şu ana kadar token’lar arasındaki benzerlikleri tamamen serbest bir şekilde hesapladık. Yani her token, diğer tüm token’lara bakabiliyor. Buna gelecekteki token’lar da dahil. Ama burada ciddi bir problem var: Dil modelleri metni soldan sağa üretir. Yani model “yatırdım” kelimesini üretirken, henüz yazılmamış olan kelimeleri bilmemelidir. Aksi halde model, cevabı önceden görmüş olur. Bu da öğrenmeyi anlamsız hale getirir.
 
-       **Önemli not #2:** Bu aşamada zaman kuralı henüz uygulanmamıştır. Yani token’lar, kendilerinden sonra gelen token’lara da bakabilir. Model şu an sadece şunu hesaplar: “Hangi token, hangisiyle ne kadar ilişkili?” Kimin kime bakamayacağı sorusu, bir sonraki adımda maske uygulandığında devreye girer.
+          Bu noktada **mask** devreye girer.
+        </Note>
 
-       **Mask: Hangi Token, Hangi Token'a Bakamaz**
+       **Masking: Geleceği görmeyi engellemek**
 
-       Şu ana kadar token’lar arasındaki benzerlikleri tamamen serbest bir şekilde hesapladık. Yani her token, diğer tüm token’lara bakabiliyor. Buna gelecekteki token’lar da dahil. Ama burada ciddi bir problem var: Dil modelleri metni soldan sağa üretir. Yani model “yatırdım” kelimesini üretirken, henüz yazılmamış olan kelimeleri bilmemelidir. Aksi halde model, cevabı önceden görmüş olur. Bu da öğrenmeyi anlamsız hale getirir.
-
-       Bu noktada **mask** devreye girer. Mask'ın görevi: Bir token’ın, kendisinden sonra gelen token’lara bakmasını engellemek. Bunu matematiksel olarak şöyle yaparız:
+     Skor tablosunu oluşturduk ama burada çok hayati bir kural devreye giriyor: Dürüstlük. Eğitim sırasında modelin bir sonraki kelimeyi tahmin etmesini istiyoruz. Eğer model, skor tablosunda kendisinden sonra gelen (yani henüz üretilmemiş) kelimelere bakabilirse, bu bir kopya çekme işlemi olur.
+     
+     Bunu engellemek için Masking mekanizmasını kullanıyoruz:
        <div className="writingArticle__codeRow">
          <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0, -0.1], [0.2, -0.2, 0, 0.6]]} title={{ text:"scores" }} prefix={{ text: "mask(" }} suffix={{ text: ")" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }}/>
        </div>
 
-       Scores matrisinde, “bakılması yasak” olan hücreleri özel bir değerle işaretleriz. Pratikte bu değer genellikle −∞ (eksi sonsuz) olarak alınır. Böylece bu hücreler, bir sonraki adımda etkisiz hale gelir.
+       -inf (eksi sonsuz) değerleri, modelin "geleceğe" bakmasını matematiksel olarak imkansız hale getirir. Bu sayede her token, sadece kendisinden önce gelenlerin bağlamıyla karar vermeye zorlanır. Yani attention mekanizmasına bir "zaman disiplini" kazandırıyoruz.
 
-       Bu noktada şunu netleştirelim: Mask yeni bir bilgi eklemez. Yeni bir ilişki yaratmaz. Sadece “olması mümkün olmayan” ilişkileri sistematik olarak devre dışı bırakır. Yani attention’a bir zaman disiplini kazandırır.
+       **Softmax: Skorları ağırlıklara dönüştürmek**
 
-       **Softmax: Skorları Ağırlıklara Dönüştürmek**
-
-       Mask uygulandıktan sonra elimizde hâlâ bir skor tablosu var. Bu skorlar, token’lar arasındaki benzerliği ölçüyor ama hâlâ ham hâlde. Negatif olabilirler, pozitif olabilirler, büyüklükleri karşılaştırılması zor olabilir. Oysa modelin bir sonraki adımda ihtiyacı olan şey: Her token için, diğer token’lara ne kadar dikkat edileceğini açık ve karşılaştırılabilir bir şekilde ifade etmek. **Softmax** tam olarak bunu yapar.
-
-       Softmax, her satırı ayrı ayrı ele alır ve o satırdaki skorları:
-
-       <ul className="writingArticle__TokenizerList">
-         <li>0 ile 1 arasına sıkıştırır</li>
-         <li>Toplamları 1 olacak şekilde normalize eder</li>
-       </ul>
-
-       Böylece her satır, “dikkatin nasıl dağıtıldığı”nı gösteren bir ağırlık vektörüne dönüşür.
+       Maskeleme bittikten sonra elimizde hala ham ve karşılaştırılması zor sayılar var. Burada Softmax devreye giriyor ve bu sayıları alıp toplamı 1 (yani %100) eden, tertemiz olasılık ağırlıklarına dönüştürüyor:
             <div className="writingArticle__codeRow">
          <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }} prefix={{ text: "softmax(" }} suffix={{ text: ")" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
        </div>
 
-       Bu adımda büyük skorlar daha da öne çıkar, küçük skorlar bastırılır. Mask ile −∞ olarak işaretlenmiş hücreler ise softmax sonrası otomatik olarak 0 ağırlık alır. Yani model, bu token’lara fiilen hiç bakmaz.
+       Ortaya çıkan sonuç artık bir **Attention Ağırlık Matrisidir**. Bu matrise baktığınızda, dördüncü satırdaki bir kelimenin, kendisinden önceki üç kelimeye yüzde kaç oranında odaklandığını net bir şekilde görebilirsiniz. Sıfır olan hücreler (maskelenmiş kısımlar), modelin o tarafa fiilen hiç bakmadığını garantiler.
 
-       Ortaya çıkan sonuç artık bir **attention ağırlık matrisidir**. Bu matris, her token’ın diğer token’lardan ne kadar bilgi alacağını belirler.
+       **Value (V) ve Output'un oluşması: Anlamı paketlemek** 
 
-       Bu ağırlık matrisini şöyle okumak gerekir: Her satır, “şu anki token’ı”; her sütun ise “bakılan token’ı” temsil eder. Satırdaki değerler, bu token’ın dikkatini diğer token’lara nasıl paylaştırdığını gösterir. Örneğin üçüncü satıra baktığımızda, modelin bu token için dikkatini birden fazla önceki token arasında dağıttığını görürüz. Dördüncü sütundaki 0 değeri ise, bu token’a hiç bakılmadığını gösterir. Bu, mask’in doğrudan sonucudur.
-
-       **Önemli bir nokta:** Softmax yeni bir ilişki yaratmaz. Skorların sırasını değiştirmez. Sadece onları anlamlı, karşılaştırılabilir ve kullanılabilir hale getirir.
-
-       **Value (V) ve Output'un Oluşması** 
-
-       Şimdiye kadar yaptığımız tüm adımlar, aslında tek bir soruya hazırlanıyordu: Seçilen token’lardan hangi bilgi ne kadar taşınacak?
-
-       Bu sorunun cevabı **Value (V) matrisinde**.
-
-       V matrisini, embedding’lerin “taşınabilir içerik” hâli gibi düşünebiliriz. Bu adımda artık “ne arıyoruz?” ya da “kim uygun?” soruları yoktur. Sadece içerik vardır. Daha önce olduğu gibi, burada da eğitim sırasında öğrenilmiş bir WV matrisi vardır. Bu matrisi kullanarak token embedding’lerini V matrisine dönüştürürüz:
+       Şimdiye kadar sadece "kiminle ne kadar ilgiliyiz?" sorusuna yanıt aradık. Peki, o ilgili olduğumuz kelimeden hangi bilgiyi alacağız? İşte burada $Value(V)$ matrisi devreye giriyor.
 
        <div className="writingArticle__codeRow">
          <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-         <Matrix values={[[0.6, -0.2, 0.1], [0.3, 0.7, -0.4], [-0.5, 0.2, 0.8]]} title={{ text:"W_V" }}/>
+         <Matrix values={[[0.6, -0.2, 0.1], [0.3, 0.7, -0.4], [-0.5, 0.2, 0.8]]} title={{ text:"WV" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
        </div>
 
-       Elimizde artık üç şey hazır:
+              V matrisini, embedding’lerin “taşınabilir içerik” hâli gibi düşünebiliriz. Bu aşamada artık "ne arıyoruz?" sorusu biter; sadece "içerik" kalır. Daha önce olduğu gibi, burada da eğitim sırasında öğrenilmiş bir WV matrisi vardır. Bu matrisi kullanarak token embedding’lerini V matrisine dönüştürürüz.
 
-       <ul className="writingArticle__TokenizerList">
-         <li>Hangi token’ların önemli olduğuna karar veren **attention ağırlıkları**</li>
-         <li>Her token’ın taşıdığı içeriği temsil eden **V vektörleri**</li>
-         <li>Ve bu ikisini birleştirecek **son adım**</li>
-       </ul>
-
-       Bu son adım, attention ağırlıkları ile V matrisinin çarpılmasıdır:
+       Son adımda, Softmax’ten çıkan o hassas ağırlıklar ile V matrisini çarparız ($Weights \times V$):
         <div className="writingArticle__codeRow">
          <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
          <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
@@ -612,13 +587,19 @@ content:
          <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
          <Matrix values={[[-0.3, 0.0, 0.6], [0.3, 0.0, 0.1], [0.3, 0.2, 0.0], [0.0, 0.2, 0.3]]} title={{ text:"output" }}/>
        </div>
-      
-      Ortaya çıkan bu output vektörleri, embedding’lerin Transformer’a girmeden önceki, tek başına anlam taşımayan konumlarından; artık bağlam içinde, bir cümlenin parçası olarak anlam kazandıkları temsillere dönüşmüş hâlidir. Attention mekanizması bu noktada görevini tamamlar: Model, her token için cümlenin geri kalanından hangi bilginin ne kadar önemli olduğunu hesaplamış ve bu bilgiyi bağlamsal vektörler halinde kodlamıştır.
 
-     Ancak bu aşamada model hâlâ bir kelime üretmez. Ortaya çıkan vektörler, nihai bir karar değil; Transformer katmanının bir sonraki adımında daha da işlenmek üzere hazırlanmış ara temsillerdir.
+       **Sonuç: Pişmiş bir "Bağlamsal Vektör"**
       
-      Bu katman, her token’ın bağlamsal vektörünü alır ve onu küçük bir sinir ağından geçirir. Aynı ağ, tüm token’lar için birebir aynıdır. Yani “parayı”, “bankaya” ve “yatırdım” token’larının her biri, aynı matematiksel dönüşüme tabi tutulur.
-       
+      Bu çarpımın sonucunda elimize geçen Output vektörleri, artık Transformer’a giren o ilk "statik" kelimeler değildir. Bunlar:
+
+      <ul className="writingArticle__TokenizerList">  
+         <li>Cümlenin parçası olarak anlam kazanmış,</li>
+          <li>Bağlamın içinde "pişmiş",</li>
+         <li>Hangi kelimenin ne kadar önemli olduğu bilgisiyle yoğurulmuş **dinamik temsillerdir**.</li>
+       </ul>
+     
+     Ancak heyecanlanmayın, model hala bir kelime üretmedi! Bu çıkan vektörler nihai karar değil; sadece bir sonraki aşamada (FFN) daha da işlenmek üzere hazırlanmış, anlamı derinleşmiş ara temsilcilerdir.
+             
        **Feedforward: Bağlamı Yoğunlaştırmak**
 
        Attention mekanizmasıyla her token için bağlama duyarlı bir temsil (vektör) oluşturduk. Yani model artık “hangi kelime, hangi kelimeyle ne kadar ilişkili?” sorusunun cevabını biliyor. Ancak bu bilgi hâlâ ham hâlde.
