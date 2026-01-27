@@ -8,7 +8,6 @@ import {
   scaleOrdinal,
   schemeCategory10,
   select,
-  selectAll,
 } from 'https://cdn.skypack.dev/d3@7.8.5'
 
 import {
@@ -16,9 +15,19 @@ import {
   lineStrips3D,
   points3D,
 } from 'https://cdn.skypack.dev/d3-3d@1.0.0'
-;(() => {
-  const width = window.scatterplot3dWidth || 720
-  const height = window.scatterplot3dHeight || 480
+
+// Initialize a specific scatterplot by SVG ID
+window.initScatterplot = function (fullSvgId) {
+  const svgElement = document.getElementById(fullSvgId)
+  if (!svgElement) {
+    console.error(`SVG element with id ${fullSvgId} not found`)
+    return
+  }
+
+  const svgId = fullSvgId.split('-scatterplot')[0]
+
+  const width = window[`${svgId}_width`] || 720
+  const height = window[`${svgId}_height`] || 480
   const origin = { x: width / 2, y: height / 2 }
   const rows = 10
   const scale = 20
@@ -36,14 +45,14 @@ import {
     mouseX = 0,
     mouseY = 0
 
-  const svg = select('#scatterplot-3d-svg')
+  const svg = select(`#${fullSvgId}`)
     .call(drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd))
     .append('g')
 
   // Create tooltip
   const tooltip = select('body')
     .append('div')
-    .attr('class', 'scatterplot-tooltip')
+    .attr('class', `scatterplot-tooltip-${svgId}`)
     .style('position', 'absolute')
     .style('padding', '8px')
     .style('background', 'rgba(0, 0, 0, 0.8)')
@@ -135,6 +144,7 @@ import {
       .enter()
       .append('circle')
       .attr('class', 'd3-3d')
+      .attr('data-scatterplot-id', svgId)
       .attr('opacity', 0)
       .attr('cx', posPointX)
       .attr('cy', posPointY)
@@ -227,7 +237,7 @@ import {
 
     yText.exit().remove()
 
-    selectAll('.d3-3d').sort(points3d.sort)
+    svg.selectAll('.d3-3d').sort(points3d.sort)
   }
 
   function posPointX(d) {
@@ -244,9 +254,9 @@ import {
     yLine = []
 
     // Check if custom points are provided
-    const allPoints = window.scatterplot3dPoints
-    const labels = window.scatterplot3dLabels || []
-    const currentIndex = window.scatterplot3dCurrentIndex || 0
+    const allPoints = window[`${svgId}_points`]
+    const labels = window[`${svgId}_labels`] || []
+    const currentIndex = window[`${svgId}_currentIndex`] || 0
 
     // Calculate maxValue from all points
     let calculatedMaxValue = 1
@@ -328,7 +338,7 @@ import {
   }
 
   // Expose init function globally so React component can call it
-  window.scatterplot3dInit = init
+  window[`${svgId}_init`] = init
 
   init()
-})()
+}

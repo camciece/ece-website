@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 interface Scatterplot3DDemoProps {
+  id?: string
   pointSets?: PointSet[]
   labels?: string[]
   width?: number
@@ -16,80 +17,100 @@ interface PointSet {
 }
 
 export default function Scatterplot3DDemo({
+  id = 'default-scatterplot',
   pointSets = [],
   labels = [],
   width = 720,
   height = 480,
 }: Scatterplot3DDemoProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const scriptLoadedRef = useRef(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const initializedRef = useRef(false)
 
   useEffect(() => {
-    if (!containerRef.current || scriptLoadedRef.current)
+    if (!containerRef.current)
       return // Store points data globally for the script to access
-    ;(window as any).scatterplot3dPoints = pointSets.map((set) => set.points)
-    ;(window as any).scatterplot3dSetNames = pointSets.map((set) => set.name)
-    ;(window as any).scatterplot3dLabels = labels
-    ;(window as any).scatterplot3dCurrentIndex = currentIndex
-    ;(window as any).scatterplot3dWidth = width
-    ;(window as any).scatterplot3dHeight = height
+    ;(window as any)[`${id}_points`] = pointSets.map((set) => set.points)
+    ;(window as any)[`${id}_setNames`] = pointSets.map((set) => set.name)
+    ;(window as any)[`${id}_labels`] = labels
+    ;(window as any)[`${id}_currentIndex`] = currentIndex
+    ;(window as any)[`${id}_width`] = width
+    ;(window as any)[`${id}_height`] = height
 
     // Create the SVG element that the script expects
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    svg.setAttribute('id', 'scatterplot-3d-svg')
+    const svgId = `${id}-scatterplot`
+    svg.setAttribute('id', svgId)
     svg.setAttribute('width', String(width))
     svg.setAttribute('height', String(height))
     svg.style.border = '1px solid #ddd'
     svg.style.borderRadius = '4px'
     containerRef.current.appendChild(svg)
 
-    // Load the external script
-    const script = document.createElement('script')
-    script.type = 'module'
-    script.src = '/3d-scatterplot.js'
-    script.async = true
+    // Load the external script only once globally
+    const existingScript = document.querySelector(
+      'script[src="/3d-scatterplot.js"]',
+    )
 
-    script.onload = () => {
-      scriptLoadedRef.current = true
+    if (!existingScript) {
+      const script = document.createElement('script')
+      script.type = 'module'
+      script.src = '/3d-scatterplot.js'
+
+      script.onload = () => {
+        // Initialize this specific scatterplot
+        if ((window as any).initScatterplot && !initializedRef.current) {
+          ;(window as any).initScatterplot(svgId)
+          initializedRef.current = true
+        }
+      }
+
+      script.onerror = () => {
+        console.error('Failed to load 3d-scatterplot.js')
+      }
+
+      document.body.appendChild(script)
+    } else {
+      // Script already exists, check if it's loaded
+      const checkAndInit = () => {
+        if ((window as any).initScatterplot) {
+          if (!initializedRef.current) {
+            ;(window as any).initScatterplot(svgId)
+            initializedRef.current = true
+          }
+        } else {
+          // Script still loading, wait a bit and try again
+          setTimeout(checkAndInit, 50)
+        }
+      }
+      checkAndInit()
     }
-
-    script.onerror = () => {
-      console.error('Failed to load 3d-scatterplot.js')
-    }
-
-    document.body.appendChild(script)
 
     return () => {
       // Cleanup
       if (containerRef.current) {
         containerRef.current.innerHTML = ''
       }
-      if (script.parentNode) {
-        script.parentNode.removeChild(script)
-      }
-      delete (window as any).scatterplot3dPoints
-      delete (window as any).scatterplot3dSetNames
-      delete (window as any).scatterplot3dLabels
-      delete (window as any).scatterplot3dCurrentIndex
-      delete (window as any).scatterplot3dWidth
-      delete (window as any).scatterplot3dHeight
+      delete (window as any)[`${id}_points`]
+      delete (window as any)[`${id}_setNames`]
+      delete (window as any)[`${id}_labels`]
+      delete (window as any)[`${id}_currentIndex`]
+      delete (window as any)[`${id}_width`]
+      delete (window as any)[`${id}_height`]
+      delete (window as any)[`${id}_init`]
     }
-  }, [pointSets, labels, width, height])
+  }, [id, pointSets, labels, width, height])
 
   // Re-initialize when currentIndex changes
   useEffect(() => {
-    if (!scriptLoadedRef.current) return
-    ;(window as any).scatterplot3dCurrentIndex = currentIndex
-    if ((window as any).scatterplot3dInit) {
-      ;(window as any).scatterplot3dInit()
+    ;(window as any)[`${id}_currentIndex`] = currentIndex
+    if ((window as any)[`${id}_init`]) {
+      ;(window as any)[`${id}_init`]()
     }
-  }, [currentIndex])
+  }, [id, currentIndex])
 
   // Re-render when reading mode changes
   useEffect(() => {
-    if (!scriptLoadedRef.current) return
-
     const writingPage = document.querySelector('.writingPage')
     if (!writingPage) return
 
@@ -99,8 +120,8 @@ export default function Scatterplot3DDemo({
           mutation.type === 'attributes' &&
           mutation.attributeName === 'data-reading-mode'
         ) {
-          if ((window as any).scatterplot3dInit) {
-            ;(window as any).scatterplot3dInit()
+          if ((window as any)[`${id}_init`]) {
+            ;(window as any)[`${id}_init`]()
           }
         }
       })
@@ -114,7 +135,7 @@ export default function Scatterplot3DDemo({
     return () => {
       observer.disconnect()
     }
-  }, [])
+  }, [id])
 
   const handleNext = () => {
     if (pointSets.length > 0) {

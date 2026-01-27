@@ -275,6 +275,15 @@ content:
           <span>-8.9</span>
         </div>
        </div>
+       <Scatterplot3DDemo 
+        id={'embeddings'}
+        width={640}
+        height={360}
+        pointSets={[
+          { name: 'Embeddings', points: [[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]}
+         ]}
+        labels={["796", "35569", "6922", "5094"]}
+       />
        </div>
              Süreci adım adım hayal edersek:
 
@@ -579,6 +588,7 @@ content:
        **Sonuç: Hazır bir "Bağlamsal Vektör"**
 
        <Scatterplot3DDemo 
+        id={'output'}
         width={640}
         height={360}
         pointSets={[
