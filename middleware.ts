@@ -30,9 +30,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Language switching disabled - always use default locale (tr)
   const segment = pathname.split('/')[1]
-  const locale = isLocale(segment) ? segment : defaultLocale
+  const locale = defaultLocale // Always use tr
 
+  // If path has a locale prefix (en or tr), strip it and redirect to tr version
+  if (isLocale(segment)) {
+    const url = request.nextUrl.clone()
+    const pathWithoutLocale = pathname.slice(segment.length + 1) || '/'
+    url.pathname = `/${locale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
+    return NextResponse.redirect(url)
+  }
+
+  // If path has no locale prefix, add tr prefix
   if (!isLocale(segment)) {
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`

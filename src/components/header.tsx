@@ -21,12 +21,15 @@ export default function Header({ locale }: { locale: Locale }) {
   const { t, i18n } = useTranslation()
   const currentPath = stripLocale(pathname)
 
-  const toggleLanguage = () => {
-    const newLocale: Locale = locale === 'en' ? 'tr' : 'en'
-    const target = withLocale(currentPath, newLocale)
-    i18n.changeLanguage(newLocale)
-    router.push(target)
-  }
+  /*
+   Language toggle disabled - infrastructure kept for later use
+   const toggleLanguage = () => {
+     const newLocale: Locale = locale === 'en' ? 'tr' : 'en'
+     const target = withLocale(currentPath, newLocale)
+     i18n.changeLanguage(newLocale)
+     router.push(target)
+   }
+  */
 
   return (
     <header className={`topBar ${menuOpen ? 'topBar--open' : ''}`}>
@@ -68,6 +71,7 @@ export default function Header({ locale }: { locale: Locale }) {
             >
               EcesNotes
             </Link>
+            {/*
             <button
               type="button"
               onClick={toggleLanguage}
@@ -77,7 +81,8 @@ export default function Header({ locale }: { locale: Locale }) {
               })}
             >
               {locale === 'en' ? 'EN' : 'TR'}
-            </button>
+            </button>}
+            */}
           </div>
           <nav className="navRow">
             {links.map((l) => {
@@ -100,6 +105,7 @@ export default function Header({ locale }: { locale: Locale }) {
 
         {/* RIGHT island */}
         <div className="island island--search">
+          {/*
           <button
             type="button"
             onClick={toggleLanguage}
@@ -110,6 +116,7 @@ export default function Header({ locale }: { locale: Locale }) {
           >
             {locale === 'en' ? 'EN' : 'TR'}
           </button>
+          Language toggle disabled */}
         </div>
       </div>
 
