@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   const oldSlugPath = '/writing/2025-10-19-why-ai-needs-boring-ops'
-  const newSlugPath = '/writing/llmler-nasil-calisiyor'
+  const newSlugPath = '/writing/how-llms-work'
   const normalizedPath = pathname.endsWith('/')
     ? pathname.slice(0, -1)
     : pathname

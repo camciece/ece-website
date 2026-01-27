@@ -1,3 +1,4 @@
+import Footer from '@/components/footer'
 import type { Locale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 
@@ -60,6 +61,7 @@ export default async function ContactPage({
           </button>
         </form>
       </section>
+      <Footer locale={locale} />
     </main>
   )
 }
