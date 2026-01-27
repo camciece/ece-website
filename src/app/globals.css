@@ -3865,7 +3865,7 @@ ol.writingArticle__TokenizerList {
 }
 @media (max-width: 899px) {
   .homeHeroFrame {
-    background-position: right;
+    background-position: 88%;
   }
   .heroStage__card p {
     -webkit-line-clamp: 5;

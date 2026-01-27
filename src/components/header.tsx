@@ -61,7 +61,8 @@ export default function Header() {
             <Link href="/" className="logoCenter" aria-label={t('nav.home')}>
               EcesNotes
             </Link>
-            {/*
+            {
+              <div style={{ width: 48 }} /> /*
             <button
               type="button"
               onClick={toggleLanguage}
@@ -72,7 +73,8 @@ export default function Header() {
             >
               {locale === 'en' ? 'EN' : 'TR'}
             </button>}
-            */}
+            */
+            }
           </div>
           <nav className="navRow">
             {links.map((l) => {
