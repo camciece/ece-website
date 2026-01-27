@@ -1,5 +1,6 @@
 import Scatterplot3DDemo from '@/components/3d-scatterplot-demo'
 import EmbeddingsDemo from '@/components/embeddings-demo'
+import EngagementSection from '@/components/engagement-section'
 import Footer from '@/components/footer'
 import Matrix from '@/components/matrix'
 import Note from '@/components/note'
@@ -69,6 +70,8 @@ export default async function Post({
             }}
           />
         </div>
+
+        <EngagementSection slug={slug} locale={locale} />
       </article>
 
       <Footer locale={locale} />
