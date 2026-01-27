@@ -18,9 +18,7 @@ export default async function PrivacyPage({
         </header>
 
         <div className="disclaimerMeta">
-          <div className="disclaimerAvatar" aria-hidden>
-            EC
-          </div>
+          <div className="disclaimerAvatar" aria-hidden />
           <p className="disclaimerByline">
             <span>{copy.privacy.bylineName}</span>{' '}
             {copy.privacy.publishedOnPrefix}

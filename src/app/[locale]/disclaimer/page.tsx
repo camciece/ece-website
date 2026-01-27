@@ -18,9 +18,7 @@ export default async function DisclaimerPage({
         </header>
 
         <div className="disclaimerMeta">
-          <div className="disclaimerAvatar" aria-hidden>
-            EC
-          </div>
+          <div className="disclaimerAvatar" aria-hidden />
           <p className="disclaimerByline">
             <span>{copy.disclaimer.bylineName}</span>{' '}
             {copy.disclaimer.publishedOnPrefix}
@@ -45,6 +43,8 @@ export default async function DisclaimerPage({
             {copy.disclaimer.headingAccuracy}
           </h2>
           <p>{copy.disclaimer.accuracy}</p>
+          <h2 className="disclaimerHeading">{copy.disclaimer.headingAI}</h2>
+          <p>{copy.disclaimer.aiNote}</p>
           <h2 className="disclaimerHeading">{copy.disclaimer.headingIP}</h2>
           <p>{copy.disclaimer.intellectualProperty}</p>
           <h2 className="disclaimerHeading">

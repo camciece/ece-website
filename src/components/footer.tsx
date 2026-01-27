@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
 import type { Locale } from '@/lib/locale'
 import { withLocale } from '@/lib/locale'
+import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 export default function Footer({ locale }: { locale: Locale }) {
   const { t } = useTranslation()
@@ -12,12 +12,8 @@ export default function Footer({ locale }: { locale: Locale }) {
     <section className="closingSection">
       <div className="closingPanel">
         <div className="closingNav">
-          <Link href={withLocale('/writing', locale)}>
-            {t('nav.writings')}
-          </Link>
-          <Link href={withLocale('/meet-ece', locale)}>
-            {t('nav.meetEce')}
-          </Link>
+          <Link href={withLocale('/writing', locale)}>{t('nav.writings')}</Link>
+          <Link href={withLocale('/meet-ece', locale)}>{t('nav.meetEce')}</Link>
           <Link href={withLocale('/recommendations', locale)}>
             {t('nav.recommendations')}
           </Link>
@@ -25,9 +21,6 @@ export default function Footer({ locale }: { locale: Locale }) {
         </div>
         <div className="closingMeta">
           <div className="closingLinks">
-            <Link href={withLocale('/privacy', locale)}>
-              {t('footer.privacy')}
-            </Link>
             <Link href={withLocale('/disclaimer', locale)}>
               {t('footer.disclaimer')}
             </Link>
@@ -58,7 +51,7 @@ export default function Footer({ locale }: { locale: Locale }) {
               target="_blank"
               rel="noreferrer"
             >
-              <img src="/ig.svg" alt="" />
+              <img src="/in.svg" alt="" />
             </a>
           </div>
           <div className="closingCopyright">

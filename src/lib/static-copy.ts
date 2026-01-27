@@ -64,6 +64,8 @@ type SiteCopy = {
     responsibility: string
     headingAccuracy: string
     accuracy: string
+    headingAI: string
+    aiNote: string
     headingIP: string
     intellectualProperty: string
     headingContact: string
@@ -184,6 +186,9 @@ const copy: Record<Locale, SiteCopy> = {
       headingAccuracy: 'Accuracy and updates',
       accuracy:
         'I aim to be thoughtful and accurate, but information may change over time. Some posts reflect opinions at a specific moment. I reserve the right to update or revise content as my thinking evolves.',
+      headingAI: 'AI and technical content',
+      aiNote:
+        'The AI examples, technical explanations, code snippets, and usage scenarios shared on this site are for experimentation and learning. Please evaluate them within your own context before applying them. They should not be used as the sole reference for production environments or critical decisions.',
       headingIP: 'Intellectual property',
       intellectualProperty:
         'Unless stated otherwise, all content on this site is my original work. You are welcome to quote short excerpts with proper attribution. Please do not reproduce full articles without permission.',
@@ -275,30 +280,29 @@ const copy: Record<Locale, SiteCopy> = {
           copy: 'Bana başka türlü düşünmeyi hatırlatan insanlar.',
         },
       ],
-      beyondTitle: 'Yazıların ötesi / Bu sayfanın dışında',
+      beyondTitle: 'Beni başka nerelerde bulabilirsiniz',
       beyondNote:
-        'Bu site çoğunlukla nasıl düşündüğüm ve neler inşa ettiğimle ilgili. Daha insani, filtrelenmemiş tarafı — günlük anlar, kısa düşünceler ve hayatın arası — merak ediyorsan Instagram’da paylaşıyorum.',
-      instagramCta: 'Instagram’da takip et',
+        'Bu site düşünme ve yazma alanım. Günlük hayat, küçük notlar ve arada kalanlar Instagram’da.',
+      instagramCta: 'Instagram',
       linkedInNote:
-        'Daha profesyonel sohbetler, iş güncellemeleri ve iş birlikleri için LinkedIn’de de varım.',
-      linkedInCta: 'LinkedIn’de bağlantı kur',
-      noteTitle: 'Küçük bir not',
+        'İş tarafı, güncellemeler ve profesyonel konular için ise LinkedIn’deyim.',
+      linkedInCta: 'Linkedin',
+      noteTitle: 'Dipnot',
       noteBodyPrefix:
-        'Bu site bir yan proje olarak başladı: AI araçlarıyla deneyler yaparken, yaparak öğrenirken ve bazen de bir şeyleri bozarken inşa edildi. Basit bir kurulumla yapıldı ve',
+        'Bu sitenin kaynak kodu açık. Merak ediyorsan inceleyebilir, fork’layabilir ya da kendi projelerinde ilham olarak kullanabilirsin. Basit bir kurulumla inşa edildi ve Vercel üzerinde barındırılıyor.',
       noteBodySuffix:
         ' üzerinde barındırılıyor. Kendi küçük köşelerini internette inşa edenlere faydalı (ya da en azından cesaret verici) olabileceğini düşünerek açık kaynak yapmaya karar verdim.',
-      sourceCta: 'GitHub’da kaynak koda bak',
-      noteSmall: 'İnceleyebilir, fork’layabilir ya da fikir alabilirsin.',
+      sourceCta: 'GitHub’da kodu görebilirsiniz',
     },
     thoughts: {
       title: 'Yazılar',
       lead: 'Burası yazılar sayfası olacak. Hazır olunca yazıları buraya ekle.',
     },
     recommendations: {
-      lead: 'Bu sayfa yapım aşamasında. Merak ediyorsan daha sonra tekrar bak. :)',
+      lead: 'Bu sayfa yapım aşamasında. Merak edersniz daha sonra tekrar bakın. :)',
     },
     heroes: {
-      lead: 'Bu konu üzerinde hâlâ düşünüyorum. Bazı insanlar zamanla kendini gösteriyor.',
+      lead: 'Bu konu üzerinde hâlâ düşünüyorum. Kahramanlar hemen seçilmiyor.',
     },
     contact: {
       title: 'Bana Ulaş',
@@ -313,52 +317,55 @@ const copy: Record<Locale, SiteCopy> = {
     },
     disclaimer: {
       eyebrow: 'Eces Notes Web Sitesi',
-      title: 'Sorumluluk Reddi',
+      title: 'Sorumluluk Notu',
       bylineName: 'Ece Camci tarafından',
       publishedOnPrefix: '',
       publishedOnSuffix: ' tarihinde yayınlandı',
-      bylineDate: '24 Kasım 2015, Salı',
+      bylineDate: '24 Kasım 2025',
       intro:
-        'Bu sitedeki içerikler kişisel görüşlerimi ve deneyimlerimi yansıtır. Buradaki tüm yazılar yalnızca bilgilendirme ve eğitim amaçlıdır.',
+        'Bu sitedeki içerikler kişisel görüşlerimi ve deneyimlerimi yansıtır. Buradaki tüm yazılar yalnızca bilgilendirme ve öğrenme amaçlıdır.',
       headingNotProfessional: 'Profesyonel tavsiye değildir',
-      notProfessionalLead: 'Bu sitedeki hiçbir şey şu anlamlara gelmez:',
+      notProfessionalLead: 'Bu sitedeki hiçbir içerik;',
       notProfessionalItems: [
         'hukuki tavsiye',
         'finansal tavsiye',
         'tıbbi tavsiye',
-        'veya profesyonel danışmanlık yerine geçer',
+        'veya herhangi bir profesyonel danışmanlık yerine geçmez',
       ],
       responsibility:
-        'İçeriğe dayanarak aldığınız kararların sorumluluğu size aittir.',
+        'Buradaki içeriklere dayanarak aldığınız kararların sorumluluğu size aittir.',
       headingAccuracy: 'Doğruluk ve güncellemeler',
       accuracy:
-        'Doğru ve dikkatli olmaya çalışırım, ancak bilgiler zamanla değişebilir. Bazı yazılar belirli bir anın düşüncelerini yansıtır. İçerikleri güncelleme veya revize etme hakkımı saklı tutarım.',
+        'İçerikleri doğru ve güncel tutmaya özen gösteririm. Ancak teknoloji hızla değiştiği için bazı bilgiler zamanla geçerliliğini yitirebilir. Bazı yazılar belirli bir dönemdeki düşüncelerimi yansıtır. İçerikleri güncelleme, değiştirme veya kaldırma hakkımı saklı tutarım.',
+      headingAI: 'Yapay zekâ ve teknik içerikler hakkında',
+      aiNote:
+        'Bu sitede paylaşılan yapay zekâ örnekleri, teknik anlatımlar, kod parçaları ve kullanım senaryoları deneme ve öğrenme amaçlıdır. Doğrudan uygulanmadan önce kendi koşullarınıza göre değerlendirilmelidir. Üretim ortamlarında ya da kritik kararlar öncesinde tek başına referans olarak kullanılmamalıdır.',
       headingIP: 'Fikri mülkiyet',
       intellectualProperty:
         'Aksi belirtilmedikçe bu sitedeki tüm içerikler bana aittir. Kısa alıntıları uygun atıfla kullanabilirsiniz. Lütfen tam yazıları izinsiz çoğaltmayın.',
       headingContact: 'İletişim',
       contactLead:
-        'İçerik veya kullanım hakkında soruların varsa bana yazabilirsin:',
+        'İçerik veya kullanım hakkında sorularınız olursa bana buradan yazabilirsiniz:',
     },
     privacy: {
       eyebrow: 'Eces Notes Web Sitesi',
-      title: 'Gizlilik Politikası',
+      title: 'Gizlilik',
       bylineName: 'Ece Camci tarafından',
       publishedOnPrefix: '',
       publishedOnSuffix: ' tarihinde yayınlandı',
-      bylineDate: '24 Kasım 2015, Salı',
+      bylineDate: '24 Kasım 2025',
       lastUpdated: 'Son güncelleme: Ocak 2026',
       headingPrivacy: 'Gizlilik',
       privacyIntro: [
-        'Bu kişisel bir web sitesi ve yazı alanıdır.',
-        'Kendi gizliliğimi ve seninkini önemsiyorum. Bu sayfa, siteyi ziyaret ettiğinde hangi verilerin (varsa) toplandığını sade bir şekilde açıklar.',
+        'Burası kişisel bir web sitesi ve yazı alanı.',
+        'Kendi gizliliğimi önemsediğim gibi sizinkini de önemsiyorum. Bu sayfa, siteyi ziyaret ettiğinizde hangi verilerin (varsa) toplandığını açık ve sade bir şekilde anlatır.',
       ],
       headingCollected: 'Toplanan bilgiler',
       collected: [
         {
           title: 'Anonim kullanım verileri',
           body: [
-            'Çoğu web sitesinde olduğu gibi, temel ve toplulaştırılmış trafik verileri toplanabilir (örneğin sayfa görüntüleme veya ülke gibi genel konum).',
+            'Çoğu web sitesinde olduğu gibi, temel ve toplulaştırılmış trafik verileri toplanabilir. Örneğin sayfa görüntüleme sayıları ya da ülke bazlı genel konum gibi bilgiler.',
             'Bu veriler yalnızca sitenin nasıl kullanıldığını anlamak ve iyileştirmek için kullanılır.',
           ],
         },
