@@ -22,7 +22,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${newsreader.variable} bg-[--bg] text-[--text] antialiased`}
       >
-        <div>{children}</div>
+        <div className="site-layout">{children}</div>
       </body>
     </html>
   )
