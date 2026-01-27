@@ -97,6 +97,7 @@ type SiteCopy = {
 }
 
 const copy: Record<Locale, SiteCopy> = {
+  /*
   en: {
     home: {
       heroTitle: 'Merhaba',
@@ -239,6 +240,7 @@ const copy: Record<Locale, SiteCopy> = {
       publishedOnSuffix: '',
     },
   },
+  */
   tr: {
     home: {
       heroTitle: 'Hoşgeldiniz!',
