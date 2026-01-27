@@ -336,7 +336,7 @@ content:
          Bu dönüşüm birkaç farklı mekanizma üzerinden yapılsa da, sistemin kalbinde tek bir altın kural var: **Her kelime eşit derecede önemli değildir.** İşte tam bu noktada, modelin hangi kelimeye ne kadar odaklanacağını seçtiği o meşhur **Attention (Dikkat)** mekanizması devreye girer.
         
 
-       <h33 className="writingArticle__transformerTitle">Attention: Hangi token, ne kadar önemli?</h33>
+       <h3 className="writingArticle__transformerTitle">Attention: Hangi token, ne kadar önemli?</h3>
 
        Attention mekanizması aslında şu basit ama hayati soruyu sorar: "Bu cümleyi doğru anlamak için, şu anda hangi token’lara, ne kadar odaklanmalıyım?"
 
@@ -608,7 +608,7 @@ content:
      
      Ancak heyecanlanmayın, model hala bir kelime üretmedi! Bu çıkan vektörler nihai karar değil; sadece bir sonraki aşamada **(Feedforward (FFN))** daha da işlenmek üzere hazırlanmış, anlamı derinleşmiş ara temsilcilerdir.
              
-                <h33 className="writingArticle__transformerTitle">Feedforward: Anlamın pişirildiği mutfak</h33>
+                <h3 className="writingArticle__transformerTitle">Feedforward: Anlamın pişirildiği mutfak</h3>
 
       Attention mekanizması görevini tamamlayıp her token için diğer kelimelerle harmanlanmış o bağlamsal matrisi (Output) önümüze koyduğunda, aslında sadece "kimin kiminle ne kadar ilişkili olduğunu" çözmüş oluruz. Ancak sadece konuşmak yetmez; bu konuşmadan çıkan mesajın işlenmesi, rafine edilmesi ve kalıcı bir "bilgiye" dönüşmesi gerekir.  
       
@@ -638,7 +638,7 @@ content:
           olarak çalışır; biri bağı kurar, diğeri o bağı işler.
         </Note>
 
-      <h33 className="writingArticle__transformerTitle">Transformer Blokları (Attention + Feedforward): Döngünün defalarca tekrarlanması</h33>
+      <h3 className="writingArticle__transformerTitle">Transformer Blokları (Attention + Feedforward): Döngünün defalarca tekrarlanması</h3>
 
       Bu noktada durup bir perspektif kazanalım: Bir Transformer bloğu (Attention + Feedforward) bittiğinde süreç hemen sona ermiyor. <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Paylaştığımız o interaktif görsellerdeki</a> "11 more identical Transformer Blocks" ifadesi, bu sürecin dikey bir maraton olduğunu fısıldıyor.
 
