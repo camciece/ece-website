@@ -2,12 +2,13 @@ import Footer from '@/components/footer'
 import type { Locale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 
-export default function DisclaimerPage({
+export default async function DisclaimerPage({
   params,
 }: {
-  params: { locale: Locale }
+  params: Promise<{ locale: Locale }>
 }) {
-  const copy = getCopy(params.locale)
+  const { locale } = await params
+  const copy = getCopy(locale)
   return (
     <main className="disclaimerPage">
       <section className="disclaimerShell">
@@ -57,7 +58,7 @@ export default function DisclaimerPage({
           </p>
         </article>
       </section>
-      <Footer locale={params.locale} />
+      <Footer locale={locale} />
     </main>
   )
 }

@@ -4,8 +4,13 @@ import { withLocale } from '@/lib/locale'
 import { getAllPosts } from '@/lib/md'
 import Link from 'next/link'
 
-export default function Writing({ params }: { params: { locale: Locale } }) {
-  const writings = getAllPosts(params.locale)
+export default async function Writing({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}) {
+  const { locale } = await params
+  const writings = getAllPosts(locale)
   return (
     <main className="writingPage">
       <section className="simpleSection"></section>
@@ -16,7 +21,7 @@ export default function Writing({ params }: { params: { locale: Locale } }) {
             <Link
               key={post.slug}
               className="writingCard"
-              href={withLocale(`/writing/${post.slug}`, params.locale)}
+              href={withLocale(`/writing/${post.slug}`, locale)}
             >
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
@@ -30,7 +35,7 @@ export default function Writing({ params }: { params: { locale: Locale } }) {
         </div>
       </section>
 
-      <Footer locale={params.locale} />
+      <Footer locale={locale} />
     </main>
   )
 }

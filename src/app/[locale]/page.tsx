@@ -5,16 +5,21 @@ import { getAllPosts } from '@/lib/md'
 import { getCopy } from '@/lib/static-copy'
 import Link from 'next/link'
 
-export default function Home({ params }: { params: { locale: Locale } }) {
-  const [latest] = getAllPosts(params.locale)
-  const copy = getCopy(params.locale)
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}) {
+  const { locale } = await params
+  const [latest] = getAllPosts(locale)
+  const copy = getCopy(locale)
   return (
     <main className="home">
       <section className="homeHeroBg">
         <div className="homeHeroFrame">
           <Link
             className="heroStage__card heroStage__card--link"
-            href={withLocale('/writing', params.locale)}
+            href={withLocale('/writing', locale)}
           >
             <h1>{copy.home.heroTitle}</h1>
             <p>{copy.home.heroBody}</p>
@@ -28,7 +33,7 @@ export default function Home({ params }: { params: { locale: Locale } }) {
           <h2>{copy.home.latestTitle}</h2>
           <Link
             className="sectionLink"
-            href={withLocale('/writing', params.locale)}
+            href={withLocale('/writing', locale)}
           >
             {copy.home.viewAll}
           </Link>
@@ -37,7 +42,7 @@ export default function Home({ params }: { params: { locale: Locale } }) {
           {latest ? (
             <Link
               className="writingCard writingCard--featured writingCard--link"
-              href={withLocale(`/writing/${latest.slug}`, params.locale)}
+              href={withLocale(`/writing/${latest.slug}`, locale)}
             >
               <div className="writingCard__body">
                 <div className="writingCard__content">
@@ -59,7 +64,7 @@ export default function Home({ params }: { params: { locale: Locale } }) {
         </div>
       </section>
 
-      <Footer locale={params.locale} />
+      <Footer locale={locale} />
     </main>
   )
 }

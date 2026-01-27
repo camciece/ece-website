@@ -6,12 +6,13 @@ import Link from 'next/link'
 
 const topicHrefs = ['/writing', '/recommendations', '/heroes'] as const
 
-export default function MeetEcePage({
+export default async function MeetEcePage({
   params,
 }: {
-  params: { locale: Locale }
+  params: Promise<{ locale: Locale }>
 }) {
-  const copy = getCopy(params.locale)
+  const { locale } = await params
+  const copy = getCopy(locale)
   return (
     <main className="meetPage">
       <section className="homeHeroBg meetHeroBg">
@@ -24,7 +25,11 @@ export default function MeetEcePage({
 
       <section className="meetSection meetSection--intro">
         <div className="meetSectionFrame">
-          <p className="meetStatement">{copy.meet.intro}</p>
+          {copy.meet.intro.map((paragraph) => (
+            <p key={paragraph} className="meetStatement">
+              {paragraph}
+            </p>
+          ))}
         </div>
       </section>
 
@@ -38,7 +43,7 @@ export default function MeetEcePage({
               <Link
                 key={topic.title}
                 className="meetTopics__card"
-                href={withLocale(topicHrefs[index], params.locale)}
+                href={withLocale(topicHrefs[index], locale)}
               >
                 <h3>{topic.title}</h3>
                 <p>{topic.copy}</p>
@@ -109,7 +114,7 @@ export default function MeetEcePage({
         </div>
       </section>
 
-      <Footer locale={params.locale} />
+      <Footer locale={locale} />
     </main>
   )
 }

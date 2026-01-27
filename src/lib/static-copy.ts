@@ -15,7 +15,7 @@ type SiteCopy = {
   }
   meet: {
     heroTitle: string
-    intro: string
+    intro: string[]
     topicsTitle: string
     topics: Topic[]
     beyondTitle: string
@@ -107,8 +107,10 @@ const copy: Record<Locale, SiteCopy> = {
     },
     meet: {
       heroTitle: 'Meet Ece',
-      intro:
-        'I work in tech and I’m currently carving my own path within it. I love experimenting with AI tools, and somewhere along the way, that curiosity turned into building this website through a bit of vibe coding. Writing helps me think, learn, and actually digest what I’m building, so I share what I learn as I go.',
+      intro: [
+        'I work in tech and I’m currently carving my own path within it. I love experimenting with AI tools, and somewhere along the way, that curiosity turned into building this website through a bit of vibe coding.',
+        'Writing helps me think, learn, and actually digest what I’m building, so I share what I learn as I go.',
+      ],
       topicsTitle: 'What I write about',
       topics: [
         {
@@ -245,13 +247,24 @@ const copy: Record<Locale, SiteCopy> = {
     },
     meet: {
       heroTitle: 'Ece ile Tanışın',
-      intro:
-        'Teknoloji alanında çalışıyorum ve şu sıralar kendi yolumu çiziyorum. Yapay zekâ araçlarıyla denemeler yapmayı seviyorum ve bu merak bir noktada bu siteyi “vibe coding” ile kurmaya dönüştü. Yazmak, ne inşa ettiğimi düşünmemi, öğrenmemi ve sindirmemi sağlıyor; ben de öğrendiklerimi süreç boyunca paylaşıyorum.',
+      intro: [
+        'Türkiye ve Hollanda’da endüstri ve sistem mühendisliği üzerine eğitim aldım. Çalıştığım zamanlarda teknoloji sektöründeyim; aralarda bilerek yavaşlayıp kendimle kalmayı, beni besleyen başka şeylere alan açmayı seviyorum. Altyapım gereği teknolojiye bakarken beni asıl ilgilendiren şey hep tekil çözümlerden çok sistemler, süreçler ve bunların gerçek hayatta nasıl karşılık bulduğu.',
+
+        'Çalıştığım dönemlerde merakım gereği kamuda ve özel sektörde bulundum. Batı merkezli teknoloji şirketlerinde de çalıştım, Doğu kültürünün baskın olduğu yapılarda da. Bu geçişler teknolojiye farklı kültürler içinde nasıl üretildiği ve benimsendiğini görmemi bakmamı sağladı. Hiçbir zaman klasik anlamda kariyer kovalayan, kurumsal hayata kendini kaptırmış biri olmadım. Yaptığım şeyleri gerçekten ilgimi çektiği ve içime sindiği için yaptım. Yirmili yaşlarımın ortasında hayatımın 2 senesini backpacker gibi, solo traveler olarak dünyayı gezerek geçirdim. O yüzden sistemin tamamen dışında da değilim, tam içinde de. Bir yandan parçasıyım, bir yandan da gözlemcisiyim.',
+
+        'Son birkaç senedir özellikle yapay zekâ tarafında çalışıyorum. Dürüst olmak gerekirse pandemiden sonra değişen dünyada bu alanda çalışmayı çok sevdim. Hem değişen çalışma şartları nedeniyle hem de bullshit’e daha az alan kalmasından dolayı.',
+
+        'Arkadaşlarım çalışmadığım dönemlerde gezi, lifestyle ya da yeme içme gibi konularda bir blog açmam gerektiğini söylerdi. Ben de en sonunda gidip, uğruna yazılacak gerçekten bir şey var diyerek bir AI tech blog açtım. Bu blog, genel bir teknoloji blogu değil. Burada yalnızca yapay zekâyı ve yapay zekânın gerçek dünyadaki uygulamalarını yazıyorum. Zaten bu site de yapay zekâ araçlarıyla denemeler yaparken, bir noktada vibe coding sırasında ortaya çıktı ve zamanla benim için bir düşünme alanına dönüştü.',
+
+        'Yazmak, neyle uğraştığımı görmeme ve öğrendiklerimi sindirmeme yardımcı oluyor. Burada karşıma çıkanları, kafamda netleşenleri ve hâlâ netleşmeyenleri paylaşıyorum. Tamamlanmış cevaplardan çok, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.',
+
+        'Herkese iyi okumalar. Geri bildirimlerinizi ve merak ettiklerinizi paylaşmaktan çekinmeyin.',
+      ],
       topicsTitle: 'Neler hakkında yazıyorum',
       topics: [
         {
           title: 'AI Serisi',
-          copy: 'Yapay zekâyı anlama ve inşa etmenin işe yarayan sınırları.',
+          copy: 'Yapay zekânın nasıl çalıştığını ve uygulamalarını adım adım ele aldığım yazılar.',
         },
         {
           title: 'Öneriler',
@@ -259,7 +272,7 @@ const copy: Record<Locale, SiteCopy> = {
         },
         {
           title: 'İlham Aldıklarım',
-          copy: 'Daha geniş düşünmemi sağlayan insanlar.',
+          copy: 'Bana başka türlü düşünmeyi hatırlatan insanlar.',
         },
       ],
       beyondTitle: 'Yazıların ötesi / Bu sayfanın dışında',

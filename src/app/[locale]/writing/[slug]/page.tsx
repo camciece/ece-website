@@ -13,18 +13,19 @@ import { notFound } from 'next/navigation'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
-export default function Post({
+export default async function Post({
   params,
 }: {
-  params: { locale: Locale; slug: string }
+  params: Promise<{ locale: Locale; slug: string }>
 }) {
+  const { locale, slug } = await params
   let post
   try {
-    post = getPost(params.slug, params.locale)
+    post = getPost(slug, locale)
   } catch {
     notFound()
   }
-  const copy = getCopy(params.locale)
+  const copy = getCopy(locale)
 
   return (
     <main className="writingPage">
@@ -70,7 +71,7 @@ export default function Post({
         </div>
       </article>
 
-      <Footer locale={params.locale} />
+      <Footer locale={locale} />
     </main>
   )
 }
