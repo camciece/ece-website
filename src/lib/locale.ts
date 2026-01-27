@@ -14,7 +14,9 @@ export function stripLocale(pathname: string): string {
   return stripped.length === 0 ? '/' : stripped
 }
 
-export function withLocale(pathname: string, locale: Locale): string {
+// Updated to not add locale prefix - just returns the pathname as-is
+export function withLocale(pathname: string): string {
+  // Remove any existing locale prefix and return clean path
   const base = stripLocale(pathname.startsWith('/') ? pathname : `/${pathname}`)
-  return base === '/' ? `/${locale}` : `/${locale}${base}`
+  return base
 }

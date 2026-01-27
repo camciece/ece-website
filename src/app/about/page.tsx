@@ -1,3 +1,3 @@
 export default function About() {
-  return null;
+  return null
 }

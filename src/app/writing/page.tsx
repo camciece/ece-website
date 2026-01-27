@@ -1,15 +1,10 @@
 import Footer from '@/components/footer'
-import type { Locale } from '@/lib/locale'
-import { withLocale } from '@/lib/locale'
+import { defaultLocale } from '@/lib/locale'
 import { getAllPosts } from '@/lib/md'
 import Link from 'next/link'
 
-export default async function Writing({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>
-}) {
-  const { locale } = await params
+export default async function Writing() {
+  const locale = defaultLocale
   const writings = getAllPosts(locale)
   return (
     <main className="writingPage">
@@ -21,7 +16,7 @@ export default async function Writing({
             <Link
               key={post.slug}
               className="writingCard"
-              href={withLocale(`/writing/${post.slug}`, locale)}
+              href={`/writing/${post.slug}`}
             >
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
@@ -39,7 +34,7 @@ export default async function Writing({
         </div>
       </section>
 
-      <Footer locale={locale} />
+      <Footer />
     </main>
   )
 }

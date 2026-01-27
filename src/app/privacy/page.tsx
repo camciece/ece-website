@@ -1,13 +1,9 @@
 import Footer from '@/components/footer'
-import type { Locale } from '@/lib/locale'
+import { defaultLocale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 
-export default async function PrivacyPage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>
-}) {
-  const { locale } = await params
+export default async function PrivacyPage() {
+  const locale = defaultLocale
   const copy = getCopy(locale)
   return (
     <main className="disclaimerPage">
@@ -33,9 +29,7 @@ export default async function PrivacyPage({
           {copy.privacy.privacyIntro.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
-          <h2 className="disclaimerHeading">
-            {copy.privacy.headingCollected}
-          </h2>
+          <h2 className="disclaimerHeading">{copy.privacy.headingCollected}</h2>
           <ul className="privacyList">
             {copy.privacy.collected.map((item) => (
               <li key={item.title}>
@@ -61,7 +55,7 @@ export default async function PrivacyPage({
           <p>{copy.privacy.closing}</p>
         </article>
       </section>
-      <Footer locale={locale} />
+      <Footer />
     </main>
   )
 }

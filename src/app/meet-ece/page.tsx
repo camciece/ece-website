@@ -1,17 +1,12 @@
 import Footer from '@/components/footer'
-import type { Locale } from '@/lib/locale'
-import { withLocale } from '@/lib/locale'
+import { defaultLocale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 import Link from 'next/link'
 
 const topicHrefs = ['/writing', '/recommendations', '/heroes'] as const
 
-export default async function MeetEcePage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>
-}) {
-  const { locale } = await params
+export default async function MeetEcePage() {
+  const locale = defaultLocale
   const copy = getCopy(locale)
   return (
     <main className="meetPage">
@@ -43,7 +38,7 @@ export default async function MeetEcePage({
               <Link
                 key={topic.title}
                 className="meetTopics__card"
-                href={withLocale(topicHrefs[index], locale)}
+                href={topicHrefs[index]}
               >
                 <h3>{topic.title}</h3>
                 <p>{topic.copy}</p>
@@ -105,7 +100,7 @@ export default async function MeetEcePage({
         </div>
       </section>
 
-      <Footer locale={locale} />
+      <Footer />
     </main>
   )
 }

@@ -1,9 +1,8 @@
 'use client'
 
-import type { Locale } from '@/lib/locale'
-import { stripLocale, withLocale } from '@/lib/locale'
+import { stripLocale } from '@/lib/locale'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -14,11 +13,10 @@ const links = [
   { href: '/heroes', label: 'nav.heroes' },
 ]
 
-export default function Header({ locale }: { locale: Locale }) {
+export default function Header() {
   const pathname = usePathname() || '/'
-  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const currentPath = stripLocale(pathname)
 
   /*
@@ -36,11 +34,7 @@ export default function Header({ locale }: { locale: Locale }) {
       <div className="topBar__wrap">
         {/* LEFT island */}
         <div className="island island--logo">
-          <Link
-            href={withLocale('/', locale)}
-            className="logoLink"
-            aria-label={t('nav.home')}
-          >
+          <Link href="/" className="logoLink" aria-label={t('nav.home')}>
             <span className="logoBadge">
               Eces
               <br />
@@ -64,11 +58,7 @@ export default function Header({ locale }: { locale: Locale }) {
             >
               <span className="menuIcon" aria-hidden />
             </button>
-            <Link
-              href={withLocale('/', locale)}
-              className="logoCenter"
-              aria-label={t('nav.home')}
-            >
+            <Link href="/" className="logoCenter" aria-label={t('nav.home')}>
               EcesNotes
             </Link>
             {/*
@@ -93,7 +83,7 @@ export default function Header({ locale }: { locale: Locale }) {
               return (
                 <Link
                   key={l.href}
-                  href={withLocale(l.href, locale)}
+                  href={l.href}
                   className={`navPill ${active ? 'isActive' : ''}`}
                 >
                   {t(l.label)}
@@ -128,7 +118,7 @@ export default function Header({ locale }: { locale: Locale }) {
             return (
               <Link
                 key={l.href}
-                href={withLocale(l.href, locale)}
+                href={l.href}
                 className={`mobileMenu__link ${active ? 'isActive' : ''}`}
                 onClick={() => setMenuOpen(false)}
               >

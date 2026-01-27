@@ -1,12 +1,8 @@
-import type { Locale } from '@/lib/locale'
+import { defaultLocale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 
-export default async function RecommendationsPage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>
-}) {
-  const { locale } = await params
+export default async function RecommendationsPage() {
+  const locale = defaultLocale
   const copy = getCopy(locale)
   return (
     <main className="simplePage">

@@ -1,13 +1,9 @@
 import Footer from '@/components/footer'
-import type { Locale } from '@/lib/locale'
+import { defaultLocale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 
-export default async function ContactPage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>
-}) {
-  const { locale } = await params
+export default async function ContactPage() {
+  const locale = defaultLocale
   const copy = getCopy(locale)
   return (
     <main className="contactPage">
@@ -61,7 +57,7 @@ export default async function ContactPage({
           </button>
         </form>
       </section>
-      <Footer locale={locale} />
+      <Footer />
     </main>
   )
 }

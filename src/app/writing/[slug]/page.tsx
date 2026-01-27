@@ -6,7 +6,7 @@ import Matrix from '@/components/matrix'
 import Note from '@/components/note'
 import ReadingModeToggle from '@/components/reading-mode-toggle'
 import TokenDemo from '@/components/token-demo'
-import type { Locale } from '@/lib/locale'
+import { defaultLocale } from '@/lib/locale'
 import { getPost } from '@/lib/md'
 import { getCopy } from '@/lib/static-copy'
 import { MDXRemote } from 'next-mdx-remote/rsc'
@@ -17,9 +17,10 @@ import remarkMath from 'remark-math'
 export default async function Post({
   params,
 }: {
-  params: Promise<{ locale: Locale; slug: string }>
+  params: Promise<{ slug: string }>
 }) {
-  const { locale, slug } = await params
+  const { slug } = await params
+  const locale = defaultLocale
   let post
   try {
     post = getPost(slug, locale)
@@ -74,7 +75,7 @@ export default async function Post({
         <EngagementSection slug={slug} locale={locale} />
       </article>
 
-      <Footer locale={locale} />
+      <Footer />
     </main>
   )
 }
