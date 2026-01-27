@@ -4,14 +4,19 @@
 import { useEffect, useRef, useState } from 'react'
 
 interface Scatterplot3DDemoProps {
-  points?: number[][][]
+  pointSets?: PointSet[]
   labels?: string[]
   width?: number
   height?: number
 }
 
+interface PointSet {
+  points: number[][]
+  name: string
+}
+
 export default function Scatterplot3DDemo({
-  points = [],
+  pointSets = [],
   labels = [],
   width = 720,
   height = 480,
@@ -23,7 +28,8 @@ export default function Scatterplot3DDemo({
   useEffect(() => {
     if (!containerRef.current || scriptLoadedRef.current)
       return // Store points data globally for the script to access
-    ;(window as any).scatterplot3dPoints = points
+    ;(window as any).scatterplot3dPoints = pointSets.map((set) => set.points)
+    ;(window as any).scatterplot3dSetNames = pointSets.map((set) => set.name)
     ;(window as any).scatterplot3dLabels = labels
     ;(window as any).scatterplot3dCurrentIndex = currentIndex
     ;(window as any).scatterplot3dWidth = width
@@ -63,12 +69,13 @@ export default function Scatterplot3DDemo({
         script.parentNode.removeChild(script)
       }
       delete (window as any).scatterplot3dPoints
+      delete (window as any).scatterplot3dSetNames
       delete (window as any).scatterplot3dLabels
       delete (window as any).scatterplot3dCurrentIndex
       delete (window as any).scatterplot3dWidth
       delete (window as any).scatterplot3dHeight
     }
-  }, [points, labels, width, height])
+  }, [pointSets, labels, width, height])
 
   // Re-initialize when currentIndex changes
   useEffect(() => {
@@ -110,8 +117,8 @@ export default function Scatterplot3DDemo({
   }, [])
 
   const handleNext = () => {
-    if (points.length > 0) {
-      setCurrentIndex((prev) => (prev + 1) % points.length)
+    if (pointSets.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % pointSets.length)
     }
   }
 
@@ -121,25 +128,9 @@ export default function Scatterplot3DDemo({
         ref={containerRef}
         style={{ position: 'relative', display: 'inline-block' }}
       >
-        {points.length > 1 && (
-          <button
-            onClick={handleNext}
-            style={{
-              position: 'absolute',
-              bottom: '20px',
-              right: '20px',
-              padding: '8px 16px',
-              backgroundColor: '#4f46e5',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              zIndex: 10,
-            }}
-          >
-            Next ({currentIndex + 1}/{points.length})
+        {pointSets.length > 1 && (
+          <button onClick={handleNext} className="scatterplot3d__button">
+            {pointSets[currentIndex].name}
           </button>
         )}
       </div>

@@ -2208,6 +2208,26 @@ ol.writingArticle__TokenizerList {
   font-size: 16px;
 }
 
+.scatterplot3d__button {
+  position: absolute;
+  width: 120px;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.scatterplot3d__button:hover {
+  background-color: #4338ca;
+}
+
 .writingArticle__embedVisualization {
   display: flex;
   flex-direction: column;
