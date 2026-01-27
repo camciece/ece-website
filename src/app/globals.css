@@ -1202,18 +1202,10 @@ body.text-\[--text\] {
 }
 
 .writingCard__media--one {
-  background-image: url('/LLMArch.png');
+  object-fit: cover;
   background-size: contain;
   background-position: 65%;
   background-repeat: no-repeat;
-}
-
-.writingCard__media--two {
-  background-image: url('/LLMArch.png');
-}
-
-.writingCard__media--three {
-  background-image: linear-gradient(120deg, #9b9fa5, #d0d3d8);
 }
 
 .writingPage {

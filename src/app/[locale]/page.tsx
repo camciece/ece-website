@@ -57,7 +57,11 @@ export default async function Home({
                 ) : null}
               </div>
               <div className="writingCard__visual">
-                <div className="writingCard__media writingCard__media--one" />
+                <img
+                  className="writingCard__media writingCard__media--one"
+                  src="/LLMs.png"
+                  alt="LLMs"
+                />
               </div>
             </Link>
           ) : null}

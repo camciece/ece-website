@@ -29,7 +29,11 @@ export default async function Writing({
                 <h3>{post.title}</h3>
                 {post.excerpt ? <p>{post.excerpt}</p> : null}
               </div>
-              <div className="writingCard__media writingCard__media--one" />
+              <img
+                className="writingCard__media writingCard__media--one"
+                src="/LLMs.png"
+                alt="LLMs"
+              />
             </Link>
           ))}
         </div>
