@@ -321,7 +321,7 @@ const copy: Record<Locale, SiteCopy> = {
       bylineName: 'Ece Camci tarafından',
       publishedOnPrefix: '',
       publishedOnSuffix: ' tarihinde yayınlandı',
-      bylineDate: '24 Kasım 2025',
+      bylineDate: '27 Ocak 2026',
       intro:
         'Bu sitedeki içerikler kişisel görüşlerimi ve deneyimlerimi yansıtır. Buradaki tüm yazılar yalnızca bilgilendirme ve öğrenme amaçlıdır.',
       headingNotProfessional: 'Profesyonel tavsiye değildir',
@@ -353,7 +353,7 @@ const copy: Record<Locale, SiteCopy> = {
       bylineName: 'Ece Camci tarafından',
       publishedOnPrefix: '',
       publishedOnSuffix: ' tarihinde yayınlandı',
-      bylineDate: '24 Kasım 2025',
+      bylineDate: '27 Ocak 2026',
       lastUpdated: 'Son güncelleme: Ocak 2026',
       headingPrivacy: 'Gizlilik',
       privacyIntro: [
