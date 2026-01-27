@@ -27,7 +27,6 @@ type SiteCopy = {
     noteBodyPrefix: string
     noteBodySuffix: string
     sourceCta: string
-    noteSmall: string
   }
   thoughts: {
     title: string
@@ -141,7 +140,6 @@ const copy: Record<Locale, SiteCopy> = {
       noteBodySuffix:
         '. I decided to open-source it in case it’s useful (or at least reassuring) for others building their own small corners on the internet.',
       sourceCta: 'View the source code on GitHub',
-      noteSmall: 'Feel free to explore, fork, or borrow ideas.',
     },
     thoughts: {
       title: 'Writings',

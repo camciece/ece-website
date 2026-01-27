@@ -56,13 +56,9 @@ export default async function MeetEcePage({
       <section className="meetSection meetSection--beyond">
         <div className="meetSectionFrame">
           <div className="meetSectionHeader">
-            <h2 className="meetSectionTitle">
-              {copy.meet.beyondTitle}
-            </h2>
+            <h2 className="meetSectionTitle">{copy.meet.beyondTitle}</h2>
           </div>
-          <p className="meetSectionNote">
-            {copy.meet.beyondNote}
-          </p>
+          <p className="meetSectionNote">{copy.meet.beyondNote}</p>
 
           <Link
             className="meetSectionLink"
@@ -73,9 +69,7 @@ export default async function MeetEcePage({
             {copy.meet.instagramCta}
           </Link>
 
-          <p className="meetSectionNote">
-            {copy.meet.linkedInNote}
-          </p>
+          <p className="meetSectionNote">{copy.meet.linkedInNote}</p>
 
           <Link
             className="meetSectionLink"
@@ -108,9 +102,6 @@ export default async function MeetEcePage({
           >
             {copy.meet.sourceCta}
           </Link>
-          <p className="meetSectionNote meetSectionNote--small">
-            {copy.meet.noteSmall}
-          </p>
         </div>
       </section>
 
