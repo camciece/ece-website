@@ -285,7 +285,7 @@ const copy: Record<Locale, SiteCopy> = {
         'Bu site düşünme ve yazma alanım. Günlük hayat, küçük notlar ve arada kalanlar Instagram’da.',
       instagramCta: 'Instagram',
       linkedInNote:
-        'İş tarafı, güncellemeler ve profesyonel konular için ise LinkedIn’deyim.',
+        'İş tarafı, güncellemeler ve profesyonel konular için ise Linkedin’deyim.',
       linkedInCta: 'Linkedin',
       noteTitle: 'Dipnot',
       noteBodyPrefix:
