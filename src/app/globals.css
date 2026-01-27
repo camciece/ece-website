@@ -3518,7 +3518,7 @@ ol.writingArticle__TokenizerList {
 
 .meetStatement {
   margin: 30px;
-  font-size: clamp(20px, 2.6vw, 30px);
+  font-size: clamp(20px, 2.6vw, 25px);
   line-height: 2;
   color: #3a3029;
   font-family: var(--font-news), 'Times New Roman', serif;
@@ -3599,7 +3599,7 @@ ol.writingArticle__TokenizerList {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 0px;
   margin-bottom: 20px;
   color: #000000;
   font-weight: 600;

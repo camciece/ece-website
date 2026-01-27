@@ -282,11 +282,10 @@ const copy: Record<Locale, SiteCopy> = {
       ],
       beyondTitle: 'Beni başka nerelerde bulabilirsiniz',
       beyondNote:
-        'Bu site düşünme ve yazma alanım. Günlük hayat, küçük notlar ve arada kalanlar Instagram’da.',
-      instagramCta: 'Instagram',
-      linkedInNote:
-        'İş tarafı, güncellemeler ve profesyonel konular için ise Linkedin’deyim.',
-      linkedInCta: 'Linkedin',
+        'Bu site düşünme ve yazma alanım. Günlük hayat, küçük notlar ve arada kalanlar için:',
+      instagramCta: "Instagram'da beni bulun",
+      linkedInNote: 'İş tarafı, güncellemeler ve profesyonel konular için:',
+      linkedInCta: "Linkedin'den bağlanalım",
       noteTitle: 'Dipnot',
       noteBodyPrefix:
         'Bu sitenin kaynak kodu açık. Merak ediyorsan inceleyebilir, fork’layabilir ya da kendi projelerinde ilham olarak kullanabilirsin. Basit bir kurulumla inşa edildi ve Vercel üzerinde barındırılıyor.',
