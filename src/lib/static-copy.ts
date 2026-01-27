@@ -245,7 +245,7 @@ const copy: Record<Locale, SiteCopy> = {
     home: {
       heroTitle: 'Hoşgeldiniz!',
       heroBody:
-        'Burası yapay zekâyla çalışırken aldığım notları paylaştığım kişisel bir alan. Biraz teknik detaylar, biraz bu teknolojilerin neden önemli olduğunu ve nereye gittiğini birlikte düşünelim.',
+        'Burası yapay zekâyla çalışırken aldığım notları paylaştığım kişisel bir alan. Biraz teknik detaylar, biraz bu teknolojilerin neden önemli olduğu ve nereye gittiğini gelin birlikte düşünelim.',
       latestTitle: 'Son yazılar',
       viewAll: 'Tümünü gör',
       heroCta: 'İlk yazıyı oku',
