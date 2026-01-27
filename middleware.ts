@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
   // If path has wrong locale prefix (en or other), redirect to tr version
   if (isLocale(segment) && segment !== locale) {
     const url = request.nextUrl.clone()
-    const pathWithoutLocale = pathname.slice(segment.length + 1) || '/'
+    const pathWithoutLocale = pathname.slice(('/' + segment).length) || '/'
     url.pathname = `/${locale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
     return NextResponse.redirect(url)
   }
