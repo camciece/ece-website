@@ -48,6 +48,12 @@ type SiteCopy = {
     emailPlaceholder: string
     messagePlaceholder: string
     send: string
+    successMessage: string
+    errorMessage: string
+    successTitle: string
+    successSubcopy: string
+    backHome: string
+    newMessage: string
   }
   disclaimer: {
     eyebrow: string
@@ -162,6 +168,12 @@ const copy: Record<Locale, SiteCopy> = {
       emailPlaceholder: 'Email Address',
       messagePlaceholder: 'Send me your questions and feedback',
       send: 'Send',
+      successMessage: 'Thanks! Your message has been sent.',
+      errorMessage: 'Something went wrong. Please try again.',
+      successTitle: 'Message received!',
+      successSubcopy: 'I will get back to you as soon as possible.',
+      backHome: 'Back to home',
+      newMessage: 'Send another message',
     },
     disclaimer: {
       eyebrow: "Ece's Notes Website",
@@ -313,6 +325,13 @@ const copy: Record<Locale, SiteCopy> = {
       emailPlaceholder: 'E-posta adresiniz',
       messagePlaceholder: 'Lütfen sorularınızı ve geri bildiriminizi yazın',
       send: 'Gönder',
+      successMessage: 'Teşekkürler! Mesajınız gönderildi.',
+      errorMessage: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+      successTitle: 'Mesajını aldım!',
+      successSubcopy:
+        'En kısa sürede (genellikle 24 saat içinde) sana dönüş yapacağım.',
+      backHome: 'Ana Sayfaya Dön',
+      newMessage: 'Yeni Mesaj Gönder',
     },
     disclaimer: {
       eyebrow: 'Eces Notes Web Sitesi',

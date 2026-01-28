@@ -3152,6 +3152,131 @@ ol.writingArticle__TokenizerList {
   color: #141414;
 }
 
+.contactStatus {
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.contactStatus--success {
+  color: #1e4620;
+  background: #e6f3e8;
+  border: 1px solid #b7d8be;
+}
+
+.contactStatus--error {
+  color: #611a15;
+  background: #fdecea;
+  border: 1px solid #f5c6cb;
+}
+
+.contactSuccess {
+  min-height: 520px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 18px;
+  padding: 24px 0 40px;
+}
+
+.contactSuccess__icon {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 2px;
+}
+
+.contactSuccess__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.contactSuccess__circle {
+  fill: none;
+  stroke: #b7d8be;
+  stroke-width: 4;
+  stroke-dasharray: 176;
+  stroke-dashoffset: 176;
+  animation: contactCircleDraw 1s ease forwards;
+}
+
+.contactSuccess__check {
+  fill: none;
+  stroke: #1f6b2b;
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: contactCheckDraw 0.6s ease 0.9s forwards;
+}
+
+.contactSuccess__title {
+  font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(24px, 4vw, 32px);
+  margin: 0;
+  color: #141414;
+  font-weight: 700;
+}
+
+.contactSuccess__copy {
+  margin: 0 auto;
+  max-width: 360px;
+  color: #4b4f57;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.contactSuccess__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.contactSuccess__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 12px 28px;
+  background: #2f3239;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contactSuccess__button:hover {
+  background: #23262d;
+}
+
+.contactSuccess__link {
+  color: #1f232b;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(31, 35, 43, 0.3);
+}
+
+.contactSuccess__link:hover {
+  border-color: rgba(31, 35, 43, 0.6);
+}
+
+@keyframes contactCircleDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes contactCheckDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 .contactForm {
   display: grid;
   gap: 50px;
