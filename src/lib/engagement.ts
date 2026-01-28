@@ -18,7 +18,10 @@ export type EngagementRecord = {
 
 type Store = Record<string, EngagementRecord>
 
-const dataDir = path.join(process.cwd(), 'data')
+const baseDir = process.env.VERCEL
+  ? path.join('/tmp', 'ece-website')
+  : process.cwd()
+const dataDir = path.join(baseDir, 'data')
 const dataFile = path.join(dataDir, 'engagement.json')
 
 function ensureDataFile() {

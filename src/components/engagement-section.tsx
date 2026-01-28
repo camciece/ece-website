@@ -20,11 +20,31 @@ type EngagementRecord = {
 function formatDate(value: string, locale: string) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
-  return new Intl.DateTimeFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(date)
+  const now = new Date()
+  const diffMs = date.getTime() - now.getTime()
+  const diffSec = Math.round(diffMs / 1000)
+
+  const rtf = new Intl.RelativeTimeFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
+    numeric: 'auto',
+  })
+
+  const absSec = Math.abs(diffSec)
+  if (absSec < 60) return rtf.format(diffSec, 'second')
+
+  const diffMin = Math.round(diffSec / 60)
+  if (Math.abs(diffMin) < 60) return rtf.format(diffMin, 'minute')
+
+  const diffHour = Math.round(diffMin / 60)
+  if (Math.abs(diffHour) < 24) return rtf.format(diffHour, 'hour')
+
+  const diffDay = Math.round(diffHour / 24)
+  if (Math.abs(diffDay) < 30) return rtf.format(diffDay, 'day')
+
+  const diffMonth = Math.round(diffDay / 30)
+  if (Math.abs(diffMonth) < 12) return rtf.format(diffMonth, 'month')
+
+  const diffYear = Math.round(diffDay / 365)
+  return rtf.format(diffYear, 'year')
 }
 
 function readOwnedIds(key: string): Set<string> {
@@ -435,11 +455,13 @@ export default function EngagementSection({
             return (
               <article key={comment.id} className="writingEngagement__item" role="listitem">
                 <header className="writingEngagement__itemHeader">
-                  <strong className="writingEngagement__itemName">{comment.name}</strong>
-                  <div className="writingEngagement__itemMeta">
-                    <time className="writingEngagement__itemTime" dateTime={comment.createdAt}>
+                  <strong className="writingEngagement__itemName">
+                    {comment.name}
+                    <span className="writingEngagement__itemTimeInline">
                       {formatDate(comment.createdAt, locale)}
-                    </time>
+                    </span>
+                  </strong>
+                  <div className="writingEngagement__itemMeta">
                     {comment.updatedAt ? (
                       <span className="writingEngagement__edited">{copy.edited}</span>
                     ) : null}
@@ -513,6 +535,53 @@ export default function EngagementSection({
                     </button>
                   </div>
                 ) : null}
+
+                <div className="writingEngagement__itemEngagement">
+                  <button
+                    type="button"
+                    className="writingEngagement__itemEngage"
+                    aria-label={copy.like}
+                    title={copy.like}
+                  >
+                    <span className="writingEngagement__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" role="img">
+                        <path
+                          d="M7.5 10.5v9H5a2 2 0 0 1-2-2v-4.5a2 2 0 0 1 2-2h2.5Zm2-1.5 2.7-4.8a2 2 0 0 1 3.7 1.5L15 9h3.8a2 2 0 0 1 1.9 2.6l-1.7 5.5a3 3 0 0 1-2.9 2.1H9.5v-9Z"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="writingEngagement__itemEngage"
+                    aria-label={copy.dislike}
+                    title={copy.dislike}
+                  >
+                    <span className="writingEngagement__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" role="img">
+                        <path
+                          d="M16.5 13.5v-9H19a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2h-2.5Zm-2 1.5-2.7 4.8a2 2 0 0 1-3.7-1.5L9 15H5.2a2 2 0 0 1-1.9-2.6l1.7-5.5A3 3 0 0 1 7.9 4h6.6v9Z"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="writingEngagement__itemReply"
+                    aria-label={locale === 'tr' ? 'Yanıtla' : 'Reply'}
+                    title={locale === 'tr' ? 'Yanıtla' : 'Reply'}
+                  >
+                    {locale === 'tr' ? 'Yanıtla' : 'Reply'}
+                  </button>
+                </div>
               </article>
             )
           })}
