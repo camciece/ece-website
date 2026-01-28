@@ -58,12 +58,14 @@ export default function EngagementSection({
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [formActive, setFormActive] = useState(false)
 
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set())
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingName, setEditingName] = useState('')
   const [editingMessage, setEditingMessage] = useState('')
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [pulseReaction, setPulseReaction] = useState<string | null>(null)
 
   const storageKey = useMemo(() => `engagement:owned:${locale}::${slug}`, [locale, slug])
 
@@ -111,13 +113,14 @@ export default function EngagementSection({
     if (locale === 'tr') {
       return {
         title: 'Yorumlar',
-        subtitle: 'Bu yazı faydalı mıydı?',
-        like: 'Beğen',
-        dislike: 'Beğenme',
+        like: 'Beğendim',
+        dislike: 'Beğenmedim',
+        share: 'Paylaş',
         nameLabel: 'İsim (opsiyonel)',
         messageLabel: 'Yorumun',
-        submit: 'Yorumu gönder',
-        empty: 'Henüz yorum yok. İlk yorumu sen yaz.',
+        submit: 'Gönder',
+        cancel: 'İptal',
+        empty: 'Düşüncelerini merak ediyoruz, ilk yorumu sen bırakmak ister misin?',
         loading: 'Yükleniyor...',
         edit: 'Düzenle',
         delete: 'Sil',
@@ -125,17 +128,20 @@ export default function EngagementSection({
         cancel: 'İptal',
         edited: 'düzenlendi',
         ownerHint: 'Sadece kendi yorumlarını düzenleyebilir veya silebilirsin.',
+        proof: 'Okurların %PCT’i bu yazıyı faydalı buldu.',
+        proofEmpty: 'Henüz tepki yok. İlk tepkiyi sen ver.',
       }
     }
 
     return {
       title: 'Comments',
-      subtitle: 'Was this article helpful?',
-      like: 'Like',
-      dislike: 'Dislike',
+      like: 'Liked it',
+      dislike: "Didn't like",
+      share: 'Share',
       nameLabel: 'Name (optional)',
       messageLabel: 'Your comment',
-      submit: 'Post comment',
+      submit: 'Send',
+      cancel: 'Cancel',
       empty: 'No comments yet. Be the first to comment.',
       loading: 'Loading...',
       edit: 'Edit',
@@ -144,6 +150,8 @@ export default function EngagementSection({
       cancel: 'Cancel',
       edited: 'edited',
       ownerHint: 'You can edit or delete your own comments on this device.',
+      proof: '%PCT of readers found this helpful.',
+      proofEmpty: 'No reactions yet. Be the first to react.',
     }
   }, [locale])
 
@@ -222,6 +230,15 @@ export default function EngagementSection({
     [sendAction],
   )
 
+  const onReact = useCallback(
+    async (kind: 'like' | 'dislike', reactionId: string) => {
+      setPulseReaction(reactionId)
+      window.setTimeout(() => setPulseReaction(null), 500)
+      await onVote(kind)
+    },
+    [onVote],
+  )
+
   const onSubmit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -231,6 +248,7 @@ export default function EngagementSection({
       try {
         await sendAction('comment', { name, message }, { trackNewOwnedIds: true })
         setMessage('')
+        setFormActive(false)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
@@ -294,61 +312,121 @@ export default function EngagementSection({
   return (
     <section className="writingEngagement" aria-labelledby="writing-engagement-title">
       <div className="writingEngagement__votes">
-        <p className="writingEngagement__subtitle">{copy.subtitle}</p>
-        <div className="writingEngagement__buttons">
+        <div className="writingEngagement__reactions" role="group">
           <button
             type="button"
-            className="writingEngagement__button"
-            onClick={() => void onVote('like')}
+            className={`writingEngagement__reaction ${
+              pulseReaction === 'like-thumb' ? 'is-pulsing' : ''
+            }`}
+            onClick={() => void onReact('like', 'like-thumb')}
+            aria-label={copy.like}
+            title={copy.like}
           >
-            {copy.like}
-            <span className="writingEngagement__count">{record?.likes ?? 0}</span>
+            <span className="writingEngagement__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path
+                  d="M7.5 10.5v9H5a2 2 0 0 1-2-2v-4.5a2 2 0 0 1 2-2h2.5Zm2-1.5 2.7-4.8a2 2 0 0 1 3.7 1.5L15 9h3.8a2 2 0 0 1 1.9 2.6l-1.7 5.5a3 3 0 0 1-2.9 2.1H9.5v-9Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <span className="writingEngagement__countBadge">{record?.likes ?? 0}</span>
           </button>
           <button
             type="button"
-            className="writingEngagement__button writingEngagement__button--ghost"
-            onClick={() => void onVote('dislike')}
+            className={`writingEngagement__reaction ${
+              pulseReaction === 'dislike' ? 'is-pulsing' : ''
+            }`}
+            onClick={() => void onReact('dislike', 'dislike')}
+            aria-label={copy.dislike}
+            title={copy.dislike}
           >
-            {copy.dislike}
-            <span className="writingEngagement__count">{record?.dislikes ?? 0}</span>
+            <span className="writingEngagement__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path
+                  d="M16.5 13.5v-9H19a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2h-2.5Zm-2 1.5-2.7 4.8a2 2 0 0 1-3.7-1.5L9 15H5.2a2 2 0 0 1-1.9-2.6l1.7-5.5A3 3 0 0 1 7.9 4h6.6v9Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+          <button
+            type="button"
+            className={`writingEngagement__reaction writingEngagement__reaction--share ${
+              pulseReaction === 'share' ? 'is-pulsing' : ''
+            }`}
+            onClick={() => {
+              setPulseReaction('share')
+              window.setTimeout(() => setPulseReaction(null), 500)
+              void navigator.clipboard?.writeText(window.location.href)
+            }}
+            aria-label={copy.share}
+            title={copy.share}
+          >
+            <span className="writingEngagement__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path
+                  d="M15 5 21 12 15 19"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M20.5 12H9a5 5 0 0 0-5 5v2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
+            <span className="writingEngagement__shareLabel">{copy.share}</span>
           </button>
         </div>
       </div>
 
       <div className="writingEngagement__comments">
-        <h2 id="writing-engagement-title" className="writingEngagement__title">
-          {copy.title}
-        </h2>
-
-        <p className="writingEngagement__ownerHint">{copy.ownerHint}</p>
-
         <form className="writingEngagement__form" onSubmit={onSubmit}>
-          <label className="writingEngagement__label">
-            {copy.nameLabel}
+          <div className="writingEngagement__addComment">
+            <div className="writingEngagement__avatar">
+              {(name.trim()[0] || 'E').toUpperCase()}
+            </div>
             <input
-              className="writingEngagement__input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              name="name"
-              autoComplete="name"
-              maxLength={80}
-            />
-          </label>
-
-          <label className="writingEngagement__label">
-            {copy.messageLabel}
-            <textarea
-              className="writingEngagement__textarea"
+              id="engagement-message"
+              className="writingEngagement__commentInput"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onFocus={() => setFormActive(true)}
+              onBlur={() => {
+                if (!message.trim() && !name.trim()) setFormActive(false)
+              }}
               name="message"
-              rows={4}
               maxLength={2000}
+              placeholder={locale === 'tr' ? 'Yorum ekle...' : 'Add a comment...'}
               required
             />
-          </label>
+          </div>
 
-          <div className="writingEngagement__actions">
+          <div className="writingEngagement__actions writingEngagement__actions--compact">
+            <button
+              type="button"
+              className="writingEngagement__cancel"
+              onClick={() => {
+                setFormActive(false)
+                setMessage('')
+                setName('')
+              }}
+            >
+              {copy.cancel}
+            </button>
             <button type="submit" className="writingEngagement__submit" disabled={submitting}>
               {submitting ? '...' : copy.submit}
             </button>
@@ -358,10 +436,6 @@ export default function EngagementSection({
         </form>
 
         <div className="writingEngagement__list" role="list">
-          {!loading && (record?.comments?.length ?? 0) === 0 ? (
-            <p className="writingEngagement__empty">{copy.empty}</p>
-          ) : null}
-
           {record?.comments.map((comment) => {
             const isOwned = ownedIds.has(comment.id)
             const isEditing = editingId === comment.id
