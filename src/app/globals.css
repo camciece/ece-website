@@ -1968,6 +1968,18 @@ body.text-\[--text\] {
   justify-content: flex-end;
   gap: 10px;
   margin-top: -4px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.writingEngagement__form:focus-within .writingEngagement__actions--compact {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .writingEngagement__cancel {
