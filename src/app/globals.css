@@ -1977,7 +1977,9 @@ body.text-\[--text\] {
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .writingEngagement__form:focus-within .writingEngagement__actions--compact {
@@ -2044,6 +2046,7 @@ body.text-\[--text\] {
   box-shadow: none;
   display: grid;
   gap: 6px;
+  margin-top: -25px;
 }
 
 @keyframes reactionPulse {
