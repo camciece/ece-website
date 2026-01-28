@@ -54,12 +54,54 @@ export async function POST(request: Request) {
     message,
   ].join('\n')
 
+  const safeMessage = message.replace(/\n/g, '<br />')
+  const safeName = fullName || 'Unknown sender'
+  const safeEmail = email || '—'
+
+  const html = `
+    <div style="margin:0;padding:0;background:#f6f7fb;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f6f7fb;padding:32px 16px;font-family:Arial, Helvetica, sans-serif;color:#1f232b;">
+        <tr>
+          <td align="center">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:16px;padding:28px 28px 24px;box-shadow:0 10px 30px rgba(20,22,26,0.08);">
+              <tr>
+                <td>
+                  <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#7b8088;">
+                    New contact form submission
+                  </p>
+                  <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;color:#141414;">
+                    ${safeName}
+                  </h1>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:16px 0 20px;border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:10px 12px;border:1px solid #eceef2;border-radius:10px;font-size:14px;background:#fafbff;">
+                        <strong style="color:#5a5e66;">Email:</strong>
+                        <span style="margin-left:6px;color:#1f232b;">${safeEmail}</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <div style="padding:18px 18px;border:1px solid #eceef2;border-radius:12px;background:#fcfcff;font-size:15px;line-height:1.6;color:#2f3239;">
+                    ${safeMessage}
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:16px 0 0;font-size:12px;color:#9aa0a6;">
+              Reply directly to this email to respond.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `
+
   await transporter.sendMail({
     from,
     to: CONTACT_TO,
     replyTo: email,
     subject,
     text,
+    html,
   })
 
   return redirectWithStatus(request, 'sent')
