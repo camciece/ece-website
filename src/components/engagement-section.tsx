@@ -58,7 +58,6 @@ export default function EngagementSection({
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [formActive, setFormActive] = useState(false)
 
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set())
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -216,7 +215,7 @@ export default function EngagementSection({
         }
       }
     },
-    [addOwnedIds, locale, record?.comments, slug],
+    [addOwnedIds, locale, record, record?.comments, slug],
   )
 
   const onVote = useCallback(
@@ -248,7 +247,6 @@ export default function EngagementSection({
       try {
         await sendAction('comment', { name, message }, { trackNewOwnedIds: true })
         setMessage('')
-        setFormActive(false)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
@@ -404,10 +402,6 @@ export default function EngagementSection({
               className="writingEngagement__commentInput"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onFocus={() => setFormActive(true)}
-              onBlur={() => {
-                if (!message.trim() && !name.trim()) setFormActive(false)
-              }}
               name="message"
               maxLength={2000}
               placeholder={locale === 'tr' ? 'Yorum ekle...' : 'Add a comment...'}
@@ -420,7 +414,6 @@ export default function EngagementSection({
               type="button"
               className="writingEngagement__cancel"
               onClick={() => {
-                setFormActive(false)
                 setMessage('')
                 setName('')
               }}
