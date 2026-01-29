@@ -284,8 +284,8 @@ const copy: Record<Locale, SiteCopy> = {
           copy: 'Yapay zekânın nasıl çalıştığını ve uygulamalarını adım adım ele aldığım yazılar.',
         },
         {
-          title: 'Öneriler',
-          copy: 'Kitaplar, araçlar ve elimden düşürmediklerim.',
+          title: 'Projeler',
+          copy: 'Farklı dönemlerde üzerinde çalıştığım ve hâlâ evrilen projeler.',
         },
         {
           title: 'İlham Aldıklarım',
