@@ -257,7 +257,7 @@ const copy: Record<Locale, SiteCopy> = {
     home: {
       heroTitle: 'Hoşgeldiniz!',
       heroBody:
-        'Burası yapay zekâyla çalışırken aldığım notları paylaştığım kişisel bir alan. Biraz teknik detaylar, biraz bu teknolojilerin neden önemli olduğu ve nereye gittiğini gelin birlikte düşünelim.',
+        'Burası yapay zekâ ve teknolojiyle çalışırken aldığım notları paylaştığım kişisel bir alan. Biraz teknik detaylar, biraz bu modern teknolojilerin neden önemli olduğu, nereye gittiğini ve etkilerini gelin birlikte düşünelim.',
       latestTitle: 'Son yazılar',
       viewAll: 'Tümünü gör',
       heroCta: 'İlk yazıyı oku',
@@ -271,7 +271,7 @@ const copy: Record<Locale, SiteCopy> = {
 
         'Son birkaç senedir özellikle yapay zekâ tarafında çalışıyorum. Dürüst olmak gerekirse pandemiden sonra değişen dünyada bu alanda çalışmayı çok sevdim. Hem değişen çalışma şartları nedeniyle hem de bullshit’e daha az alan kalmasından dolayı.',
 
-        'Arkadaşlarım çalışmadığım dönemlerde gezi, lifestyle ya da yeme içme gibi konularda bir blog açmam gerektiğini söylerdi. Ben de en sonunda gidip, uğruna yazılacak gerçekten bir şey var diyerek bir AI tech blog açtım. Bu blog, genel bir teknoloji blogu değil. Burada yalnızca yapay zekâyı ve yapay zekânın gerçek dünyadaki uygulamalarını yazıyorum. Zaten bu site de yapay zekâ araçlarıyla denemeler yaparken, bir noktada vibe coding sırasında ortaya çıktı ve zamanla benim için bir düşünme alanına dönüştü.',
+        'Arkadaşlarım çalışmadığım dönemlerde gezi, lifestyle ya da yeme içme gibi konularda bir blog açmam gerektiğini söylerdi. Ben de en sonunda gidip, uğruna yazılacak gerçekten bir şey var diyerek bir blog açtım. Bu blog, genel bir teknoloji blogu değil. Buradaki içerikler, teknolojiyle birebir temas ettiğim alanlardan besleniyor. Son dönemde ağırlıklı olarak yapay zekâ, daha önce üzerinde çalıştığım ve bugün çalışmakta olduğum projeler bu alanın önemli parçaları. Zaten bu site de yapay zekâ araçlarıyla denemeler yaparken, bir noktada vibe coding sırasında ortaya çıktı ve zamanla benim için bir düşünme alanına dönüştü.',
 
         'Yazmak, neyle uğraştığımı görmeme ve öğrendiklerimi sindirmeme yardımcı oluyor. Burada karşıma çıkanları, kafamda netleşenleri ve hâlâ netleşmeyenleri paylaşıyorum. Tamamlanmış cevaplardan çok, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.',
 
