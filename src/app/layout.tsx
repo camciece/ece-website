@@ -13,7 +13,7 @@ const newsreader = Newsreader({
 })
 
 export const metadata: Metadata = {
-  title: 'The website of Ece Çamcı | Eces Notes',
+  title: 'Eces Notes',
 }
 
 export default function RootLayout({
