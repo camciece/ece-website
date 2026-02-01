@@ -8,11 +8,57 @@ import ReadingModeToggle from '@/components/reading-mode-toggle'
 import TokenDemo from '@/components/token-demo'
 import { defaultLocale } from '@/lib/locale'
 import { getPost } from '@/lib/md'
+import { getBaseUrl } from '@/lib/site'
 import { getCopy } from '@/lib/static-copy'
+import type { Metadata } from 'next'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { notFound } from 'next/navigation'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const locale = defaultLocale
+
+  try {
+    const post = getPost(slug, locale)
+    const baseUrl = getBaseUrl()
+    const url = `${baseUrl}/writing/${slug}`
+    const title = post.frontmatter.title
+    const allowDescription = post.frontmatter.shareDescription !== false
+    const description = allowDescription ? post.frontmatter.excerpt ?? '' : ''
+    const imagePath = post.frontmatter.image ?? '/LLMs.png'
+    const imageUrl = new URL(imagePath, baseUrl).toString()
+
+    const metadata: Metadata = {
+      title,
+      alternates: { canonical: url },
+      openGraph: {
+        title,
+        type: 'article',
+        url,
+        images: [{ url: imageUrl }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        images: [imageUrl],
+      },
+    }
+    if (allowDescription && description) {
+      metadata.description = description
+      if (metadata.openGraph) metadata.openGraph.description = description
+      if (metadata.twitter) metadata.twitter.description = description
+    }
+    return metadata
+  } catch {
+    return {}
+  }
+}
 
 export default async function Post({
   params,

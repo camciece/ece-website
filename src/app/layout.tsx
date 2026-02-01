@@ -1,6 +1,7 @@
 import Header from '@/components/header'
 import I18nProvider from '@/components/i18n-provider'
 import { defaultLocale } from '@/lib/locale'
+import { getBaseUrl } from '@/lib/site'
 import type { Metadata } from 'next'
 import { Inter, Newsreader } from 'next/font/google'
 import './globals.css'
@@ -14,6 +15,7 @@ const newsreader = Newsreader({
 
 export const metadata: Metadata = {
   title: 'Eces Notes',
+  metadataBase: new URL(getBaseUrl()),
 }
 
 export default function RootLayout({

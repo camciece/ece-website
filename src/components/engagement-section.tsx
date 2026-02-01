@@ -85,6 +85,10 @@ export default function EngagementSection({
   const [editingMessage, setEditingMessage] = useState('')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [pulseReaction, setPulseReaction] = useState<string | null>(null)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [shareUrl, setShareUrl] = useState('')
+  const [shareTitle, setShareTitle] = useState('')
+  const [shareCopied, setShareCopied] = useState(false)
 
   const storageKey = useMemo(() => `engagement:owned:${locale}::${slug}`, [locale, slug])
 
@@ -148,6 +152,13 @@ export default function EngagementSection({
         ownerHint: 'Sadece kendi yorumlarını düzenleyebilir veya silebilirsin.',
         proof: 'Okurların %PCT’i bu yazıyı faydalı buldu.',
         proofEmpty: 'Henüz tepki yok. İlk tepkiyi sen ver.',
+        shareSheetTitle: 'Paylaş',
+        shareLinkedIn: "LinkedIn'de paylaş",
+        shareX: "X'te paylaş",
+        shareFacebook: "Facebook'ta paylaş",
+        shareEmail: 'E-posta ile paylaş',
+        shareCopy: 'Bağlantıyı kopyala',
+        shareCopied: 'Bağlantı kopyalandı',
       }
     }
 
@@ -169,8 +180,66 @@ export default function EngagementSection({
       ownerHint: 'You can edit or delete your own comments on this device.',
       proof: '%PCT of readers found this helpful.',
       proofEmpty: 'No reactions yet. Be the first to react.',
+      shareSheetTitle: 'Share to...',
+      shareLinkedIn: 'Share on LinkedIn',
+      shareX: 'Share on X',
+      shareFacebook: 'Share on Facebook',
+      shareEmail: 'Share via email',
+      shareCopy: 'Copy link',
+      shareCopied: 'Link copied',
     }
   }, [locale])
+
+  useEffect(() => {
+    if (!shareOpen) return
+    setShareUrl(window.location.href)
+    setShareTitle(document.title)
+  }, [shareOpen])
+
+  useEffect(() => {
+    if (!shareOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShareOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [shareOpen])
+
+  useEffect(() => {
+    if (!shareCopied) return
+    const timer = window.setTimeout(() => setShareCopied(false), 1800)
+    return () => window.clearTimeout(timer)
+  }, [shareCopied])
+
+  const shareLinks = useMemo(() => {
+    if (!shareUrl) return []
+    const encodedUrl = encodeURIComponent(shareUrl)
+    const encodedTitle = encodeURIComponent(shareTitle)
+    return [
+      {
+        id: 'linkedin',
+        label: copy.shareLinkedIn,
+        href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+      },
+      {
+        id: 'x',
+        label: copy.shareX,
+        href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+      },
+      {
+        id: 'facebook',
+        label: copy.shareFacebook,
+        href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+      },
+      {
+        id: 'email',
+        label: copy.shareEmail,
+        href: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
+      },
+    ]
+  }, [copy.shareEmail, copy.shareFacebook, copy.shareLinkedIn, copy.shareX, shareTitle, shareUrl])
 
   const fetchRecord = useCallback(async () => {
     setLoading(true)
@@ -380,7 +449,7 @@ export default function EngagementSection({
             onClick={() => {
               setPulseReaction('share')
               window.setTimeout(() => setPulseReaction(null), 500)
-              void navigator.clipboard?.writeText(window.location.href)
+              setShareOpen(true)
             }}
             aria-label={copy.share}
             title={copy.share}
@@ -408,6 +477,81 @@ export default function EngagementSection({
           </button>
         </div>
       </div>
+
+      {shareOpen ? (
+        <div className="writingEngagement__shareOverlay" role="presentation">
+          <div className="writingEngagement__shareBackdrop" onClick={() => setShareOpen(false)} />
+          <div className="writingEngagement__shareSheet" role="dialog" aria-modal="true">
+            <header className="writingEngagement__shareHeader">
+              <h3 className="writingEngagement__shareTitle">{copy.shareSheetTitle}</h3>
+              <button
+                type="button"
+                className="writingEngagement__shareClose"
+                onClick={() => setShareOpen(false)}
+                aria-label={locale === 'tr' ? 'Paylaş penceresini kapat' : 'Close share dialog'}
+              >
+                ×
+              </button>
+            </header>
+            <div className="writingEngagement__shareList" role="list">
+              {shareLinks.map((item) => (
+                <a
+                  key={item.id}
+                  className="writingEngagement__shareItem"
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  role="listitem"
+                >
+                  <span className="writingEngagement__shareIcon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img">
+                      <path
+                        d="M5 12h10.5l-3.5-3.5 1.4-1.4L20.3 14l-6.9 6.9-1.4-1.4 3.5-3.5H5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span className="writingEngagement__shareText">{item.label}</span>
+                </a>
+              ))}
+              <button
+                type="button"
+                className="writingEngagement__shareItem writingEngagement__shareItem--button"
+                onClick={() => {
+                  void navigator.clipboard?.writeText(shareUrl || window.location.href)
+                  setShareCopied(true)
+                }}
+              >
+                <span className="writingEngagement__shareIcon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" role="img">
+                    <path
+                      d="M9 7h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M7 15H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span className="writingEngagement__shareText">
+                  {shareCopied ? copy.shareCopied : copy.shareCopy}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <div className="writingEngagement__comments">
         <form className="writingEngagement__form" onSubmit={onSubmit}>

@@ -21,6 +21,8 @@ export type PostMeta = {
   excerpt?: string;
   tags?: string[];
   readingTime?: string;
+  image?: string;
+  shareDescription?: boolean;
   slug: string;
 };
 
@@ -39,11 +41,16 @@ export function getAllPosts(locale: Locale): PostMeta[] {
         : undefined;
       const tags = data.tags ? (data.tags as string[]) : undefined;
       const readingTime = data.readingTime as string | undefined;
+      const image = data.image
+        ? (normalizeLocalized(data.image, locale) as string)
+        : undefined;
+      const shareDescription =
+        typeof data.shareDescription === "boolean" ? data.shareDescription : undefined;
       const date =
         data.date instanceof Date
           ? data.date.toISOString().slice(0, 10)
           : String(data.date);
-      return { slug, title, excerpt, tags, readingTime, date };
+      return { slug, title, excerpt, tags, readingTime, date, image, shareDescription };
     })
     .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
@@ -60,10 +67,15 @@ export function getPost(slug: string, locale: Locale) {
     : undefined;
   const tags = data.tags ? (data.tags as string[]) : undefined;
   const readingTime = data.readingTime as string | undefined;
+  const image = data.image
+    ? (normalizeLocalized(data.image, locale) as string)
+    : undefined;
+  const shareDescription =
+    typeof data.shareDescription === "boolean" ? data.shareDescription : undefined;
   const date =
     data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date);
   return {
     content: localizedContent,
-    frontmatter: { title, excerpt, tags, readingTime, date },
+    frontmatter: { title, excerpt, tags, readingTime, date, image, shareDescription },
   };
 }
