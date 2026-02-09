@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 const links = [
   { href: '/writing', label: 'nav.writings' },
   { href: '/meet-ece', label: 'nav.meetEce' },
-  { href: '/recommendations', label: 'nav.recommendations' },
+  { href: '/projects', label: 'nav.projects' },
   { href: '/heroes', label: 'nav.heroes' },
 ]
 

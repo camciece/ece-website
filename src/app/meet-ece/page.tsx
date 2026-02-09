@@ -3,7 +3,7 @@ import { defaultLocale } from '@/lib/locale'
 import { getCopy } from '@/lib/static-copy'
 import Link from 'next/link'
 
-const topicHrefs = ['/writing', '/recommendations', '/heroes'] as const
+const topicHrefs = ['/writing', '/projects', '/heroes'] as const
 
 export default async function MeetEcePage() {
   const locale = defaultLocale

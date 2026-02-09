@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="closingNav">
           <Link href="/writing">{t('nav.writings')}</Link>
           <Link href="/meet-ece">{t('nav.meetEce')}</Link>
-          <Link href="/recommendations">{t('nav.recommendations')}</Link>
+          <Link href="/projects">{t('nav.projects')}</Link>
           <Link href="/heroes">{t('nav.heroes')}</Link>
         </div>
         <div className="closingMeta">

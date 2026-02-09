@@ -32,7 +32,7 @@ type SiteCopy = {
     title: string
     lead: string
   }
-  recommendations: {
+  projects: {
     lead: string
   }
   heroes: {
@@ -126,7 +126,7 @@ const copy: Record<Locale, SiteCopy> = {
           copy: 'The useful edges of understanding and building with AI.',
         },
         {
-          title: 'Recommendations',
+          title: 'Projects',
           copy: 'Books, tools, and things I keep around.',
         },
         {
@@ -152,7 +152,7 @@ const copy: Record<Locale, SiteCopy> = {
       title: 'Writings',
       lead: 'This will be the articles page. Add your posts here when ready.',
     },
-    recommendations: {
+    projects: {
       lead: 'This page is work in progress. If you’re curious, check back later. :)',
     },
     heroes: {
@@ -309,7 +309,7 @@ const copy: Record<Locale, SiteCopy> = {
       title: 'Yazılar',
       lead: 'Burası yazılar sayfası olacak. Hazır olunca yazıları buraya ekle.',
     },
-    recommendations: {
+    projects: {
       lead: 'Bu sayfa yapım aşamasında. Merak edersniz daha sonra tekrar bakın. :)',
     },
     heroes: {
