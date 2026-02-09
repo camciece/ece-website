@@ -3,6 +3,7 @@ import I18nProvider from '@/components/i18n-provider'
 import { defaultLocale } from '@/lib/locale'
 import { getBaseUrl } from '@/lib/site'
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import { Inter, Newsreader } from 'next/font/google'
 import './globals.css'
 
@@ -33,6 +34,7 @@ export default function RootLayout({
         <I18nProvider locale={locale}>
           <Header />
           <div className="site-layout">{children}</div>
+          <Analytics />
         </I18nProvider>
       </body>
     </html>
