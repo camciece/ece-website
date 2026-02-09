@@ -29,6 +29,10 @@ const supabaseUrl = process.env.SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 const useSupabase = Boolean(supabaseUrl && supabaseServiceKey)
 
+export function getEngagementStoreKind() {
+  return useSupabase ? 'supabase' : 'file'
+}
+
 type SupabaseCommentRow = {
   id: string
   slug: string

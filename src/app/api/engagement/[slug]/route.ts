@@ -5,6 +5,7 @@ import {
   addVote,
   deleteComment,
   editComment,
+  getEngagementStoreKind,
   getEngagement,
 } from '@/lib/engagement'
 
@@ -33,7 +34,9 @@ export async function GET(
   }
 
   const record = await getEngagement(slug, locale)
-  return NextResponse.json(sanitizeRecord(record))
+  return NextResponse.json(sanitizeRecord(record), {
+    headers: { 'x-engagement-store': getEngagementStoreKind() },
+  })
 }
 
 export async function POST(
@@ -70,7 +73,9 @@ export async function POST(
 
   if (action === 'like' || action === 'dislike') {
     const record = await addVote(slug, locale, action)
-    return NextResponse.json(sanitizeRecord(record))
+    return NextResponse.json(sanitizeRecord(record), {
+      headers: { 'x-engagement-store': getEngagementStoreKind() },
+    })
   }
 
   if (action === 'delete') {
@@ -78,7 +83,9 @@ export async function POST(
       return badRequest('Comment id is required')
     }
     const record = await deleteComment(slug, locale, body.id)
-    return NextResponse.json(sanitizeRecord(record))
+    return NextResponse.json(sanitizeRecord(record), {
+      headers: { 'x-engagement-store': getEngagementStoreKind() },
+    })
   }
 
   const message = body.message?.trim() ?? ''
@@ -95,7 +102,9 @@ export async function POST(
       name: body.name,
       message,
     })
-    return NextResponse.json(sanitizeRecord(record))
+    return NextResponse.json(sanitizeRecord(record), {
+      headers: { 'x-engagement-store': getEngagementStoreKind() },
+    })
   }
 
   const name = body.name?.trim() ?? ''
@@ -113,5 +122,7 @@ export async function POST(
     email,
     message,
   })
-  return NextResponse.json(sanitizeRecord(record))
+  return NextResponse.json(sanitizeRecord(record), {
+    headers: { 'x-engagement-store': getEngagementStoreKind() },
+  })
 }
