@@ -31,7 +31,7 @@ export async function GET(
     return badRequest('Missing locale')
   }
 
-  const record = getEngagement(slug, locale)
+  const record = await getEngagement(slug, locale)
   return NextResponse.json(sanitizeRecord(record))
 }
 
@@ -68,7 +68,7 @@ export async function POST(
   }
 
   if (action === 'like' || action === 'dislike') {
-    const record = addVote(slug, locale, action)
+    const record = await addVote(slug, locale, action)
     return NextResponse.json(sanitizeRecord(record))
   }
 
@@ -76,7 +76,7 @@ export async function POST(
     if (!body.id) {
       return badRequest('Comment id is required')
     }
-    const record = deleteComment(slug, locale, body.id)
+    const record = await deleteComment(slug, locale, body.id)
     return NextResponse.json(sanitizeRecord(record))
   }
 
@@ -89,7 +89,7 @@ export async function POST(
     if (!body.id) {
       return badRequest('Comment id is required')
     }
-    const record = editComment(slug, locale, {
+    const record = await editComment(slug, locale, {
       id: body.id,
       name: body.name,
       message,
@@ -107,7 +107,7 @@ export async function POST(
     return badRequest('Email is required')
   }
 
-  const record = addComment(slug, locale, {
+  const record = await addComment(slug, locale, {
     name,
     email,
     message,
