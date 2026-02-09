@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { EngagementRecord } from '@/lib/engagement'
 import {
   addComment,
   addVote,
@@ -13,7 +14,7 @@ function badRequest(message: string) {
   return NextResponse.json({ error: message }, { status: 400 })
 }
 
-function sanitizeRecord(record: ReturnType<typeof getEngagement>) {
+function sanitizeRecord(record: EngagementRecord) {
   return {
     ...record,
     comments: record.comments.map(({ email: _email, ...comment }) => comment),
