@@ -2148,6 +2148,30 @@ body.text-\[--text\] {
   gap: 14px;
 }
 
+.writingEngagement__replyBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #f6f1eb;
+  color: #4a413b;
+  font-size: 12px;
+}
+
+.writingEngagement__replyCancel {
+  border: 0;
+  background: transparent;
+  color: #2d2621;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.writingEngagement__replyCancel:hover {
+  color: #1f232b;
+}
+
 .writingEngagement__label {
   display: grid;
   gap: 6px;
@@ -2437,10 +2461,22 @@ body.text-\[--text\] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
 }
 
 .writingEngagement__itemEngage:hover {
   color: #1f232b;
+}
+
+.writingEngagement__itemEngage:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.writingEngagement__itemCount {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6e635a;
 }
 
 .writingEngagement__itemReply {

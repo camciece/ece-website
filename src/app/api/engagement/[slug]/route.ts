@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type { EngagementRecord } from '@/lib/engagement'
 import {
   addComment,
+  addCommentReaction,
   addVote,
   deleteComment,
   editComment,
@@ -9,7 +10,14 @@ import {
   getEngagement,
 } from '@/lib/engagement'
 
-type Action = 'like' | 'dislike' | 'comment' | 'edit' | 'delete'
+type Action =
+  | 'like'
+  | 'dislike'
+  | 'comment'
+  | 'edit'
+  | 'delete'
+  | 'comment_like'
+  | 'comment_dislike'
 
 function badRequest(message: string) {
   return NextResponse.json({ error: message }, { status: 400 })
@@ -52,6 +60,7 @@ export async function POST(
     name?: string
     email?: string
     message?: string
+    parentId?: string
   }
 
   try {
@@ -73,6 +82,21 @@ export async function POST(
 
   if (action === 'like' || action === 'dislike') {
     const record = await addVote(slug, locale, action)
+    return NextResponse.json(sanitizeRecord(record), {
+      headers: { 'x-engagement-store': getEngagementStoreKind() },
+    })
+  }
+
+  if (action === 'comment_like' || action === 'comment_dislike') {
+    if (!body.id) {
+      return badRequest('Comment id is required')
+    }
+    const record = await addCommentReaction(
+      slug,
+      locale,
+      body.id,
+      action === 'comment_like' ? 'like' : 'dislike',
+    )
     return NextResponse.json(sanitizeRecord(record), {
       headers: { 'x-engagement-store': getEngagementStoreKind() },
     })
@@ -121,6 +145,7 @@ export async function POST(
     name,
     email,
     message,
+    parentId: body.parentId,
   })
   return NextResponse.json(sanitizeRecord(record), {
     headers: { 'x-engagement-store': getEngagementStoreKind() },

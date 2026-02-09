@@ -5,8 +5,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type EngagementComment = {
   id: string
+  parentId?: string
   name: string
   message: string
+  likeCount: number
+  dislikeCount: number
   createdAt: string
   updatedAt?: string
 }
@@ -100,6 +103,8 @@ export default function EngagementSection({
   const [editingMessage, setEditingMessage] = useState('')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [pulseReaction, setPulseReaction] = useState<string | null>(null)
+  const [replyToId, setReplyToId] = useState<string | null>(null)
+  const [replyToName, setReplyToName] = useState<string | null>(null)
 
   const storageKey = useMemo(() => `engagement:owned:${locale}::${slug}`, [locale, slug])
 
@@ -161,6 +166,9 @@ export default function EngagementSection({
         delete: 'Sil',
         save: 'Kaydet',
         edited: 'düzenlendi',
+        reply: 'Yanıtla',
+        replyingTo: 'Yanıtlıyorsun',
+        cancelReply: 'Yanıtı iptal et',
         ownerHint: 'Sadece kendi yorumlarını düzenleyebilir veya silebilirsin.',
         proof: 'Okurların %PCT’i bu yazıyı faydalı buldu.',
         proofEmpty: 'Henüz tepki yok. İlk tepkiyi sen ver.',
@@ -184,6 +192,9 @@ export default function EngagementSection({
       delete: 'Delete',
       save: 'Save',
       edited: 'edited',
+      reply: 'Reply',
+      replyingTo: 'Replying to',
+      cancelReply: 'Cancel reply',
       ownerHint: 'You can edit or delete your own comments on this device.',
       proof: '%PCT of readers found this helpful.',
       proofEmpty: 'No reactions yet. Be the first to react.',
@@ -217,7 +228,14 @@ export default function EngagementSection({
 
   const sendAction = useCallback(
     async (
-      action: 'like' | 'dislike' | 'comment' | 'edit' | 'delete',
+      action:
+        | 'like'
+        | 'dislike'
+        | 'comment'
+        | 'edit'
+        | 'delete'
+        | 'comment_like'
+        | 'comment_dislike',
       payload?: Record<string, unknown>,
       options?: { trackNewOwnedIds?: boolean },
     ) => {
@@ -285,17 +303,19 @@ export default function EngagementSection({
       try {
         await sendAction(
           'comment',
-          { name: name.trim(), email: email.trim(), message },
+          { name: name.trim(), email: email.trim(), message, parentId: replyToId },
           { trackNewOwnedIds: true },
         )
         setMessage('')
+        setReplyToId(null)
+        setReplyToName(null)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setSubmitting(false)
       }
     },
-    [email, message, name, sendAction],
+    [email, message, name, replyToId, sendAction],
   )
 
   const startEdit = useCallback((comment: EngagementComment) => {
@@ -349,6 +369,59 @@ export default function EngagementSection({
     [cancelEdit, editingId, locale, removeOwnedId, sendAction],
   )
 
+  const onReply = useCallback((comment: EngagementComment) => {
+    setReplyToId(comment.id)
+    setReplyToName(comment.name)
+    const input = document.getElementById('engagement-message')
+    if (input instanceof HTMLInputElement) {
+      input.focus()
+    }
+  }, [])
+
+  const onCommentReaction = useCallback(
+    async (id: string, kind: 'like' | 'dislike') => {
+      setBusyId(id)
+      setError(null)
+      try {
+        await sendAction(kind === 'like' ? 'comment_like' : 'comment_dislike', { id })
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error')
+      } finally {
+        setBusyId(null)
+      }
+    },
+    [sendAction],
+  )
+
+  const commentTree = useMemo(() => {
+    if (!record?.comments) return []
+    const byId = new Map<string, EngagementComment & { children: EngagementComment[] }>()
+    record.comments.forEach((comment) => {
+      byId.set(comment.id, { ...comment, children: [] })
+    })
+    const roots: (EngagementComment & { children: EngagementComment[] })[] = []
+    byId.forEach((comment) => {
+      if (comment.parentId && byId.has(comment.parentId)) {
+        byId.get(comment.parentId)!.children.push(comment)
+      } else {
+        roots.push(comment)
+      }
+    })
+    const sortByCreatedAsc = (a: EngagementComment, b: EngagementComment) =>
+      +new Date(a.createdAt) - +new Date(b.createdAt)
+    const sortByCreatedDesc = (a: EngagementComment, b: EngagementComment) =>
+      +new Date(b.createdAt) - +new Date(a.createdAt)
+    roots.sort(sortByCreatedDesc)
+    const flatten: Array<{ comment: EngagementComment; depth: number }> = []
+    const walk = (node: EngagementComment & { children: EngagementComment[] }, depth: number) => {
+      flatten.push({ comment: node, depth })
+      node.children.sort(sortByCreatedAsc)
+      node.children.forEach((child) => walk(child as EngagementComment & { children: EngagementComment[] }, depth + 1))
+    }
+    roots.forEach((root) => walk(root, 0))
+    return flatten
+  }, [record?.comments])
+
   return (
     <section className="writingEngagement" aria-labelledby="writing-engagement-title">
       <div className="writingEngagement__votes">
@@ -401,6 +474,23 @@ export default function EngagementSection({
 
       <div className="writingEngagement__comments">
         <form className="writingEngagement__form" onSubmit={onSubmit}>
+          {replyToId ? (
+            <div className="writingEngagement__replyBanner">
+              <span>
+                {copy.replyingTo}: <strong>{replyToName}</strong>
+              </span>
+              <button
+                type="button"
+                className="writingEngagement__replyCancel"
+                onClick={() => {
+                  setReplyToId(null)
+                  setReplyToName(null)
+                }}
+              >
+                {copy.cancelReply}
+              </button>
+            </div>
+          ) : null}
           <div className="writingEngagement__addComment">
             <div className="writingEngagement__avatar">
               {getInitials(name)}
@@ -466,13 +556,18 @@ export default function EngagementSection({
         </form>
 
         <div className="writingEngagement__list" role="list">
-          {record?.comments.map((comment) => {
+          {commentTree.map(({ comment, depth }) => {
             const isOwned = ownedIds.has(comment.id)
             const isEditing = editingId === comment.id
             const isBusy = busyId === comment.id
 
             return (
-              <article key={comment.id} className="writingEngagement__item" role="listitem">
+              <article
+                key={comment.id}
+                className="writingEngagement__item"
+                role="listitem"
+                style={{ marginLeft: `${depth * 22}px` }}
+              >
                 <header className="writingEngagement__itemHeader">
                   <div className="writingEngagement__avatar writingEngagement__avatar--small">
                     {getInitials(comment.name)}
@@ -566,6 +661,8 @@ export default function EngagementSection({
                     className="writingEngagement__itemEngage"
                     aria-label={copy.like}
                     title={copy.like}
+                    onClick={() => void onCommentReaction(comment.id, 'like')}
+                    disabled={isBusy}
                   >
                     <span className="writingEngagement__icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" role="img">
@@ -578,12 +675,15 @@ export default function EngagementSection({
                         />
                       </svg>
                     </span>
+                    <span className="writingEngagement__itemCount">{comment.likeCount ?? 0}</span>
                   </button>
                   <button
                     type="button"
                     className="writingEngagement__itemEngage"
                     aria-label={copy.dislike}
                     title={copy.dislike}
+                    onClick={() => void onCommentReaction(comment.id, 'dislike')}
+                    disabled={isBusy}
                   >
                     <span className="writingEngagement__icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" role="img">
@@ -596,14 +696,16 @@ export default function EngagementSection({
                         />
                       </svg>
                     </span>
+                    <span className="writingEngagement__itemCount">{comment.dislikeCount ?? 0}</span>
                   </button>
                   <button
                     type="button"
                     className="writingEngagement__itemReply"
-                    aria-label={locale === 'tr' ? 'Yanıtla' : 'Reply'}
-                    title={locale === 'tr' ? 'Yanıtla' : 'Reply'}
+                    aria-label={copy.reply}
+                    title={copy.reply}
+                    onClick={() => onReply(comment)}
                   >
-                    {locale === 'tr' ? 'Yanıtla' : 'Reply'}
+                    {copy.reply}
                   </button>
                 </div>
               </article>

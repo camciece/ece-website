@@ -4,9 +4,12 @@ import path from 'path'
 
 export type EngagementComment = {
   id: string
+  parentId?: string
   name: string
   email?: string
   message: string
+  likeCount: number
+  dislikeCount: number
   createdAt: string
   updatedAt?: string
 }
@@ -35,11 +38,14 @@ export function getEngagementStoreKind() {
 
 type SupabaseCommentRow = {
   id: string
+  parent_id?: string | null
   slug: string
   locale: string
   name: string
   email?: string | null
   message: string
+  like_count?: number | null
+  dislike_count?: number | null
   created_at: string
   updated_at?: string | null
 }
@@ -81,9 +87,12 @@ async function supabaseFetch<T>(
 function mapCommentRow(row: SupabaseCommentRow): EngagementComment {
   return {
     id: row.id,
+    parentId: row.parent_id ?? undefined,
     name: row.name,
     email: row.email ?? undefined,
     message: row.message,
+    likeCount: row.like_count ?? 0,
+    dislikeCount: row.dislike_count ?? 0,
     createdAt: row.created_at,
     updatedAt: row.updated_at ?? undefined,
   }
@@ -147,14 +156,22 @@ export async function getEngagement(slug: string, locale: string): Promise<Engag
   if (!useSupabase) {
     const store = readStore()
     const key = keyFor(slug, locale)
-    return store[key] ?? emptyRecord()
+    const record = store[key] ?? emptyRecord()
+    return {
+      ...record,
+      comments: record.comments.map((comment) => ({
+        ...comment,
+        likeCount: comment.likeCount ?? 0,
+        dislikeCount: comment.dislikeCount ?? 0,
+      })),
+    }
   }
 
   const [comments, reactions] = await Promise.all([
     supabaseFetch<SupabaseCommentRow[]>(
       `engagement_comments?slug=eq.${encodeURIComponent(slug)}&locale=eq.${encodeURIComponent(
         locale,
-      )}&select=id,slug,locale,name,email,message,created_at,updated_at&order=created_at.desc&limit=200`,
+      )}&select=id,parent_id,slug,locale,name,email,message,like_count,dislike_count,created_at,updated_at&order=created_at.desc&limit=500`,
     ),
     supabaseFetch<SupabaseReactionRow[]>(
       `engagement_reactions?slug=eq.${encodeURIComponent(slug)}&locale=eq.${encodeURIComponent(
@@ -225,10 +242,11 @@ export async function addVote(
 export async function addComment(
   slug: string,
   locale: string,
-  input: { name?: string; email?: string; message: string },
+  input: { name?: string; email?: string; message: string; parentId?: string },
 ): Promise<EngagementRecord> {
   const name = (input.name ?? '').trim() || 'Anonymous'
   const email = (input.email ?? '').trim() || undefined
+  const parentId = input.parentId?.trim() || undefined
   const message = input.message.trim()
 
   if (!message) {
@@ -237,9 +255,12 @@ export async function addComment(
 
   const comment: EngagementComment = {
     id: randomUUID(),
+    parentId,
     name: name.slice(0, 80),
     email: email?.slice(0, 120),
     message: message.slice(0, 2000),
+    likeCount: 0,
+    dislikeCount: 0,
     createdAt: new Date().toISOString(),
   }
 
@@ -257,11 +278,14 @@ export async function addComment(
       headers: { Prefer: 'return=representation' },
       body: JSON.stringify({
         id: comment.id,
+        parent_id: comment.parentId ?? null,
         slug,
         locale,
         name: comment.name,
         email: comment.email ?? null,
         message: comment.message,
+        like_count: comment.likeCount,
+        dislike_count: comment.dislikeCount,
         created_at: comment.createdAt,
       }),
     },
@@ -333,5 +357,53 @@ export async function deleteComment(
     )}&slug=eq.${encodeURIComponent(slug)}&locale=eq.${encodeURIComponent(locale)}`,
     { method: 'DELETE' },
   )
+  return getEngagement(slug, locale)
+}
+
+export async function addCommentReaction(
+  slug: string,
+  locale: string,
+  id: string,
+  kind: 'like' | 'dislike',
+): Promise<EngagementRecord> {
+  if (!useSupabase) {
+    return updateRecord(slug, locale, (current) => ({
+      ...current,
+      comments: current.comments.map((comment) => {
+        if (comment.id !== id) return comment
+        return {
+          ...comment,
+          likeCount: (comment.likeCount ?? 0) + (kind === 'like' ? 1 : 0),
+          dislikeCount: (comment.dislikeCount ?? 0) + (kind === 'dislike' ? 1 : 0),
+        }
+      }),
+    }))
+  }
+
+  const rows = await supabaseFetch<SupabaseCommentRow[]>(
+    `engagement_comments?id=eq.${encodeURIComponent(
+      id,
+    )}&slug=eq.${encodeURIComponent(slug)}&locale=eq.${encodeURIComponent(
+      locale,
+    )}&select=id,like_count,dislike_count&limit=1`,
+  )
+  const current = rows[0]
+  if (!current) {
+    return getEngagement(slug, locale)
+  }
+  const nextLikes = (current.like_count ?? 0) + (kind === 'like' ? 1 : 0)
+  const nextDislikes = (current.dislike_count ?? 0) + (kind === 'dislike' ? 1 : 0)
+
+  await supabaseFetch<SupabaseCommentRow[]>(
+    `engagement_comments?id=eq.${encodeURIComponent(
+      id,
+    )}&slug=eq.${encodeURIComponent(slug)}&locale=eq.${encodeURIComponent(locale)}`,
+    {
+      method: 'PATCH',
+      headers: { Prefer: 'return=representation' },
+      body: JSON.stringify({ like_count: nextLikes, dislike_count: nextDislikes }),
+    },
+  )
+
   return getEngagement(slug, locale)
 }
