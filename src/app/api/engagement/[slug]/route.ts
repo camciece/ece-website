@@ -13,6 +13,13 @@ function badRequest(message: string) {
   return NextResponse.json({ error: message }, { status: 400 })
 }
 
+function sanitizeRecord(record: ReturnType<typeof getEngagement>) {
+  return {
+    ...record,
+    comments: record.comments.map(({ email: _email, ...comment }) => comment),
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
@@ -25,7 +32,7 @@ export async function GET(
   }
 
   const record = getEngagement(slug, locale)
-  return NextResponse.json(record)
+  return NextResponse.json(sanitizeRecord(record))
 }
 
 export async function POST(
@@ -39,6 +46,7 @@ export async function POST(
     action?: Action
     id?: string
     name?: string
+    email?: string
     message?: string
   }
 
@@ -61,7 +69,7 @@ export async function POST(
 
   if (action === 'like' || action === 'dislike') {
     const record = addVote(slug, locale, action)
-    return NextResponse.json(record)
+    return NextResponse.json(sanitizeRecord(record))
   }
 
   if (action === 'delete') {
@@ -69,7 +77,7 @@ export async function POST(
       return badRequest('Comment id is required')
     }
     const record = deleteComment(slug, locale, body.id)
-    return NextResponse.json(record)
+    return NextResponse.json(sanitizeRecord(record))
   }
 
   const message = body.message?.trim() ?? ''
@@ -86,12 +94,23 @@ export async function POST(
       name: body.name,
       message,
     })
-    return NextResponse.json(record)
+    return NextResponse.json(sanitizeRecord(record))
+  }
+
+  const name = body.name?.trim() ?? ''
+  if (!name) {
+    return badRequest('Name is required')
+  }
+
+  const email = body.email?.trim() ?? ''
+  if (!email) {
+    return badRequest('Email is required')
   }
 
   const record = addComment(slug, locale, {
-    name: body.name,
+    name,
+    email,
     message,
   })
-  return NextResponse.json(record)
+  return NextResponse.json(sanitizeRecord(record))
 }

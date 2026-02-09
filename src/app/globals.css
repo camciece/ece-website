@@ -2175,6 +2175,12 @@ body.text-\[--text\] {
   font-size: 14px;
 }
 
+.writingEngagement__avatar--small {
+  width: 36px;
+  height: 36px;
+  font-size: 12px;
+}
+
 .writingEngagement__commentInput {
   border: 0;
   border-bottom: 1px solid #d9d0c8;
@@ -2193,6 +2199,10 @@ body.text-\[--text\] {
   display: grid;
   gap: 12px;
   align-items: center;
+}
+
+.writingEngagement__row--double {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .writingEngagement__field {
@@ -2351,10 +2361,22 @@ body.text-\[--text\] {
 }
 
 .writingEngagement__itemHeader {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.writingEngagement__itemHeaderMain {
+  display: grid;
+  gap: 4px;
+}
+
+.writingEngagement__itemTitleRow {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  flex-wrap: wrap;
   gap: 8px;
+  align-items: baseline;
 }
 
 .writingEngagement__itemMeta {

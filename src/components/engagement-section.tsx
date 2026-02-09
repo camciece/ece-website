@@ -65,6 +65,20 @@ function writeOwnedIds(key: string, ids: Set<string>) {
   window.localStorage.setItem(key, JSON.stringify(Array.from(ids)))
 }
 
+function getInitials(value: string) {
+  const tokens = value
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+  if (tokens.length === 0) return 'E'
+  if (tokens.length === 1) {
+    return (tokens[0][0] ?? 'E').toUpperCase()
+  }
+  const first = tokens[0][0] ?? ''
+  const last = tokens[tokens.length - 1][0] ?? ''
+  return `${first}${last}`.toUpperCase()
+}
+
 export default function EngagementSection({
   slug,
   locale,
@@ -76,6 +90,7 @@ export default function EngagementSection({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -139,7 +154,9 @@ export default function EngagementSection({
         like: 'Beğendim',
         dislike: 'Beğenmedim',
         share: 'Paylaş',
-        nameLabel: 'İsim (opsiyonel)',
+        nameLabel: 'İsim *',
+        emailLabel: 'E-posta *',
+        emailHint: 'E-posta adresin yayınlanmaz.',
         messageLabel: 'Yorumun',
         submit: 'Gönder',
         cancel: 'İptal',
@@ -168,7 +185,9 @@ export default function EngagementSection({
       like: 'Liked it',
       dislike: "Didn't like",
       share: 'Share',
-      nameLabel: 'Name (optional)',
+      nameLabel: 'Name *',
+      emailLabel: 'Email *',
+      emailHint: 'Your email will not be published.',
       messageLabel: 'Your comment',
       submit: 'Send',
       cancel: 'Cancel',
@@ -336,10 +355,15 @@ export default function EngagementSection({
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       if (!message.trim()) return
+      if (!name.trim() || !email.trim()) return
       setSubmitting(true)
       setError(null)
       try {
-        await sendAction('comment', { name, message }, { trackNewOwnedIds: true })
+        await sendAction(
+          'comment',
+          { name: name.trim(), email: email.trim(), message },
+          { trackNewOwnedIds: true },
+        )
         setMessage('')
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
@@ -347,7 +371,7 @@ export default function EngagementSection({
         setSubmitting(false)
       }
     },
-    [message, name, sendAction],
+    [email, message, name, sendAction],
   )
 
   const startEdit = useCallback((comment: EngagementComment) => {
@@ -620,7 +644,7 @@ export default function EngagementSection({
         <form className="writingEngagement__form" onSubmit={onSubmit}>
           <div className="writingEngagement__addComment">
             <div className="writingEngagement__avatar">
-              {(name.trim()[0] || 'E').toUpperCase()}
+              {getInitials(name)}
             </div>
             <input
               id="engagement-message"
@@ -634,6 +658,34 @@ export default function EngagementSection({
             />
           </div>
 
+          <div className="writingEngagement__row writingEngagement__row--double">
+            <label className="writingEngagement__label">
+              {copy.nameLabel}
+              <input
+                className="writingEngagement__input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                name="name"
+                maxLength={80}
+                required
+              />
+            </label>
+            <label className="writingEngagement__label">
+              {copy.emailLabel}
+              <input
+                className="writingEngagement__input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                type="email"
+                autoComplete="email"
+                maxLength={120}
+                required
+              />
+            </label>
+          </div>
+          <p className="writingEngagement__hint">{copy.emailHint}</p>
+
           <div className="writingEngagement__actions writingEngagement__actions--compact">
             <button
               type="button"
@@ -641,6 +693,7 @@ export default function EngagementSection({
               onClick={() => {
                 setMessage('')
                 setName('')
+                setEmail('')
               }}
             >
               {copy.cancel}
@@ -662,16 +715,21 @@ export default function EngagementSection({
             return (
               <article key={comment.id} className="writingEngagement__item" role="listitem">
                 <header className="writingEngagement__itemHeader">
-                  <strong className="writingEngagement__itemName">
-                    {comment.name}
-                    <span className="writingEngagement__itemTimeInline">
-                      {formatDate(comment.createdAt, locale)}
-                    </span>
-                  </strong>
-                  <div className="writingEngagement__itemMeta">
-                    {comment.updatedAt ? (
-                      <span className="writingEngagement__edited">{copy.edited}</span>
-                    ) : null}
+                  <div className="writingEngagement__avatar writingEngagement__avatar--small">
+                    {getInitials(comment.name)}
+                  </div>
+                  <div className="writingEngagement__itemHeaderMain">
+                    <div className="writingEngagement__itemTitleRow">
+                      <strong className="writingEngagement__itemName">{comment.name}</strong>
+                      <span className="writingEngagement__itemTimeInline">
+                        {formatDate(comment.createdAt, locale)}
+                      </span>
+                    </div>
+                    <div className="writingEngagement__itemMeta">
+                      {comment.updatedAt ? (
+                        <span className="writingEngagement__edited">{copy.edited}</span>
+                      ) : null}
+                    </div>
                   </div>
                 </header>
 

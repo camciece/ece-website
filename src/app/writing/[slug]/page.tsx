@@ -31,6 +31,7 @@ export async function generateMetadata({
     const title = post.frontmatter.title
     const allowDescription = post.frontmatter.shareDescription !== false
     const description = allowDescription ? post.frontmatter.excerpt ?? '' : ''
+    const shareDescription = allowDescription && description ? description : ' '
     const imagePath = post.frontmatter.image ?? '/LLMs.png'
     const imageUrl = new URL(imagePath, baseUrl).toString()
 
@@ -41,19 +42,17 @@ export async function generateMetadata({
         title,
         type: 'article',
         url,
+        description: shareDescription,
         images: [{ url: imageUrl }],
       },
       twitter: {
         card: 'summary_large_image',
         title,
+        description: shareDescription,
         images: [imageUrl],
       },
     }
-    if (allowDescription && description) {
-      metadata.description = description
-      if (metadata.openGraph) metadata.openGraph.description = description
-      if (metadata.twitter) metadata.twitter.description = description
-    }
+    metadata.description = shareDescription
     return metadata
   } catch {
     return {}

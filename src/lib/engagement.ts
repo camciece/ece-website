@@ -5,6 +5,7 @@ import path from 'path'
 export type EngagementComment = {
   id: string
   name: string
+  email?: string
   message: string
   createdAt: string
   updatedAt?: string
@@ -99,9 +100,10 @@ export function addVote(
 export function addComment(
   slug: string,
   locale: string,
-  input: { name?: string; message: string },
+  input: { name?: string; email?: string; message: string },
 ): EngagementRecord {
   const name = (input.name ?? '').trim() || 'Anonymous'
+  const email = (input.email ?? '').trim() || undefined
   const message = input.message.trim()
 
   if (!message) {
@@ -111,6 +113,7 @@ export function addComment(
   const comment: EngagementComment = {
     id: randomUUID(),
     name: name.slice(0, 80),
+    email: email?.slice(0, 120),
     message: message.slice(0, 2000),
     createdAt: new Date().toISOString(),
   }
