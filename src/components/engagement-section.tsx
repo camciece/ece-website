@@ -100,10 +100,6 @@ export default function EngagementSection({
   const [editingMessage, setEditingMessage] = useState('')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [pulseReaction, setPulseReaction] = useState<string | null>(null)
-  const [shareOpen, setShareOpen] = useState(false)
-  const [shareUrl, setShareUrl] = useState('')
-  const [shareTitle, setShareTitle] = useState('')
-  const [shareCopied, setShareCopied] = useState(false)
 
   const storageKey = useMemo(() => `engagement:owned:${locale}::${slug}`, [locale, slug])
 
@@ -153,7 +149,6 @@ export default function EngagementSection({
         title: 'Yorumlar',
         like: 'Beğendim',
         dislike: 'Beğenmedim',
-        share: 'Paylaş',
         nameLabel: 'İsim *',
         emailLabel: 'E-posta *',
         emailHint: 'E-posta adresin yayınlanmaz.',
@@ -169,14 +164,7 @@ export default function EngagementSection({
         ownerHint: 'Sadece kendi yorumlarını düzenleyebilir veya silebilirsin.',
         proof: 'Okurların %PCT’i bu yazıyı faydalı buldu.',
         proofEmpty: 'Henüz tepki yok. İlk tepkiyi sen ver.',
-        shareSheetTitle: 'Paylaş',
-        shareLinkedIn: 'LinkedIn',
-        shareX: 'X',
-        shareFacebook: 'Facebook',
-        shareInstagram: 'Instagram',
-        shareEmail: 'E-posta ile paylaş',
-        shareCopy: 'Bağlantıyı kopyala',
-        shareCopied: 'Bağlantı kopyalandı',
+ 
       }
     }
 
@@ -184,7 +172,6 @@ export default function EngagementSection({
       title: 'Comments',
       like: 'Liked it',
       dislike: "Didn't like",
-      share: 'Share',
       nameLabel: 'Name *',
       emailLabel: 'Email *',
       emailHint: 'Your email will not be published.',
@@ -200,72 +187,9 @@ export default function EngagementSection({
       ownerHint: 'You can edit or delete your own comments on this device.',
       proof: '%PCT of readers found this helpful.',
       proofEmpty: 'No reactions yet. Be the first to react.',
-      shareSheetTitle: 'Share to...',
-      shareLinkedIn: 'LinkedIn',
-      shareX: 'X',
-      shareFacebook: 'Facebook',
-      shareInstagram: 'Instagram',
-      shareEmail: 'Share via email',
-      shareCopy: 'Copy link',
-      shareCopied: 'Link copied',
+ 
     }
   }, [locale])
-
-  useEffect(() => {
-    if (!shareOpen) return
-    setShareUrl(window.location.href)
-    setShareTitle(document.title)
-  }, [shareOpen])
-
-  useEffect(() => {
-    if (!shareOpen) return
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setShareOpen(false)
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [shareOpen])
-
-  useEffect(() => {
-    if (!shareCopied) return
-    const timer = window.setTimeout(() => setShareCopied(false), 1800)
-    return () => window.clearTimeout(timer)
-  }, [shareCopied])
-
-  const shareLinks = useMemo(() => {
-    if (!shareUrl) return []
-    const encodedUrl = encodeURIComponent(shareUrl)
-    const encodedTitle = encodeURIComponent(shareTitle)
-    return [
-      {
-        id: 'linkedin',
-        label: copy.shareLinkedIn,
-        href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      },
-      {
-        id: 'x',
-        label: copy.shareX,
-        href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
-      },
-      {
-        id: 'facebook',
-        label: copy.shareFacebook,
-        href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-      },
-      {
-        id: 'instagram',
-        label: copy.shareInstagram,
-        href: 'https://www.instagram.com/',
-      },
-      {
-        id: 'email',
-        label: copy.shareEmail,
-        href: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
-      },
-    ]
-  }, [copy.shareEmail, copy.shareFacebook, copy.shareLinkedIn, copy.shareX, shareTitle, shareUrl])
 
   const fetchRecord = useCallback(async () => {
     setLoading(true)
@@ -472,173 +396,8 @@ export default function EngagementSection({
               </svg>
             </span>
           </button>
-          <button
-            type="button"
-            className={`writingEngagement__reaction writingEngagement__reaction--share ${
-              pulseReaction === 'share' ? 'is-pulsing' : ''
-            }`}
-            onClick={() => {
-              setPulseReaction('share')
-              window.setTimeout(() => setPulseReaction(null), 500)
-              setShareOpen(true)
-            }}
-            aria-label={copy.share}
-            title={copy.share}
-          >
-            <span className="writingEngagement__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" role="img">
-                <path
-                  d="M15 5 21 12 15 19"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M20.5 12H9a5 5 0 0 0-5 5v2"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-            <span className="writingEngagement__shareLabel">{copy.share}</span>
-          </button>
         </div>
       </div>
-
-      {shareOpen ? (
-        <div className="writingEngagement__shareOverlay" role="presentation">
-          <div className="writingEngagement__shareBackdrop" onClick={() => setShareOpen(false)} />
-          <div
-            className="writingEngagement__shareSheet"
-            role="dialog"
-            aria-modal="true"
-            aria-label={locale === 'tr' ? 'Paylaşım seçenekleri' : 'Share options'}
-          >
-            <header className="writingEngagement__shareHeader">
-              <button
-                type="button"
-                className="writingEngagement__shareClose"
-                onClick={() => setShareOpen(false)}
-                aria-label={locale === 'tr' ? 'Paylaş penceresini kapat' : 'Close share dialog'}
-              >
-                ×
-              </button>
-            </header>
-
-            <div className="writingEngagement__sharePrimary" role="list">
-              {shareLinks
-                .filter(
-                  (item) =>
-                    item.id === 'linkedin' ||
-                    item.id === 'x' ||
-                    item.id === 'facebook' ||
-                    item.id === 'instagram',
-                )
-                .map((item) => (
-                  <a
-                    key={item.id}
-                    className={`writingEngagement__sharePrimaryItem writingEngagement__sharePrimaryItem--${item.id}`}
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    role="listitem"
-                  >
-                    <span className="writingEngagement__shareLogo" aria-hidden="true">
-                      {item.id === 'linkedin' ? (
-                        <svg viewBox="0 0 24 24" role="img">
-                          <path
-                            d="M5.2 9.2h3.1V19H5.2V9.2Zm1.6-1.5a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6Zm4.3 1.5h3v1.3h.1c.4-.8 1.5-1.6 3.1-1.6 3.3 0 3.9 2.2 3.9 5v5.1h-3.1v-4.5c0-1.1 0-2.5-1.5-2.5s-1.7 1.2-1.7 2.4v4.6h-3.1V9.2Z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      ) : null}
-                      {item.id === 'x' ? (
-                        <svg viewBox="0 0 24 24" role="img">
-                          <path
-                            d="M4 5h3.8l3.3 4.7L15.2 5H20l-6.7 7.3L20.5 20h-3.8l-3.9-5.3L8.1 20H3.3l7.2-8L4 5Z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      ) : null}
-                      {item.id === 'facebook' ? (
-                        <svg viewBox="0 0 24 24" role="img">
-                          <path
-                            d="M14 9h2.5V6.2c-.4-.1-1.2-.2-2.2-.2-2.2 0-3.7 1.3-3.7 3.8V12H8.2v3h2.4v6h3v-6h2.6l.4-3h-3v-1.9c0-.8.2-1.1 1.4-1.1Z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      ) : null}
-                      {item.id === 'instagram' ? (
-                        <svg viewBox="0 0 24 24" role="img">
-                          <path
-                            d="M8 4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Zm4 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5-1.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      ) : null}
-                    </span>
-                    <span className="writingEngagement__sharePrimaryLabel">{item.label}</span>
-                  </a>
-                ))}
-            </div>
-
-            <div className="writingEngagement__shareSecondary" role="list">
-              {shareLinks
-                .filter((item) => item.id === 'email')
-                .map((item) => (
-                  <a
-                    key={item.id}
-                    className="writingEngagement__shareSecondaryItem"
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    role="listitem"
-                  >
-                    <span className="writingEngagement__shareSecondaryIcon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" role="img">
-                        <path
-                          d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2 8 5 8-5"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.7"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                    <span className="writingEngagement__shareSecondaryLabel">{item.label}</span>
-                  </a>
-                ))}
-            </div>
-
-            <div className="writingEngagement__shareCopyRow">
-              <label className="writingEngagement__shareCopyLabel">
-                <span className="writingEngagement__shareCopyText">{copy.shareCopy}</span>
-                <div className="writingEngagement__shareCopyField">
-                  <input
-                    className="writingEngagement__shareCopyInput"
-                    value={shareUrl || window.location.href}
-                    readOnly
-                  />
-                  <button
-                    type="button"
-                    className="writingEngagement__shareCopyButton"
-                    onClick={() => {
-                      void navigator.clipboard?.writeText(shareUrl || window.location.href)
-                      setShareCopied(true)
-                    }}
-                  >
-                    {shareCopied ? copy.shareCopied : locale === 'tr' ? 'Kopyala' : 'Copy'}
-                  </button>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-      ) : null}
 
       <div className="writingEngagement__comments">
         <form className="writingEngagement__form" onSubmit={onSubmit}>
