@@ -265,18 +265,15 @@ const copy: Record<Locale, SiteCopy> = {
     meet: {
       heroTitle: 'Ece ile Tanışın',
       intro: [
-        'Türkiye ve Hollanda’da endüstri ve sistem mühendisliği üzerine eğitim aldım. Çalıştığım zamanlarda teknoloji sektöründeyim; aralarda bilerek yavaşlayıp kendimle kalmayı, beni besleyen başka şeylere alan açmayı seviyorum. Altyapım gereği teknolojiye bakarken beni asıl ilgilendiren şey hep tekil çözümlerden çok sistemler, süreçler ve bunların gerçek hayatta nasıl karşılık bulduğu.',
-
-        'Çalıştığım dönemlerde merakım gereği kamuda ve özel sektörde bulundum. Batı merkezli teknoloji şirketlerinde de çalıştım, Doğu kültürünün baskın olduğu yapılarda da. Bu geçişler teknolojiye farklı kültürler içinde nasıl üretildiği ve benimsendiğini görmemi bakmamı sağladı. Hiçbir zaman klasik anlamda kariyer kovalayan, kurumsal hayata kendini kaptırmış biri olmadım. Yaptığım şeyleri gerçekten ilgimi çektiği ve içime sindiği için yaptım. Yirmili yaşlarımın ortasında hayatımın 2 senesini solo traveler olarak dünyayı gezerek geçirdim. O yüzden sistemin tamamen dışında da değilim, tam içinde de. Bir yandan parçasıyım, bir yandan da gözlemcisiyim.',
-
-        'Son birkaç senedir özellikle yapay zekâ tarafında çalışıyorum. Dürüst olmak gerekirse pandemiden sonra değişen dünyada bu alanda çalışmayı çok sevdim. Hem değişen çalışma şartları nedeniyle hem de bullshit’e daha az alan kalmasından dolayı.',
-
-        'Arkadaşlarım çalışmadığım dönemlerde gezi, lifestyle ya da yeme içme gibi konularda bir blog açmam gerektiğini söylerdi. Ben de en sonunda gidip, uğruna yazılacak gerçekten bir şey var diyerek bir blog açtım. Bu blog, genel bir teknoloji blogu değil. Buradaki içerikler, teknolojiyle birebir temas ettiğim alanlardan besleniyor. Son dönemde ağırlıklı olarak yapay zekâ, daha önce üzerinde çalıştığım ve bugün çalışmakta olduğum projeler bu alanın önemli parçaları. Zaten bu site de yapay zekâ araçlarıyla denemeler yaparken, bir noktada vibe coding modunda ortaya çıktı. AI araçlardan bağımsız olarak, insan merkezli, kavram odaklı bir üretim yaklaşımına önem veriyorum. Bu süreçte farklı sistemleri öğrenip bir araya getirirken, kendimi giderek daha çok üretimi yöneten bir AI director gibi hissediyorum.',
-
-        'Yazmak, neyle uğraştığımı görmeme ve öğrendiklerimi sindirmeme yardımcı oluyor. Burada karşıma çıkanları, kafamda netleşenleri ve hâlâ netleşmeyenleri paylaşıyorum. Tamamlanmış cevaplardan çok, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.',
-
-        'Herkese iyi okumalar. Geri bildirimlerinizi ve merak ettiklerinizi paylaşmaktan çekinmeyin.',
-      ],
+        'Türkiye ve Hollanda’da endüstri ve sistem mühendisliği eğitimi aldım. Teknoloji sektöründe çalışıyorum, ama kendimi hiçbir zaman sadece “teknolojide çalışan biri” olarak tanımlamadım.',
+        'Altyapım gereği şeylere hep sistemler, süreçler ve gerçek hayattaki karşılıkları üzerinden bakıyorum. Tekil çözümlerden çok, parçaların nasıl bir araya geldiği ve nasıl işlediği ilgimi çekiyor.',
+        'Bu bakış açısı beni farklı ortamlara taşıdı. Kamuda da bulundum, özel sektörde de. Batı merkezli teknoloji şirketlerinde de çalıştım, Doğu kültürünün baskın olduğu yapılarda da. Bu geçişler, teknolojinin sadece teknik değil, kültürel bir üretim biçimi olduğunu görmemi sağladı.',
+        'Hiçbir zaman klasik anlamda kariyer kovalayan biri olmadım. Yaptığım şeyleri, gerçekten ilgimi çektiği ve içime sindiği için yaptım. Yirmili yaşlarımın ortasında iki yıl boyunca tek başıma seyahat ettim. O yüzden sistemin ne tamamen dışındayım ne de tamamen içinde. Bir yandan parçasıyım, bir yandan gözlemcisiyim.',
+        'Son birkaç yıldır odağım giderek daha fazla yapay zekâ tarafına kaydı. Çünkü burada gerçekten yeni bir şeylerin kurulduğunu hissediyorum. Ve ilk defa, üretim süreçlerinde “anlamlı” bir kırılma var.',
+        'Bu site de tam olarak böyle bir sürecin içinden çıktı. Başta AI ile yaptığım denemelerin bir yan ürünüydü. Zamanla fark etmeden bir projeden çok, bir düşünme alanına dönüştü.',
+        'Bugün üretim yaklaşımım araçlardan bağımsız. İnsan merkezli ve konsept odaklı ilerliyorum. Farklı sistemleri öğrenip bir araya getirirken, süreci uçtan uca kurgulayan ve yöneten bir rolün içindeyim. Bunu en iyi tanımlayan şey belki de şu: bir AI director gibi çalışıyorum.',
+        'Yazmak, ne yaptığımı ve ne düşündüğümü görmemi sağlıyor. Buradaki içerikleri tamamlanmış fikirler olarak değil, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.',
+        'Herkese iyi okumalar. Geri bildirimlerinizi ve merak ettiklerinizi paylaşmaktan çekinmeyin.' ],
       topicsTitle: 'Neler hakkında yazıyorum',
       topics: [
         {
