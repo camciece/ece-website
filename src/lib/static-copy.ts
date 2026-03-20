@@ -266,14 +266,15 @@ const copy: Record<Locale, SiteCopy> = {
       heroTitle: 'Ece ile Tanışın',
       intro: [
         'Türkiye ve Hollanda’da endüstri ve sistem mühendisliği eğitimi aldım. Teknoloji sektöründe çalışıyorum, ama kendimi hiçbir zaman sadece “teknolojide çalışan biri” olarak tanımlamadım.',
-        'Altyapım gereği şeylere hep sistemler, süreçler ve gerçek hayattaki karşılıkları üzerinden bakıyorum. Tekil çözümlerden çok, parçaların nasıl bir araya geldiği ve nasıl işlediği ilgimi çekiyor.',
+        'Altyapım gereği meselelere hep sistemler, süreçler ve gerçek hayattaki karşılıkları üzerinden bakıyorum. Tekil çözümlerden çok, parçaların nasıl bir araya geldiği ve nasıl işlediği ilgimi çekiyor.',
         'Bu bakış açısı beni farklı ortamlara taşıdı. Kamuda da bulundum, özel sektörde de. Batı merkezli teknoloji şirketlerinde de çalıştım, Doğu kültürünün baskın olduğu yapılarda da. Bu geçişler, teknolojinin sadece teknik değil, kültürel bir üretim biçimi olduğunu görmemi sağladı.',
         'Hiçbir zaman klasik anlamda kariyer kovalayan biri olmadım. Yaptığım şeyleri, gerçekten ilgimi çektiği ve içime sindiği için yaptım. Yirmili yaşlarımın ortasında iki yıl boyunca tek başıma seyahat ettim. O yüzden sistemin ne tamamen dışındayım ne de tamamen içinde. Bir yandan parçasıyım, bir yandan gözlemcisiyim.',
         'Son birkaç yıldır odağım giderek daha fazla yapay zekâ tarafına kaydı. Çünkü burada gerçekten yeni bir şeylerin kurulduğunu hissediyorum. Ve ilk defa, üretim süreçlerinde “anlamlı” bir kırılma var.',
         'Bu site de tam olarak böyle bir sürecin içinden çıktı. Başta AI ile yaptığım denemelerin bir yan ürünüydü. Zamanla fark etmeden bir projeden çok, bir düşünme alanına dönüştü.',
         'Bugün üretim yaklaşımım araçlardan bağımsız. İnsan merkezli ve konsept odaklı ilerliyorum. Farklı sistemleri öğrenip bir araya getirirken, süreci uçtan uca kurgulayan ve yöneten bir rolün içindeyim. Bunu en iyi tanımlayan şey belki de şu: bir AI director gibi çalışıyorum.',
         'Yazmak, ne yaptığımı ve ne düşündüğümü görmemi sağlıyor. Buradaki içerikleri tamamlanmış fikirler olarak değil, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.',
-        'Herkese iyi okumalar. Geri bildirimlerinizi ve merak ettiklerinizi paylaşmaktan çekinmeyin.' ],
+        'Herkese iyi okumalar. Geri bildirimlerinizi ve merak ettiklerinizi paylaşmaktan çekinmeyin.',
+      ],
       topicsTitle: 'Neler hakkında yazıyorum',
       topics: [
         {
