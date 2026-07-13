@@ -6,8 +6,8 @@ import Matrix from '@/components/matrix'
 import Note from '@/components/note'
 import ReadingModeToggle from '@/components/reading-mode-toggle'
 import TokenDemo from '@/components/token-demo'
-import { defaultLocale } from '@/lib/locale'
 import { getPost } from '@/lib/md'
+import { getRequestLocale } from '@/lib/server-locale'
 import { getBaseUrl } from '@/lib/site'
 import { getCopy } from '@/lib/static-copy'
 import type { Metadata } from 'next'
@@ -22,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const locale = defaultLocale
+  const locale = await getRequestLocale()
 
   try {
     const post = getPost(slug, locale)
@@ -66,7 +66,7 @@ export default async function Post({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const locale = defaultLocale
+  const locale = await getRequestLocale()
   let post
   try {
     post = getPost(slug, locale)

@@ -1,5 +1,5 @@
 import Footer from '@/components/footer'
-import { defaultLocale } from '@/lib/locale'
+import { getRequestLocale } from '@/lib/server-locale'
 import { getCopy } from '@/lib/static-copy'
 import Link from 'next/link'
 
@@ -8,7 +8,7 @@ export default async function ContactPage({
 }: {
   searchParams?: { sent?: string; error?: string }
 }) {
-  const locale = defaultLocale
+  const locale = await getRequestLocale()
   const copy = getCopy(locale)
   const isSent = searchParams?.sent === '1'
   const isError = searchParams?.error === '1'

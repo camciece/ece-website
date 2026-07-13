@@ -1,10 +1,10 @@
 import Footer from '@/components/footer'
-import { defaultLocale } from '@/lib/locale'
 import { getAllPosts } from '@/lib/md'
+import { getRequestLocale } from '@/lib/server-locale'
 import Link from 'next/link'
 
 export default async function Writing() {
-  const locale = defaultLocale
+  const locale = await getRequestLocale()
   const writings = getAllPosts(locale)
   return (
     <main className="writingPage">

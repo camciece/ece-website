@@ -1,8 +1,8 @@
 'use client'
 
-import { stripLocale } from '@/lib/locale'
+import { localeCookieName, stripLocale, type Locale } from '@/lib/locale'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,19 +15,21 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname() || '/'
+  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
+  const locale = (i18n.language === 'en' ? 'en' : 'tr') as Locale
   const currentPath = stripLocale(pathname)
 
-  /*
-   Language toggle disabled - infrastructure kept for later use
-   const toggleLanguage = () => {
-     const newLocale: Locale = locale === 'en' ? 'tr' : 'en'
-     const target = withLocale(currentPath, newLocale)
-     i18n.changeLanguage(newLocale)
-     router.push(target)
-   }
-  */
+  const toggleLanguage = () => {
+    const newLocale: Locale = locale === 'en' ? 'tr' : 'en'
+
+    document.cookie = `${localeCookieName}=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
+    i18n.changeLanguage(newLocale)
+    document.documentElement.lang = newLocale
+    setMenuOpen(false)
+    router.refresh()
+  }
 
   return (
     <header className={`topBar ${menuOpen ? 'topBar--open' : ''}`}>
@@ -61,8 +63,6 @@ export default function Header() {
             <Link href="/" className="logoCenter" aria-label={t('nav.home')}>
               EcesNotes
             </Link>
-            {
-              <div style={{ width: 48 }} /> /*
             <button
               type="button"
               onClick={toggleLanguage}
@@ -72,9 +72,7 @@ export default function Header() {
               })}
             >
               {locale === 'en' ? 'EN' : 'TR'}
-            </button>}
-            */
-            }
+            </button>
           </div>
           <nav className="navRow">
             {links.map((l) => {
@@ -97,7 +95,6 @@ export default function Header() {
 
         {/* RIGHT island */}
         <div className="island island--search">
-          {/*
           <button
             type="button"
             onClick={toggleLanguage}
@@ -108,7 +105,6 @@ export default function Header() {
           >
             {locale === 'en' ? 'EN' : 'TR'}
           </button>
-          Language toggle disabled */}
         </div>
       </div>
 

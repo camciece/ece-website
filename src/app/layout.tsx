@@ -1,6 +1,6 @@
 import Header from '@/components/header'
 import I18nProvider from '@/components/i18n-provider'
-import { defaultLocale } from '@/lib/locale'
+import { getRequestLocale } from '@/lib/server-locale'
 import { getBaseUrl } from '@/lib/site'
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(getBaseUrl()),
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const locale = defaultLocale
+  const locale = await getRequestLocale()
 
   return (
     <html lang={locale}>

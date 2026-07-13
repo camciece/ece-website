@@ -103,7 +103,6 @@ type SiteCopy = {
 }
 
 const copy: Record<Locale, SiteCopy> = {
-  /*
   en: {
     home: {
       heroTitle: 'Merhaba',
@@ -116,8 +115,14 @@ const copy: Record<Locale, SiteCopy> = {
     meet: {
       heroTitle: 'Meet Ece',
       intro: [
-        'I work in tech and I’m currently carving my own path within it. I love experimenting with AI tools, and somewhere along the way, that curiosity turned into building this website through a bit of vibe coding.',
-        'Writing helps me think, learn, and actually digest what I’m building, so I share what I learn as I go.',
+        "I studied industrial and systems engineering in Turkey and the Netherlands. I work in tech, but I've never bought the label \"works in tech.\" That's not what I am.",
+        "My training makes me look at everything as systems and processes, not features. I don't care much about point solutions. I care about how the pieces fit together and whether the whole thing actually works. I've worked in the public sector and the private sector, on critical infrastructure like payment systems, and on the ecosystem side of a big tech company. I've sat inside Western-style orgs and inside ones shaped by Eastern institutional culture. That gave me an unfashionable but useful takeaway: technology is not just an engineering problem. It's a cultural production, whether people admit it or not.",
+        "I've never chased a career ladder. I did what genuinely interested me and dropped what didn't. In my mid-twenties I traveled alone for two years. That's probably why I'm neither fully inside the system nor fully outside it. I'm a participant and an observer at the same time, and I don't think that's a contradiction.",
+        "My interest in AI comes from the same root. AI is, at its core, a systems and process problem. What draws me in isn't how a single model works, it's how models, tools, and human workflows combine into something coherent. That focus sharpened after working at Google, where I saw firsthand that AI isn't just a product feature, it's an ecosystem-scale bet. My attention has kept shifting there over the past few years, because something genuinely new is being built. There's a real break happening in how production works. Nobody actually knows where it lands: it carries as much risk as opportunity. Honestly, that uncertainty is part of what pulls me in.",
+        'This site came out of exactly that process. It started as a side effect of experiments I was running with AI. Somewhere along the way, without planning it, it stopped being a project and became a place to think out loud.',
+        "My current approach to building is tool-agnostic. Human-centered, concept-first. I learn different systems, wire them together, design the process end to end, and decide which tool does which job and how. The closest description I've got: I work like an AI director, owning the whole pipeline instead of any single tool in it.",
+        'What I write here is less about the tools and more about how AI is changing the way we think and build. Treat the posts as notes from an ongoing process, not finished conclusions.',
+        'Thanks for reading. Feedback and questions are always welcome.',
       ],
       topicsTitle: 'What I write about',
       topics: [
@@ -252,7 +257,6 @@ const copy: Record<Locale, SiteCopy> = {
       publishedOnSuffix: '',
     },
   },
-  */
   tr: {
     home: {
       heroTitle: 'Hoşgeldiniz!',
@@ -265,16 +269,16 @@ const copy: Record<Locale, SiteCopy> = {
     meet: {
       heroTitle: 'Ece ile Tanışın',
       intro: [
-        'Türkiye ve Hollanda’da endüstri ve sistem mühendisliği eğitimi aldım. Teknoloji sektöründe çalışıyorum, ama kendimi hiçbir zaman sadece “teknolojide çalışan biri” olarak tanımlamadım.',
-        'Altyapım gereği meselelere hep sistemler, süreçler ve gerçek hayattaki karşılıkları üzerinden bakıyorum. Tekil çözümlerden çok, parçaların nasıl bir araya geldiği ve nasıl işlediği ilgimi çekiyor.',
-        'Bu bakış açısı beni farklı ortamlara taşıdı. Kamuda da bulundum, özel sektörde de. Batı merkezli teknoloji şirketlerinde de çalıştım, Doğu kültürünün baskın olduğu yapılarda da. Bu geçişler, teknolojinin sadece teknik değil, kültürel bir üretim biçimi olduğunu görmemi sağladı.',
+        "Türkiye ve Hollanda'da endüstri ve sistem mühendisliği eğitimi aldım. Teknoloji sektöründe çalışıyorum, ama kendimi hiçbir zaman sadece teknolojide çalışan biri olarak tanımlamadım.",
+        'Altyapım gereği meselelere hep sistemler, süreçler ve gerçek hayattaki karşılıkları üzerinden bakıyorum. Tekil çözümlerden çok, parçaların nasıl bir araya geldiği ve nasıl işlediği ilgimi çekiyor. Kamuda da bulundum, özel sektörde de. Ödeme sistemleri gibi kritik altyapılarda da çalıştım, büyük teknoloji şirketlerinin ekosistem tarafında da. Batı merkezli yapılarda da yer aldım, Doğu kültürünün baskın olduğu kurumlarda da. Bu geçişler bana teknolojinin sadece teknik değil, kültürel bir üretim biçimi olduğunu gösterdi.',
         'Hiçbir zaman klasik anlamda kariyer kovalayan biri olmadım. Yaptığım şeyleri, gerçekten ilgimi çektiği ve içime sindiği için yaptım. Yirmili yaşlarımın ortasında iki yıl boyunca tek başıma seyahat ettim. O yüzden sistemin ne tamamen dışındayım ne de tamamen içinde. Bir yandan parçasıyım, bir yandan gözlemcisiyim.',
-        'Son birkaç yıldır odağım giderek daha fazla yapay zekâ tarafına kaydı. Çünkü burada gerçekten yeni bir şeylerin kurulduğunu hissediyorum. Ve ilk defa, üretim süreçlerinde “anlamlı” bir kırılma var.',
-        'Bu site de tam olarak böyle bir sürecin içinden çıktı. Başta AI ile yaptığım denemelerin bir yan ürünüydü. Zamanla fark etmeden bir projeden çok, bir düşünme alanına dönüştü.',
-        'Bugün üretim yaklaşımım araçlardan bağımsız. İnsan merkezli ve konsept odaklı ilerliyorum. Farklı sistemleri öğrenip bir araya getirirken, süreci uçtan uca kurgulayan ve yöneten bir rolün içindeyim. Bunu en iyi tanımlayan şey belki de şu: bir AI director gibi çalışıyorum.',
-        'Yazmak, ne yaptığımı ve ne düşündüğümü görmemi sağlıyor. Buradaki içerikleri tamamlanmış fikirler olarak değil, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.',
+        'Yapay zekâya ilgim de aslında aynı yerden besleniyor: AI, temelde bir sistem ve süreç meselesi. Nasıl çalıştığından çok, farklı parçaların (modeller, araçlar, insan iş akışları) nasıl bir araya gelip anlamlı bir bütün oluşturduğu beni cezbediyor. Özellikle Googleda çalıştıktan sonra bu tarafa odaklanmam hızlandı; orada AIn sadece bir ürün özelliği değil, kurumsal ölçekte bir ekosistem meselesi olarak nasıl kurgulandığını yakından görme şansım oldu. Son birkaç yıldır odağım giderek buraya kaydı, çünkü burada gerçekten yeni bir şeylerin kurulduğunu hissediyorum. Üretim süreçlerinde büyük bir kırılma yaşanıyor; bunun nereye evrileceğini henüz kimse tam bilmiyor, ama fırsat kadar risk de barındırdığını düşünüyorum. Ve tam da bu belirsizlik, beni buraya çeken şeylerden biri.',
+        'Bu site de tam olarak böyle bir sürecin içinden çıktı. Başta AI ile yaptığım denemelerin bir yan ürünüydü. Zamanla, fark etmeden bir projeden çok bir düşünme alanına dönüştü.',
+        'Bugün üretim yaklaşımım araçlardan bağımsız. İnsan merkezli ve konsept odaklı ilerliyorum: farklı modelleri ve sistemleri öğrenip birbirine bağlıyorum, süreci uçtan uca kurguluyorum, hangi işi hangi aracın nasıl yapacağına karar veriyorum. Bunu en iyi tanımlayan şey belki de şu: bir AI director gibi çalışıyorum, tek bir aracın değil, bütün sürecin sahibi olarak.',
+        "Burada AI'ın araç tarafından çok, düşünme ve üretim biçimini nasıl değiştirdiğiyle ilgili yazıyorum. İçerikleri tamamlanmış fikirler olarak değil, devam eden bir öğrenme sürecinin notları gibi düşünebilirsiniz.",
         'Herkese iyi okumalar. Geri bildirimlerinizi ve merak ettiklerinizi paylaşmaktan çekinmeyin.',
       ],
+
       topicsTitle: 'Neler hakkında yazıyorum',
       topics: [
         {

@@ -6,11 +6,12 @@ import type { Locale } from "@/lib/locale";
 
 const postsDir = path.join(process.cwd(), "content", "posts");
 
-type Localized<T> = T | { en: T; tr: T };
+type Localized<T> = T | Partial<Record<Locale, T>>;
 
 const normalizeLocalized = <T>(value: Localized<T>, locale: Locale): T => {
-  if (value && typeof value === "object" && "en" in value && "tr" in value) {
-    return (value as { en: T; tr: T })[locale];
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const localized = value as Partial<Record<Locale, T>>;
+    return localized[locale] ?? localized.tr ?? localized.en ?? Object.values(localized)[0] as T;
   }
   return value as T;
 };
