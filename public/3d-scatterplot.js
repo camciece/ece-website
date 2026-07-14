@@ -259,10 +259,21 @@ window.initScatterplot = function (fullSvgId) {
     const labels = window[`${svgId}_labels`] || []
     const currentIndex = window[`${svgId}_currentIndex`] || 0
 
+    if (
+      !Array.isArray(allPoints) ||
+      allPoints.length === 0 ||
+      !allPoints.some((points) => Array.isArray(points) && points.length > 0)
+    ) {
+      return
+    }
+
     // Calculate maxValue from all points
     let calculatedMaxValue = 1
-    if (allPoints && allPoints.length > 0) {
-      const flatPoints = allPoints.flat()
+    const flatPoints = allPoints
+      .flat()
+      .filter((point) => Array.isArray(point) && point.length >= 3)
+
+    if (flatPoints.length > 0) {
       const allValues = flatPoints.flatMap((point) => [
         Math.abs(point[0]),
         Math.abs(point[1]),
@@ -282,7 +293,13 @@ window.initScatterplot = function (fullSvgId) {
 
     // Use provided points at current index
     const customPoints = allPoints[currentIndex] || allPoints[0]
+    if (!Array.isArray(customPoints)) {
+      return
+    }
+
     customPoints.forEach((point, idx) => {
+      if (!Array.isArray(point) || point.length < 3) return
+
       scatter.push({
         x: point[0],
         y: -point[1],

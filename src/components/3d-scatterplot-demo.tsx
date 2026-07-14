@@ -27,6 +27,7 @@ export default function Scatterplot3DDemo({
   const [currentIndex, setCurrentIndex] = useState(0)
   const initializedRef = useRef(false)
   const [cssWidth, setCssWidth] = useState<number>(640)
+  const hasPointSets = pointSets.some((set) => set.points.length > 0)
 
   // Read width from CSS variable on mount
   useEffect(() => {
@@ -44,8 +45,12 @@ export default function Scatterplot3DDemo({
   const finalWidth = width ?? cssWidth
 
   useEffect(() => {
-    if (!svgContainerRef.current)
-      return // Store points data globally for the script to access
+    if (!svgContainerRef.current || !hasPointSets) return
+
+    initializedRef.current = false
+    svgContainerRef.current.innerHTML = ''
+
+    // Store points data globally for the script to access
     ;(window as any)[`${id}_points`] = pointSets.map((set) => set.points)
     ;(window as any)[`${id}_setNames`] = pointSets.map((set) => set.name)
     ;(window as any)[`${id}_labels`] = labels
@@ -115,7 +120,7 @@ export default function Scatterplot3DDemo({
       delete (window as any)[`${id}_height`]
       delete (window as any)[`${id}_init`]
     }
-  }, [id, pointSets, labels, finalWidth, height])
+  }, [id, pointSets, labels, finalWidth, height, hasPointSets])
 
   // Re-initialize when currentIndex changes
   useEffect(() => {

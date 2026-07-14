@@ -105,7 +105,7 @@ type SiteCopy = {
 const copy: Record<Locale, SiteCopy> = {
   en: {
     home: {
-      heroTitle: 'Merhaba',
+      heroTitle: 'Hello!',
       heroBody:
         'This is a new tech blog where I document observations and experiments from working with AI. The focus is on what I’m learning along the way. Hope you enjoy!',
       heroCta: 'Read the first post',
