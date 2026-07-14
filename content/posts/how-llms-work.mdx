@@ -5,7 +5,7 @@ title:
 image: /LLMs.png
 shareDescription: true
 excerpt:
-  en:
+  en: 'LLM Architecture 101: how Transformers, embeddings, and attention turn math into human-like answers'
   tr: 'LLM Mimarisi 101: Transformer, Embeddings ve Attention mekanizmasıyla yapay zekanın insansı cevaplar üretme süreci'
 date: 27 Ocak 2026
 tags:
@@ -13,11 +13,654 @@ tags:
   - Ops
 content:
   en: |
-    Fast prototypes are fun. But real systems survive because of the dull bits:
-    runbooks, quotas, monitoring, budgets, and incident response.
+    When we talk about AI today, we usually talk about the competition between names like Claude, Gemini, and GPT. Claude is often seen as a reliable harbor for workflows that require discipline, such as long-document analysis and coding. Gemini draws strength from Google's search and media ecosystem, with an ambitious multimodal line that can reason across text, images, and video. OpenAI continues to position the GPT series as a broad, balanced family of models with strong general reasoning ability.
 
-    You can spend more than you think, and you won’t see it until a month later.
-    “Boring” controls make the cost visible.
+    So what makes these models feel so different in their answer styles, their "personalities," their safety layers, and their behavior? When we step into the kitchen, we see that many variables shape those differences: **Tokenizer** choices, pre-training data, **RLHF** (Reinforcement Learning from Human Feedback), safety filters, and many other design decisions.
+
+    But behind all these different identities, the same core idea is beating: they are all **Transformer-based**, and at their heart they work through **next token prediction**. In other words, they all look at the text in front of them and ask, billions of times: *"What is the most likely piece that should come next?"*
+
+       <div className="writingArticle__callout">
+         In this article, we will open that engine piece by piece:
+         <ul className="writingArticle__ArchitectureList">
+           <li>How text becomes numbers, or vectors, inside the model,</li>
+           <li>Which mathematical stops those numbers pass through before they start carrying "meaning,"</li>
+           <li>How the model weighs context, and why every answer is generated word by word.</li>
+         </ul>
+          </div>
+
+        <h2>LLM Architecture</h2>
+
+      So how does this enormous mathematical system, the one that gives us such "human-like" answers, actually work inside? From the outside it looks hyper-scaled, extremely complex, and a little intimidating. But the interesting part is this: once explained, the internal architecture of large language models is much more orderly than you might expect. It is built around a flow that repeats again and again.
+
+      The easiest way to understand that flow is not to imagine the model as one single "mind," but as a production line. Text enters from one side, passes through several basic stages, and comes out as text again on the other side. We can look at this pipeline in four main parts:
+            
+      <figure className="writingArticle__media">
+         <img src="/graph.svg" alt="graph" data-graph="true" />
+       </figure>
+          <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+           <li>**Tokenizer:** The entry gate of the factory, splitting text into small pieces and turning them into numeric labels.</li>
+           <li>**Embeddings:** The layer where numeric labels are placed into a high-dimensional coordinate system that represents word meaning.</li>
+           <li>**Transformer (Attention & Feedforward):** The actual prediction engine, where words look at each other, gain context, and billions of multiplications help calculate the next step.</li>
+           <li>**Output:** The stage where the model produces the probability distribution for the next piece of text.</li>
+         </ol>
+
+         The amount of computation inside the Transformer layer is enormous, but the architecture itself is surprisingly clean. Most of what happens inside the model is the same kind of operation repeated over and over: multiply matrices, add, normalize, repeat.
+
+          Look at this tiny code sketch:
+        <div className="writingArticle__codeCard">
+          <pre className="writingArticle__codeBlock">
+            <code>
+              <span className="codeLine">
+                <span className="codeVar">prompt</span>
+                <span className="codeEq"> = </span>
+                <span className="codeString">"Write a convincing message explaining that I was not ghosting"</span>
+              </span>
+              <br />
+              <span className="codeLine">
+                <span className="codeVar">tokens</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">tokenizer</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">prompt</span>
+                <span className="codeOp">);</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeKw">while</span>
+                <span className="codeOp"> (</span>
+                <span className="codeConst">true</span>
+                <span className="codeOp">) &#123;</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeVar">  embeddings</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">embed</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">tokens</span>
+                <span className="codeOp">);</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeKw">  for</span>
+                <span className="codeOp"> ([</span>
+                <span className="codeVar">attention</span>
+                <span className="codeOp">, </span>
+                <span className="codeVar">feedforward</span>
+                <span className="codeOp">] of </span>
+                <span className="codeVar">transformers</span>
+                <span className="codeOp">) &#123;</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeVar">    embeddings</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">attention</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">embeddings</span>
+                <span className="codeOp">);</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeVar">    embeddings</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">feedforward</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">embeddings</span>
+                <span className="codeOp">);</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeOp">  &#125;</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeVar">  output_token</span>
+                <span className="codeEq"> = </span>
+                <span className="codeFn">output</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">embeddings</span>
+                <span className="codeOp">);</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeKw">  if</span>
+                <span className="codeOp"> (</span>
+                <span className="codeVar">output_token</span>
+                <span className="codeEq"> === </span>
+                <span className="codeConst">END_TOKEN</span>
+                <span className="codeOp">) &#123;</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeKw">    break</span>
+                <span className="codeOp">;</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeOp">  &#125;</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeVar">  tokens</span>
+                <span className="codeOp">.</span>
+                <span className="codeFn">push</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">output_token</span>
+                <span className="codeOp">);</span>
+              </span>
+              <span className="codeLine">
+                <span className="codeOp">&#125;</span>
+              </span>
+              <br />
+              <span className="codeLine">
+                <span className="codeFn">print</span>
+                <span className="codeOp">(</span>
+                <span className="codeFn">decode</span>
+                <span className="codeOp">(</span>
+                <span className="codeVar">tokens</span>
+                <span className="codeOp">));</span>
+              </span>
+            </code>
+          </pre>
+        </div>
+        
+      We are not talking about codebases as complicated as we might imagine. Some working open-source model examples can be built in a few hundred lines of Python. The clean, educational examples built from scratch in PyTorch by researchers like <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> are a beautiful proof of that elegance.
+         
+         But the fact that the architecture looks simple does not mean the work is small. The opposite is true: that simplicity makes the scale of the work easier to feel. Every tiny step the model takes means millions, even billions, of numbers influencing one another at the same time.
+         
+         <Note>
+           <span className="writingNote__icon" aria-hidden="true">!</span>
+           <strong>The giant marathon behind the curtain: why so much computation?</strong>
+           <br />
+          Try it yourself: if you want to see how this marathon works interactively, including how each head looks at words and how probabilities are calculated, spend time with the <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a>. Once you see those lines between numbers come alive, the pieces start falling into place.
+
+           **Explanation:**
+
+           These calculations do not happen once and stop. Even while you write a single sentence, the famous Transformer layers are running a giant internal marathon. If we read the process through the visual:
+           <ul className="writingArticle__ArchitectureList">
+             <li>**Vertical climb (Blocks):** There is not just one operation layer inside the model. The "11 more identical Transformer Blocks" phrase in Transformer Explainer means the data passes through the same kinds of operations dozens of times. In some models this can go up to 96 layers.</li>
+             <li>**Parallel perspectives (Heads):** In each block, multiple heads work at the same time. One may focus on grammar, another on distance between words, another on deeper semantic relations. A single block can contain dozens of different "heads" calculating in parallel.</li>
+             <li>**Step-by-step generation (Autoregressive):** The most critical loop is this: the model does not generate a whole sentence at once. To find each word, or token, it uses all these layers and heads again and again.</li>
+           </ul>
+           That is why the "huge" thing about LLMs is not an impossible-to-understand algorithm. It is the repetition of simple steps, multiplication and addition, at massive scale. The required compute and energy cost also explains why major technology companies are chasing new nuclear energy agreements.
+         </Note>
+
+      Now that we have seen the big picture, let's go back to the very beginning of the production line: how the text you type into ChatGPT gets translated into the language this mathematical world can understand.
+
+     The first stop in our factory is the **Tokenizer**.
+
+       <h2>Tokenizer</h2>
+
+       When you say "What's up?" to an AI system, it does not see those words the way we do. The enormous mathematical system at the heart of the model speaks in numbers, not letters. So before your text can enter the model's processors, it has to be translated into the model's native language. That is exactly the Tokenizer's job: to break human language into atomic pieces the model can calculate over.
+       
+       But this transformation is not as word-based as we might think. In everyday life, we think of language through words. We put spaces between them and treat them as clear boundaries. For a model, that would not be very practical. If it treated everything word by word, it would have to memorize every variation separately: "book," "books," "bookstore," and so on. That would inflate the vocabulary and leave the model helpless in front of new words.
+       
+       That is why modern models use **Subword Tokenization**. A word is not necessarily kept as one piece; it can be split into meaningful smaller parts. This subject is deep and critical enough that <a href="https://karpathy.ai/" target="_blank" rel="noreferrer">Andrej Karpathy</a>, one of the best-known educators in AI, has a famous hours-long <a href="https://www.youtube.com/watch?v=zduSFxRajkE/" target="_blank" rel="noreferrer">video</a> just about building a tokenizer from scratch.
+       
+      For now, this summary is enough: the Tokenizer finds the sweet spot between a word and a letter. It breaks text into pieces that are meaningful enough for the model to learn from, but flexible enough to handle words it has never seen before.
+
+      <h3>**More than a "text splitter"**</h3>
+
+     So how exactly does the living text of our language become these cold, computable pieces in the model's world? The first answer is simple: we pass the text through a Tokenizer.
+
+     But there is a critical nuance here. The Tokenizer is not a random, innocent text splitter. It is a pre-trained system, just like the model itself. During training, it studies huge text collections like a detective and learns which character sequences like to appear together. Endings, common words, technical fragments, and recurring patterns become stored as meaningful units. When training is complete, the Tokenizer has a fixed vocabulary of tens of thousands of pieces.
+       
+    So when the Tokenizer meets a word it has never seen before, it does not say, "Let me add this to my dictionary." It asks how it can split the word into the most reasonable combination of pieces it already knows.
+       
+       When you enter a prompt, three steps happen in the background:
+
+          <ul className="writingArticle__ArchitectureList">
+           <li>**Splitting:** It breaks the text into the most suitable meaningful sub-tokens it knows.</li>
+           <li>**Mapping:** It places each piece in the correct location in its vocabulary.</li>
+           <li>**ID generation:** It produces the unique Token ID that the model will actually compute with.</li>
+         </ul>
+
+         Try it yourself: if you want to see this process live on your own sentences, play with OpenAI's online <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noreferrer">tokenizer tool</a>. Watching your words turn into colored blocks and numeric identities makes the logic much easier to grasp.
+         
+        <h2>Embeddings</h2>
+
+        Now we are in the kitchen. The IDs that come out of the Tokenizer are still just numbers for the model. On their own, they are dry labels. We cannot measure similarity, and we cannot ask whether two tokens are close to each other. For meaning to be built, these numbers have to become comparable. They need a mathematical soul. That transformation happens in the Embeddings layer.
+        
+       You can imagine it like this: every Token ID corresponds to a row in a giant dictionary table inside the model, the embedding table. The long list of numbers pulled from that row represents the token as a high-dimensional vector.
+       
+       So what is a vector? Think of an embedding as a coordinate in a vast space. In a simple 3D world, a word's embedding might look like [10, 4, 2], taking us to x=10, y=4, z=2. In reality, the space is not limited to three or five dimensions. It can have thousands. Words move closer together, drift apart, or form clusters according to meaning and usage.
+       
+       <div className="writingArticle__callout">
+           <div className="writingArticle__calloutTitle">Why so many dimensions?</div>
+           <div className="writingArticle__calloutBody">
+           Large language models do not have a ready-made guide that tells them how words should relate to one another. They have to discover the enormous patterns and hidden relationships of language from scratch.
+
+         They read a sentence not only through "what is said," but through tone, rhythm, formality, slang, domain, structure, and thousands of other signals. That is why each token is represented not on one line, but across many axes at once.
+
+     The strange and fascinating part is this: these dimensions usually do not have clean human labels. There is no axis inside the model called "joy" or "irony" or "formality." The distinctions exist, they work, and they affect the output, but they do not translate neatly into our language.
+
+    In modern models, these dimensions are counted in the thousands. A word is not one meaning; it lives as a coordinate made from countless overlapping properties. Meaning is born not at one point, but inside the whole network of relationships.
+
+    Maybe this is the most "magical" part of models: they move through mathematical steps, but the world they build is too deep and high-dimensional to translate perfectly back into our words.
+          </div>
+         </div>
+
+      **Where numbers become coordinates**
+
+      Look at the table in the visual. Each row shows the representation a token receives from the model's giant internal "meaning dictionary." Each column represents a different dimension shaping that token's character.       
+        <div className="writingArticle__embedVisualization">
+         <div className="writingArticle__embedTable">
+         <div className="writingArticle__embedTableHeader">
+           <span>Token ID</span>
+           <span>d1</span>
+           <span>d2</span>
+           <span>d3</span>
+         </div>
+         <div className="writingArticle__embedTableRow">
+           <span className="writingArticle__embedTableId">684</span>
+           <span>-11.1</span>
+           <span>7.3</span>
+           <span>-5.1</span>
+         </div>
+         <div className="writingArticle__embedTableRow">
+           <span className="writingArticle__embedTableId">704</span>
+           <span>8.6</span>
+           <span>-5.4</span>
+           <span>9.5</span>
+         </div>
+         <div className="writingArticle__embedTableRow">
+           <span className="writingArticle__embedTableId">73963</span>
+           <span>-3.2</span>
+           <span>6.1</span>
+           <span>0.7</span>
+         </div>
+        <div className="writingArticle__embedTableRow">
+          <span className="writingArticle__embedTableId">10709</span>
+          <span>-10.1</span>
+          <span>-1.4</span>
+          <span>-8.9</span>
+        </div>
+       </div>
+       <Scatterplot3DDemo 
+        id={'embeddings'}
+        pointSets={[
+          { name: 'Embeddings', points: [[-11.1, 7.3, -5.1], [8.6, -5.4, 9.5], [-3.2, 6.1, 0.7], [-10.1, -1.4, -8.9]]}
+         ]}
+        labels={["684", "704", "73963", "10709"]}
+       />
+       </div>
+             Imagine the process step by step:
+
+        <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+         <li>**Step 1 (Tokens):** We have integer IDs from the Tokenizer. But they are only labels. There is no distance, similarity, or meaning between them yet. For the model, they are independent numbers.</li>
+         <li>**Step 2 (Embeddings):** The magic starts here. Each number finds its row in the giant table shaped during training. Now we no longer have a single number; we have a list of decimals, a vector, that places the token in a high-dimensional space.</li>
+         </ol>
+
+        <Note>
+          <span className="writingNote__icon" aria-hidden="true">!</span>
+          These embeddings start from random positions. As the model trains, the positions are adjusted according to error. Tokens used in similar contexts slowly move closer together, while unrelated ones drift apart.
+        </Note>
+
+         **We are on a static map, for now**
+
+         At this point, tokens can be compared for the first time. But there is a subtle detail: meaning has not directly appeared yet. The mathematical ground on which meaning can be built has been prepared.
+         
+         <Note>
+           <span className="writingNote__icon" aria-hidden="true">!</span>
+           When we say "words move closer together," we are talking about what happens during the model's long training process. When the model is running and answering your prompt, the embedding table is fixed.
+         </Note>
+         
+         The key point is this: embeddings belong to words or tokens, not to sentences. A word like "bank" pulls the same initial coordinate from the table whether it appears in "river bank" or "bank account." The embedding alone does not yet know which context is intended.
+         
+         Embeddings place tokens on a huge but static map. At this stage, the model still does not know:
+           <ul className="writingArticle__ArchitectureList">
+           <li>"Which word is critical in this sentence?"</li>
+           <li>"Which word should I focus on right now?"</li>
+           <li>"How does the neighboring word change this word's meaning?"</li>
+         </ul>
+
+      This is exactly where the **Transformer** architecture enters. It takes those static, lifeless coordinates and makes them interact through **Attention**.            
+       
+       <h2 className="writingArticle__transformerTitle">Transformer</h2>
+
+      In the Embeddings stage, we turned words into numbers and placed each one on a high-dimensional map. Every token has an address, but that address alone is not meaning. The Transformer's job is to take those static vectors, make them interact with the other tokens in the sentence, and reshape them according to context. This is where the model's famous ability to "understand" begins.
+
+        ***Static* vectors → *Dynamic* vectors that build context**
+        
+        At the embedding stage, each word corresponds to one point in space, independent of the sentence. The word "bank" begins from the same coordinate no matter where it appears. But real language does not work that way:
+
+        <ul className="writingArticle__ArchitectureList">
+           <li>*"She sat on the old bank by the river."*</li>
+           <li>*"She went to the bank branch to open a new account."*</li>
+         </ul>
+
+         The word is the same, but the meanings are worlds apart. The magic of the Transformer is that it makes this difference mathematically visible. It takes static embeddings, lets them "talk" to the other words in the sentence, and repositions each token according to its context. A word is now represented not only by what it is, but by the relationships it forms.
+
+         At the heart of this transformation is one golden rule: **not every word is equally important.** This is where **Attention** enters.
+        
+       <h3 className="writingArticle__transformerTitle">Attention: which token matters, and how much?</h3>
+
+       Attention asks a simple but vital question: "To understand this sentence correctly, which tokens should I focus on, and by how much?"
+
+       As the model processes text, it still moves piece by piece. The difference is that when it reaches a token, it does not treat all previous tokens equally. It weighs them by importance and creates a weighted combination.
+
+       For example, in the sentence *"I deposited the money in the bank"*, when the model reaches "deposited," it may roughly weigh the earlier context like this:
+       <ul className="writingArticle__TokenizerList">
+         <li>**48% → bank:** The largest share goes here because it clarifies where the action is directed.</li>
+         <li>**34% → money:** The second important focus because it tells us what was deposited.</li>
+         <li>**18% → surrounding context:** Supporting signals such as grammar, tense, and flow.</li>
+       </ul>
+
+       The model blends the embeddings of these tokens in those proportions and produces a new **contextual vector**. That vector no longer represents only the word "bank"; it represents "bank as part of a financial transaction."
+
+      <Note>
+        <span className="writingNote__icon" aria-hidden="true">!</span>
+        This attention process does not only work when the model generates an answer. It also runs while the model is trying to understand your prompt. The clearer and more detailed your frame is, the stronger the contextual network the model can build.
+
+      That is exactly why **Prompt Engineering** became a real discipline. Every word you write acts like an instruction about where the model should place its attention. The quality of your prompt shapes how accurately those billions of matrix multiplications line up.
+      </Note>
+
+       **How does Attention do this mathematically? → Q, K, V**
+
+       Time for a short math break. The goal is not to drown in formulas, but to build an intuition for how the model calculates this focusing behavior behind the curtain.
+
+       Those attention weights do not arrive by magic. They are calculated step by step. Let's use a simplified example:
+
+       <ul className="writingArticle__TokenizerList">
+         <li> **Prompt:** "I deposited money in the bank"</li>
+         <li>**Token IDs are ready:** The Tokenizer has split the sentence into pieces.</li>
+         <li>**Embeddings:** To make the visualization simple, imagine a 3-dimensional world. In reality this space has thousands of dimensions, but this small matrix is enough to understand the mechanism.</li>
+       </ul>
+       
+        <div className="writingArticle__codeRow">
+         <div className="writingArticle__codeCard writingArticle__codeCard--narrow">
+           <pre className="writingArticle__codeBlock">
+             <code>
+               <span className="codeLine">
+                 <span className="codeConst">Embeddings</span>
+                 <span className="codeOp"> (</span>
+                 <span className="codeVar">4 × 3</span>
+                 <span className="codeOp">)</span>
+               </span>
+               <br />
+               <br />
+               <span className="codeLine ">
+                <span className="codeConst codeLine--row-1">Token 1:</span>
+                <span className="codeVar"> money</span>
+                 <span className="codeOp">  → </span>
+                 <span className="codeConst codeLine--row-1">Embedding 1:</span>
+                 <span className="codeOp">[ </span>
+                 <span className="codeVar">0.2</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">-0.1</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">0.7</span>
+                 <span className="codeOp"> ]</span>
+               </span>
+               <br />
+               <span className="codeLine ">
+                <span className="codeConst codeLine--row-2">Token 2:</span>
+                <span className="codeVar"> bank</span>
+                 <span className="codeOp">   → </span>
+                 <span className="codeConst codeLine--row-2">Embedding 2:</span>
+                 <span className="codeOp">[ </span>
+                 <span className="codeVar">0.9</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">0.3</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">-0.2</span>
+                 <span className="codeOp"> ]</span>
+               </span>
+               <br />
+               <span className="codeLine ">
+                <span className="codeConst codeLine--row-3">Token 3:</span>
+                <span className="codeVar"> deposit</span>
+                 <span className="codeOp">→ </span>
+                 <span className="codeConst codeLine--row-3">Embedding 3:</span>
+                 <span className="codeOp">[ </span>
+                 <span className="codeVar">0.4</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">0.8</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">0.1</span>
+                 <span className="codeOp"> ]</span>
+               </span>
+               <br />
+               <span className="codeLine ">
+                <span className="codeConst codeLine--row-4">Token 4:</span>
+                <span className="codeVar"> ed</span>
+                 <span className="codeOp">     → </span>
+                 <span className="codeConst codeLine--row-4">Embedding 4:</span>
+                 <span className="codeOp">[ </span>
+                 <span className="codeVar">-0.3</span>
+                 <span className="codeOp">, </span>
+                 <span className="codeVar">0.2</span>
+                 <span className="codeOp"> , </span>
+                 <span className="codeVar">0.6</span>
+                 <span className="codeOp"> ]</span>
+               </span>
+             </code>
+           </pre>
+         </div>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
+         <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embedding Matrix" }} />
+        </div> 
+
+       At this point, Attention looks at these embeddings through three different lenses. The model takes each embedding and passes it through three different mathematical transformations. We call them **Query**, **Key**, and **Value**.                      
+        <div className="writingArticle__callout">
+
+        **Q and K decide, V is carried forward**
+
+        What do these three perspectives mean in practice? Let's translate the mathematical whispering through the tokens "bank" and "deposited":
+
+       <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+         <li>**Query (Q)** *"Which features should this token look for in the other tokens to understand the sentence correctly?"*</li>
+
+         For the token "deposited," the model asks: "Where was it deposited? What was deposited? Is there a place related to this action?" This wish list is the Query vector. If it finds strong matches in tokens like "bank" and "money," those tokens receive more attention.
+
+         <li>**Key (K)** *"Which signals does this token offer to the outside?"*</li>
+
+         The token "bank" offers labels such as: "I contain location information, I carry a financial context, I can be related to actions." It is like the spine label on a book in a library.
+
+         <li>**Value (V)** *"What information should be carried from this token into the context?"*</li>
+         </ol>
+
+         Q and K answer "Who should I look at?" V answers "If you look at me, what should you take from me?" The token "bank" packages its financial meaning and location signal for the next stage. The Value vector is the mathematical representation of that portable information.
+
+       **Mathematical transformation: W<sub>Q</sub>, W<sub>K</sub>, and W<sub>V</sub> matrices**
+
+       These $\mathit{Q}$, $\mathit{K}$, and $\mathit{V}$ vectors do not fall from the sky. They are obtained by multiplying the **Embedding** matrix with three different learned matrices:
+
+        <div className="writingArticle__mathLines">
+          <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
+          <div className="writingArticle__mathLine">$K = Embeddings \times W_{K}$</div>
+          <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
+        </div>
+
+       The $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$, and $\mathit{W\scriptsize{V}}$ matrices are the parameters learned during training. At the beginning, they are filled with random numbers. The model starts with no language rules, and that is the point: it is not constrained by assumptions. During training, it compares its output with the correct answer, measures the error, and updates those numbers little by little. After billions of examples, the matrices become very good at answering:
+
+        <ul className="writingArticle__TokenizerList">
+         <li>"Which features are truly related?"</li>
+         <li>"Which signals matter for context, and which ones are noise?"</li>
+       </ul>
+
+       The phrase "175 billion parameters" refers to these tiny decimal numbers inside matrices. Alone, each number means almost nothing. Together, they create a massive behavioral system, almost like neurons forming a larger pattern.
+
+       </div>
+
+       **Now let the math speak: calculating Q and K**
+
+      At this stage, we are not calculating attention yet. We are expressing what each token is looking for ($Q$) and what each token offers ($K$) in the same mathematical space.
+
+       <div className="writingArticle__codeRow">
+         <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+         <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"WQ" }} />
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q"}}/>
+       </div>
+
+        <div className="writingArticle__codeRow">
+         <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+         <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"WK" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[-0.1, -0.1, 0.6], [-0.1, -0.5, -1.0], [-0.6, 0.1, -0.8], [-0.4, 0.4, 0.6]]} title={{ text:"K" }}/>
+       </div>
+
+       Notice that the $\mathit{Q}$ and $\mathit{K}$ matrices deliberately have compatible dimensions. Soon we will make them shake hands mathematically. We are not yet asking "Who pays attention to whom?" We are building the conditions that make that question possible.
+              
+       **Q and K finally meet: the matrix handshake**
+
+       Now every token has a Query ($Q$), which knows what it is looking for, and a Key ($K$), which describes what it offers. The fascinating part comes when these two matrices are multiplied to produce **Attention Scores**.
+
+       Mathematically, we multiply the $Q$ matrix by the transpose of the $K$ matrix ($Q \times K^T$). This asks, for every pair of words: "How well do the features word A is looking for match the labels word B offers?"
+
+       The result is a score matrix showing the relevance between every word and every other word.
+         
+         <div className="writingArticle__codeRow">
+         <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+         <Matrix values={[[-0.1, -0.1, -0.6, -0.4], [-0.1, -0.5, 0.1, 0.4], [0.6, -0.1, -0.8, 0.6]]} title={{ text:"transpose (Kᵀ)" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0.0, -0.1], [0.2, -0.2, 0.0, 0.6]]} title={{ text:"scores" }}/>
+       </div>
+
+       <ul className="writingArticle__TokenizerList">  
+         <li>**Rows and columns** - Each row in the Scores table represents the current token. Each column represents the token being looked at.</li>
+          <li>**Dot product** - Each cell is the dot product of two vectors ($Q$ and $K$). It measures how much two vectors point in the same direction.</li>
+         <li>**What do the scores mean?** - This is a compatibility test between tokens. The larger the number, the stronger the connection. If the Query for "deposited" and the Key for "bank" produce a high score, the model sees them as strongly related in context.</li>
+         <li>**The size of the Scores matrix** - It depends on the number of tokens in the prompt, not on the embedding dimension. Four tokens produce a 4×4 table; twenty tokens produce a 20×20 table.</li>
+       </ul>
+
+        <Note>
+          <span className="writingNote__icon" aria-hidden="true">!</span> Up to this point, we calculated token similarities freely. Every token could look at every other token, including future tokens. But language models generate text from left to right. When the model is producing a word, it should not know words that have not been generated yet. Otherwise, it would be cheating.
+
+          This is where **masking** enters.
+        </Note>
+
+       **Masking: preventing the model from seeing the future**
+
+     We have created the score table, but a crucial rule now appears: honesty. During training, we want the model to predict the next word. If it can look at later words in the score table, it is copying the answer.
+     
+     We prevent this with masking:
+       <div className="writingArticle__codeRow">
+         <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0, -0.1], [0.2, -0.2, 0, 0.6]]} title={{ text:"scores" }} prefix={{ text: "mask(" }} suffix={{ text: ")" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }}/>
+       </div>
+
+       The -inf values make it mathematically impossible for the model to look into the future. Each token is forced to decide using only itself and the context before it. Attention gains a kind of time discipline.
+
+       **Softmax: turning scores into weights**
+
+       After masking, we still have raw numbers that are hard to compare. Softmax turns them into clean probability weights that add up to 1, or 100%:
+            <div className="writingArticle__codeRow">
+         <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }} prefix={{ text: "softmax(" }} suffix={{ text: ")" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
+       </div>
+
+       The result is an **Attention Weight Matrix**. Looking at this matrix, you can see how much the fourth row, for example, focuses on the previous tokens. The zero cells, the masked areas, guarantee that the model does not look there.
+
+       **Value (V) and the output: packaging meaning** 
+
+       So far we have answered: "Who is related to whom, and by how much?" But what information do we take from the related token? That is where the $Value(V)$ matrix enters.
+
+       <div className="writingArticle__codeRow">
+         <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+         <Matrix values={[[0.6, -0.2, 0.1], [0.3, 0.7, -0.4], [-0.5, 0.2, 0.8]]} title={{ text:"WV" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
+       </div>
+
+              You can think of the V matrix as the portable-content version of the embeddings. At this point, the question "what are we looking for?" is over; only "content" remains. As before, WV is a learned matrix from training, and it transforms token embeddings into the V matrix.
+
+       In the final step, the delicate weights from Softmax are multiplied by the V matrix ($Weights \times V$):
+        <div className="writingArticle__codeRow">
+         <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+         <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
+         <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+         <Matrix values={[[-0.3, 0.0, 0.6], [0.3, 0.0, 0.1], [0.3, 0.2, 0.0], [0.0, 0.2, 0.3]]} title={{ text:"output" }}/>
+       </div>
+
+       **Result: a contextual vector is ready**
+
+       <Scatterplot3DDemo 
+        id={'output'}
+        pointSets={[
+          { name: 'Embeddings', points: [[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]},
+          { name: 'Output', points: [[-0.3, 0, 0.6], [0.3, 0, 0.1], [0.3, 0.2, 0], [0, 0.2, 0.3]]}
+         ]}
+        labels={["796", "35569", "6922", "5094"]}
+       />
+      
+      The output vectors are no longer the original static vectors entering the Transformer. They are:
+
+      <ul className="writingArticle__TokenizerList">  
+         <li>Shaped by the sentence,</li>
+          <li>Placed inside context,</li>
+         <li>Weighted by information about which words mattered most.</li>
+       </ul>
+     
+     But do not get too excited yet: the model has still not produced a word. These vectors are not the final decision. They are intermediate representations, ready to be processed more deeply by the next stage: **Feedforward (FFN)**.
+             
+                <h3 className="writingArticle__transformerTitle">Feedforward: the kitchen where meaning is cooked</h3>
+
+      After Attention produces a contextual matrix for each token, we have solved "who relates to whom, and by how much." But that is not enough. The signal still has to be processed, refined, and turned into a stronger internal representation.
+      
+      The **Feedforward (FFN)** layer does exactly that. It takes the contextual vectors from Attention and processes each token individually:
+        <ul className="writingArticle__TokenizerList">
+         <li>**Individual processing** - Attention looks at all tokens together and weighs their relationships. Feedforward takes each token vector on its own and says: "This is your relationship to the others; now let's pass that new identity through a deeper logical filter."</li>
+         <li>**Deepening and world knowledge** - Many researchers believe that basic learned world knowledge, such as factual associations, is stored to a significant degree in Feedforward weights. This is where the model moves beyond simple statistical matching and gains conceptual depth.</li>
+         <li>**Non-linear touch** - Data passes through non-linear mathematical functions, often ReLU or GELU. This helps the model imitate the uneven, layered, complex logic of language.</li>
+       </ul>
+
+       In short: **Attention** builds the relationship; **Feedforward** builds meaning from that relationship.
+
+        <Note>
+          <span className="writingNote__icon" aria-hidden="true">!</span>
+          In plain terms, Feedforward extracts the useful combinations from the information gathered by Attention.
+      
+          It does not add new context. It does not redistribute attention or create new relationships between tokens. Its job is to transform the Attention output into a stronger and more meaningful internal representation.
+
+          Attention chooses which information matters; Feedforward kneads and deepens the selected information. That is why these two steps are an inseparable pair inside the Transformer.
+        </Note>
+
+      <h3 className="writingArticle__transformerTitle">Transformer blocks: repeating the loop again and again</h3>
+
+      A Transformer block does not end the process. The phrase <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">"11 more identical Transformer Blocks"</a> points to a vertical marathon.
+
+    The output of one block passes through Attention and Feedforward again in the block above it. During this vertical journey, meaning is refined, abstracted, and deepened layer by layer. After this happens many times, the model moves from simple word relationships in lower layers to tone, intent, and logical structure in higher layers.
+
+        <h2>Leaving the Transformer: the stage of probabilities</h2>
+
+    Once the marathon through all layers is done, the vectors have reached their most mature form. But they are still lists of numbers. Now we leave the Transformer and move to the Output, or Probabilities, layer, where the model prepares an answer:
+
+    <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
+         <li>**Saying goodbye to the dictionary (Linear Layer)** - The model takes the mature vector and projects it onto its huge vocabulary. Every possible next token receives a candidate score.</li>
+
+         For example, after "I deposited the money in the...", candidates like [bank], [account], or [branch] may receive high scores, while unrelated candidates like [apple] fall to the bottom.
+
+         <li>**Probability filter (Softmax)** - These scores pass through Softmax and become percentages that add up to 100%:</li>
+             <ul className="writingArticle__TokenizerList">
+         <li>[bank] -> 88%</li>
+         <li>[account] -> 7%</li>
+         <li>[branch] -> 4%</li>
+          <li>...</li>
+       </ul>
+         <li>**The birth of words (Sampling & Temperature)** - The model does not always choose the highest-probability word. Sampling strategies enter here. Temperature controls how creative or risk-taking the choice can be. Top-k and Top-p remove very unlikely options and help the model stay coherent while still sounding natural.</li>
+         </ol>
+
+          <h2>And the loop closes: the autoregressive process</h2>
+
+          The real illusion of intelligence is hidden here: the model does not produce a whole paragraph at once. It chooses one token. If it chooses [bank], it adds that token to its own input: "I deposited the money in the bank..."
+          
+          Then the entire production line, Tokenizer -> Embedding -> Attention -> FFN, runs again to find the next token. While you read a fluent answer, the prediction engine is sweating through this process from the beginning for every single piece.
+
+       <div className="writingArticle__callout">
+       
+       **Author's note: why are we here?** 
+       
+       In the world of Large Language Models, every day brings a new model, a new benchmark, and a new wave of excitement. But understanding how the gears turn beneath this enormous machine is what separates merely using technology from being able to shape it.
+       
+       In this article, we followed the journey from a word becoming a number to billions of matrices "talking" to one another to create meaning. My goal was to make this complex world a little more transparent and a little more understandable, so we can all be a bit more prepared for the future ahead.
+       
+       Why did we spend so much time on this foundation? Because in the next stops, we will talk about how these "word prediction engines" evolve beyond chatbots and become Agentic AI systems that make decisions and take actions on our behalf. The future will not belong only to systems that predict, but to agents that turn predictions into goals.
+       
+       See you in the next article, inside the intelligent world built on top of this architecture.
+                <br />
+
+       **P.S.** Thank you to my developer friend <a className="writingArticle__link" href="https://www.linkedin.com/in/arindenizkoklu/" target="_blank" rel="noreferrer">Arın Deniz Köklü</a>, who helped me debug the technical rough edges of this article.
+
+       </div>
 
   tr: |
 
