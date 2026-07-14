@@ -329,11 +329,11 @@ content:
 
        As the model processes text, it still moves piece by piece. The difference is that when it reaches a token, it does not treat all previous tokens equally. It weighs them by importance and creates a weighted combination.
 
-       For example, in the sentence *"I deposited the money in the bank"*, when the model reaches "deposited," it may roughly weigh the earlier context like this:
+       For example, in the sentence *"I paid the bank"*, when the model reaches "bank," it may roughly weigh the earlier context like this:
        <ul className="writingArticle__TokenizerList">
-         <li>**48% → bank:** The largest share goes here because it clarifies where the action is directed.</li>
-         <li>**34% → money:** The second important focus because it tells us what was deposited.</li>
-         <li>**18% → surrounding context:** Supporting signals such as grammar, tense, and flow.</li>
+         <li>**48% → paid:** The largest share goes here because it tells us what kind of action is happening.</li>
+         <li>**34% → I:** The subject helps anchor who is performing the action.</li>
+         <li>**18% → the:** A small but useful grammatical signal that points toward a specific object or institution.</li>
        </ul>
 
        The model blends the embeddings of these tokens in those proportions and produces a new **contextual vector**. That vector no longer represents only the word "bank"; it represents "bank as part of a financial transaction."
@@ -352,8 +352,8 @@ content:
        Those attention weights do not arrive by magic. They are calculated step by step. Let's use a simplified example:
 
        <ul className="writingArticle__TokenizerList">
-         <li> **Prompt:** "I deposited money in the bank"</li>
-         <li>**Token IDs are ready:** The Tokenizer has split the sentence into pieces.</li>
+         <li> **Prompt:** "I paid the bank"</li>
+         <li>**Token IDs are ready:** The Tokenizer has split the sentence into four pieces: [I] [paid] [the] [bank].</li>
          <li>**Embeddings:** To make the visualization simple, imagine a 3-dimensional world. In reality this space has thousands of dimensions, but this small matrix is enough to understand the mechanism.</li>
        </ul>
        
@@ -371,7 +371,7 @@ content:
                <br />
                <span className="codeLine ">
                 <span className="codeConst codeLine--row-1">Token 1:</span>
-                <span className="codeVar"> money</span>
+                <span className="codeVar"> I</span>
                  <span className="codeOp">  → </span>
                  <span className="codeConst codeLine--row-1">Embedding 1:</span>
                  <span className="codeOp">[ </span>
@@ -385,7 +385,7 @@ content:
                <br />
                <span className="codeLine ">
                 <span className="codeConst codeLine--row-2">Token 2:</span>
-                <span className="codeVar"> bank</span>
+                <span className="codeVar"> paid</span>
                  <span className="codeOp">   → </span>
                  <span className="codeConst codeLine--row-2">Embedding 2:</span>
                  <span className="codeOp">[ </span>
@@ -399,7 +399,7 @@ content:
                <br />
                <span className="codeLine ">
                 <span className="codeConst codeLine--row-3">Token 3:</span>
-                <span className="codeVar"> deposit</span>
+                <span className="codeVar"> the</span>
                  <span className="codeOp">→ </span>
                  <span className="codeConst codeLine--row-3">Embedding 3:</span>
                  <span className="codeOp">[ </span>
@@ -413,7 +413,7 @@ content:
                <br />
                <span className="codeLine ">
                 <span className="codeConst codeLine--row-4">Token 4:</span>
-                <span className="codeVar"> ed</span>
+                <span className="codeVar"> bank</span>
                  <span className="codeOp">     → </span>
                  <span className="codeConst codeLine--row-4">Embedding 4:</span>
                  <span className="codeOp">[ </span>
@@ -436,21 +436,21 @@ content:
 
         **Q and K decide, V is carried forward**
 
-        What do these three perspectives mean in practice? Let's translate the mathematical whispering through the tokens "bank" and "deposited":
+        What do these three perspectives mean in practice? Let's translate the mathematical whispering through the tokens "bank" and "paid":
 
        <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
          <li>**Query (Q)** *"Which features should this token look for in the other tokens to understand the sentence correctly?"*</li>
 
-         For the token "deposited," the model asks: "Where was it deposited? What was deposited? Is there a place related to this action?" This wish list is the Query vector. If it finds strong matches in tokens like "bank" and "money," those tokens receive more attention.
+         For the token "bank," the model asks: "What kind of bank is this? Is there an action that points to a financial meaning? Is there a subject performing that action?" This wish list is the Query vector. If it finds strong matches in tokens like "paid" and "I," those tokens receive more attention.
 
          <li>**Key (K)** *"Which signals does this token offer to the outside?"*</li>
 
-         The token "bank" offers labels such as: "I contain location information, I carry a financial context, I can be related to actions." It is like the spine label on a book in a library.
+         The token "paid" offers labels such as: "I am a financial action, I involve transfer, I can point toward a bank, bill, account, or person." It is like the spine label on a book in a library.
 
          <li>**Value (V)** *"What information should be carried from this token into the context?"*</li>
          </ol>
 
-         Q and K answer "Who should I look at?" V answers "If you look at me, what should you take from me?" The token "bank" packages its financial meaning and location signal for the next stage. The Value vector is the mathematical representation of that portable information.
+         Q and K answer "Who should I look at?" V answers "If you look at me, what should you take from me?" In this example, "paid" helps push "bank" toward its financial meaning. The Value vector is the mathematical representation of that portable information.
 
        **Mathematical transformation: W<sub>Q</sub>, W<sub>K</sub>, and W<sub>V</sub> matrices**
 
@@ -514,7 +514,7 @@ content:
        <ul className="writingArticle__TokenizerList">  
          <li>**Rows and columns** - Each row in the Scores table represents the current token. Each column represents the token being looked at.</li>
           <li>**Dot product** - Each cell is the dot product of two vectors ($Q$ and $K$). It measures how much two vectors point in the same direction.</li>
-         <li>**What do the scores mean?** - This is a compatibility test between tokens. The larger the number, the stronger the connection. If the Query for "deposited" and the Key for "bank" produce a high score, the model sees them as strongly related in context.</li>
+         <li>**What do the scores mean?** - This is a compatibility test between tokens. The larger the number, the stronger the connection. If the Query for "bank" and the Key for "paid" produce a high score, the model sees them as strongly related in context.</li>
          <li>**The size of the Scores matrix** - It depends on the number of tokens in the prompt, not on the embedding dimension. Four tokens produce a 4×4 table; twenty tokens produce a 20×20 table.</li>
        </ul>
 
@@ -627,13 +627,13 @@ content:
     <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
          <li>**Saying goodbye to the dictionary (Linear Layer)** - The model takes the mature vector and projects it onto its huge vocabulary. Every possible next token receives a candidate score.</li>
 
-         For example, after "I deposited the money in the...", candidates like [bank], [account], or [branch] may receive high scores, while unrelated candidates like [apple] fall to the bottom.
+         For example, after "I paid the...", candidates like [bank], [bill], or [fee] may receive high scores, while unrelated candidates like [apple] fall to the bottom.
 
          <li>**Probability filter (Softmax)** - These scores pass through Softmax and become percentages that add up to 100%:</li>
              <ul className="writingArticle__TokenizerList">
          <li>[bank] -> 88%</li>
-         <li>[account] -> 7%</li>
-         <li>[branch] -> 4%</li>
+         <li>[bill] -> 7%</li>
+         <li>[fee] -> 4%</li>
           <li>...</li>
        </ul>
          <li>**The birth of words (Sampling & Temperature)** - The model does not always choose the highest-probability word. Sampling strategies enter here. Temperature controls how creative or risk-taking the choice can be. Top-k and Top-p remove very unlikely options and help the model stay coherent while still sounding natural.</li>
@@ -641,7 +641,7 @@ content:
 
           <h2>And the loop closes: the autoregressive process</h2>
 
-          The real illusion of intelligence is hidden here: the model does not produce a whole paragraph at once. It chooses one token. If it chooses [bank], it adds that token to its own input: "I deposited the money in the bank..."
+          The real illusion of intelligence is hidden here: the model does not produce a whole paragraph at once. It chooses one token. If it chooses [bank], it adds that token to its own input: "I paid the bank..."
           
           Then the entire production line, Tokenizer -> Embedding -> Attention -> FFN, runs again to find the next token. While you read a fluent answer, the prediction engine is sweating through this process from the beginning for every single piece.
 
