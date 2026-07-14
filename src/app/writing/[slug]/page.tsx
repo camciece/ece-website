@@ -110,6 +110,10 @@ export default async function Post({
               Scatterplot3DDemo,
             }}
             options={{
+              // next-mdx-remote v6 strips all JSX expression props by default
+              // (blockJS), which drops <Matrix values={...} />. Disable that but
+              // keep blockDangerousJS (eval/Function/etc. stay blocked).
+              blockJS: false,
               mdxOptions: {
                 remarkPlugins: [remarkMath],
                 rehypePlugins: [rehypeKatex],
