@@ -169,7 +169,7 @@ Büyük resim bu. Şimdi bu devasa üretim bandının en başına, her şeyin ba
 
    <h2>Tokenizer</h2>
 
-   Yazdığın o prompt'un modele doğrudan metin olarak girmediğini zaten biliyorsun. Sistem harflerle değil, sayılarla konuşuyor. Ancak Tokenizer aşamasını sadece basit bir "metin çevirmeni" olarak düşünmek, kaputun altındaki en büyük maliyet kaçaklarından birini gözden kaçırmak demek. Çünkü tokenizer, modelin üzerinde hesap yapacağı atomik parçaları (token'ları) belirleyerek aslında doğrudan API faturanı ve ürününün tepki süresini (latency) belirliyor.
+   Yazdığın o prompt'un modele doğrudan metin olarak girmiyor. Sistem harflerle değil, sayılarla konuşuyor. Ancak Tokenizer aşamasını sadece basit bir "metin çevirmeni" olarak düşünmek, kaputun altındaki en büyük maliyet kaçaklarından birini gözden kaçırmak demek. Çünkü tokenizer, modelin üzerinde hesap yapacağı atomik parçaları (token'ları) belirleyerek aslında doğrudan API faturanı ve ürününün tepki süresini (latency) belirliyor.
 
 **Peki sistemi harf harf veya kelime kelime bölmek yerine neden Subword Tokenization (alt kelime parçalama) kullanılıyor?**
 
@@ -183,7 +183,11 @@ Bu konu o kadar derin ve kritik ki, yapay zekâ dünyasının efsane isimlerinde
 
 Tokenizer'ı arka planda rastgele veya tarafsız çalışan masum bir algoritma sanmak büyük bir yanılgı. O da tıpkı bağlandığı dil modeli gibi kendi eğitim setine, kendi kurallarına ve doğal olarak kendi önyargılarına sahip bağımsız bir sistem.
 
-Eğitimi sırasında hangi harf dizilerinin yan yana gelmeyi sevdiğini öğreniyor. İşte tam bu yüzden, İngilizce ağırlıklı eğitilmiş bir tokenizer "the" kelimesini tek bir token (maliyet) olarak sayarken, spesifik bir Türkçe terimi veya kodu üç farklı token'a bölebiliyor. Yani modelin ne kadar zeki olursa olsun, tokenizer'ın kullandığın dilin dinamiklerine uygun değilse aynı işlem için daha fazla para ödüyor ve donanımı daha fazla yoruyorsun.
+Eğitimi sırasında hangi harf dizilerinin yan yana gelmeyi sevdiğini öğreniyor. İşte tam bu yüzden, İngilizce ağırlıklı eğitilmiş bir tokenizer "the" kelimesini tek bir token (maliyet) olarak sayarken, spesifik bir Türkçe terimi veya kodu üç farklı token'a bölebiliyor. 
+
+Bugün açık kaynak dünyasında ibrenin Alibaba'nın Qwen 2.5'i veya DeepSeek gibi Çinli modellere kaymasının kaput altındaki en büyük sırlarından biri de bu. Batılı modeller genellikle sözlüklerini (vocabulary) dar tutarken; Qwen 2.5, 150 binin üzerinde token'a sahip devasa bir sözlük kullanıyor. Çince gibi kompleks bir dili sıkıştırmak için tasarlanan bu geniş sözlük yapısı; Türkçeyi, Avrupa dillerini ve hatta yazılım kodlarını rakiplerine göre çok daha az parçaya bölerek inanılmaz bir verimlilik sağlıyor.
+
+Yani modelin ne kadar zeki olursa olsun, tokenizer'ın kullandığın dilin dinamiklerine uygun değilse aynı işlem için daha fazla para ödüyor ve donanımı daha fazla yoruyorsun.
 
 Bu yüzden Tokenizer daha önce hiç görmediği yeni bir kelimeyle karşılaştığında "Dur şunu sözlüğüme ekleyeyim" demez. Onu, halihazırda bildiği parçalardan en mantıklı şekilde nasıl bölebileceğine bakar. Tıpkı Türkçe bilmeyen birinin uzun bir kelimeyi hecelerken zorlanması gibi, Tokenizer da sadece eğitildiği dünyanın kurallarıyla hareket eder.
    
