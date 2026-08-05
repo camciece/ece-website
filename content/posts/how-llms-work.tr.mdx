@@ -185,7 +185,9 @@ Tokenizer'ı arka planda rastgele veya tarafsız çalışan masum bir algoritma 
 
 Eğitimi sırasında hangi harf dizilerinin yan yana gelmeyi sevdiğini öğreniyor. İşte tam bu yüzden, İngilizce ağırlıklı eğitilmiş bir tokenizer "the" kelimesini tek bir token (maliyet) olarak sayarken, spesifik bir Türkçe terimi veya kodu üç farklı token'a bölebiliyor. 
 
-Bugün açık kaynak dünyasında ibrenin Alibaba'nın Qwen 2.5'i veya DeepSeek gibi Çinli modellere kaymasının kaput altındaki en büyük sırlarından biri de bu. Batılı modeller genellikle sözlüklerini (vocabulary) dar tutarken; Qwen 2.5, 150 binin üzerinde token'a sahip devasa bir sözlük kullanıyor. Çince gibi kompleks bir dili sıkıştırmak için tasarlanan bu geniş sözlük yapısı; Türkçeyi, Avrupa dillerini ve hatta yazılım kodlarını rakiplerine göre çok daha az parçaya bölerek inanılmaz bir verimlilik sağlıyor.
+Bugün açık kaynak dünyasında ibrenin Alibaba'nın Qwen 2.5'i veya DeepSeek gibi Çin merkezli modellere kaymasının kaput altındaki sırlarından biri tam olarak burada gizli. Batılı modeller genellikle sözlüklerini (vocabulary) dar tutarken, Qwen 2.5 150 binin üzerinde token'a sahip devasa bir sözlük kullanıyor.
+
+Bu devasa kapasite doğrudan modelin beslendiği eğitim verisinin çeşitliliğinden geliyor. Çok dilli ve kod ağırlıklı bir veri karışımı üzerinde eğitilen bu geniş sözlük yapısı, sadece Çinceyi değil, Türkçeyi, Avrupa dillerini ve yazılım kodlarını da rakiplerine göre çok daha az parçaya bölerek ciddi bir operasyonel verimlilik sağlıyor. Yani bu modellerin Batılı rakiplerine göre bazı görevlerde çok daha ucuza çalışması sadece mimari bir farklılık değil, doğrudan tokenizer'ın hangi dünyada büyüdüğü ve o dünyanın kurallarını nasıl içselleştirdiğiyle ilgili.
 
 Yani modelin ne kadar zeki olursa olsun, tokenizer'ın kullandığın dilin dinamiklerine uygun değilse aynı işlem için daha fazla para ödüyor ve donanımı daha fazla yoruyorsun.
 
@@ -202,26 +204,20 @@ Sen bir prompt girdiğinde, ilk faturanın kesildiği o üç aşamalı operasyon
      
     <h2>Embeddings</h2>
 
-    Geldik işin mutfağına. Tokenizer’dan çıkan o ID’ler model için aslında hala sadece birer "numaradan" ibaret. Bu kuru rakamlarla tek başına yapabileceğimiz şey ise maalesef çok kısıtlı. Ne kelimelerin benzerliğini ölçebiliriz ne de "Acaba bunlar birbirine yakın mı?" diye sorabiliriz. Anlamın gerçekten inşa edilebilmesi için, bu sayıların birbirleriyle kıyaslanabilir, yani matematiksel bir ruhu olan forma dönüşmesi şart. İşte Embeddings katmanı tam olarak bu dönüşümü sağlıyor.
-    
-   Olayı şöyle hayal edebilirsiniz: Her Token ID, modelin içinde saklanan devasa bir sözlük tablosunda (embedding table) bir satıra karşılık geliyor. O satırdan çekip aldığımız o upuzun sayı listesi, artık o kelimenin çok boyutlu bir vektör olarak temsil edilmesini sağlıyor.
+    Tokenizer'dan çıkan ID'ler model için hâlâ kuru birer rakamdan ibaret. Bu numaralar arasında hiçbir matematiksel ilişki yok. 47 numaralı token'ın 48'e yakın olması, aralarında anlamca bir yakınlık olduğu anlamına gelmiyor, numaralandırma tamamen keyfi. Bu yüzden bu sayılarla tek başına yapabileceğin şeyler çok kısıtlı, kelimelerin benzerliğini veya aralarındaki mantıksal bağı ölçemezsin. Anlamın inşa edilebilmesi için bu numaraların kıyaslanabilir, matematiksel bir zemine oturması şart. Embeddings katmanı da tam olarak bu dönüşümü üstleniyor.
 
-   Tokenizer’dan çıkan Token ID’ler, model için hâlâ sadece numaralardan ibaret. Bu numaralarla tek başına yapılabilecek şey çok sınırlı. Ne benzerlik ölçebilirsin, ne “bunlar birbirine yakın mı?” diye sorabilirsiniz. Anlamın inşa edilebilmesi için, bu etiketlerin karşılaştırılabilir bir forma dönüşmesi gerekir. Embeddings katmanının yaptığı şey tam olarak budur.
-   
-   Peki, nedir bu vektör? Bir embedding’i, devasa bir uzaydaki koordinat gibi düşünebilirsiniz. Mesela sadece 3 boyutlu bir dünyada, bir kelimenin embedding’i [10, 4, 2] gibi bir şey olurdu; yani bizi x=10, y=4, z=2 noktasına götürürdü. Ama gerçekte bu uzay öyle üçle beşle sınırlı değil, binlerce farklı boyuta sahip! Kelimeler, bu uçsuz bucaksız uzayda anlamlarına göre birbirlerine yaklaşıyor, uzaklaşıyor ya da kümeleniyorlar.
+Süreç aslında oldukça düz çalışıyor. Her token ID, modelin içine gömülü devasa bir tabloda (embedding table) tek bir satıra denk geliyor. O satırdan çektiğimiz upuzun ondalıklı sayı listesi, o kelimenin artık çok boyutlu bir vektör olarak temsil edilmesini sağlıyor.
+
+Nedir bu vektör dersen, onu devasa bir uzaydaki harita koordinatı gibi düşünebilirsin. Sadece 3 boyutlu bir dünyada olsaydık bir kelimenin koordinatı [10, 4, 2] gibi bir dizi olurdu. Ancak güncel modellerde bu uzay üç beş boyutla değil, binlerce farklı eksenle ifade ediliyor. Kelimeler bu uçsuz bucaksız uzayda anlamlarına, tonlarına ve bağlamlarına göre birbirlerine yaklaşıyor veya öbekler halinde kümeleniyor.
    
    <div className="writingArticle__callout">
        <div className="writingArticle__calloutTitle">Peki neden bu kadar çok boyut?</div>
        <div className="writingArticle__calloutBody">
-       Büyük dil modellerinin (LLM) elinde kelimelerin nasıl eşleşeceğini söyleyen hazır bir rehber yok. Onlar dildeki o devasa örüntüleri ve gizli ilişkileri sıfırdan keşfetmek zorunda.
+      Büyük dil modellerinin elinde kelimelerin nasıl eşleşeceğini anlatan hazır bir kural kitabı yok. Dildeki o devasa örüntüleri tamamen sıfırdan keşfetmek zorundalar. Bir kelimeyi sadece sözlük anlamıyla değil, tonu, ritmi, resmiyeti veya sokak ağzı olup olmadığı gibi binlerce farklı sinyalle birlikte okuyorlar. Bu yüzden her token tek bir düzlemde değil, binlerce farklı eksende aynı anda haritalanıyor.
 
-     Bir cümleyi sadece "ne dendiği" üzerinden değil; tonu, ritmi, resmi mi yoksa mahalle ağzı mı olduğu gibi binlerce farklı sinyal üzerinden okuyorlar. Bu yüzden her bir kelime (token), tek bir çizgi üzerinde değil, binlerce farklı eksende aynı anda temsil ediliyor.
+İşin asıl çarpıcı kısmı burada başlıyor. Bu boyutların hiçbirinin insan dünyasında net bir karşılığı yok. Yani o devasa matrise bakıp 42. boyut ironiyi ölçüyor veya 105. eksen kelimenin neşesini temsil ediyor diyemiyoruz. Sistemin içinde böyle insan işi etiketler yok. Bu ayrımlar modelin derinliklerinde tamamen matematiksel olarak var, tıkır tıkır çalışıyor ve harika sonuç veriyor ama bizim algımıza doğrudan tercüme edilemiyor.
 
- Ama işin en ilginç ve biraz da "garip" kısmı burası. Bu boyutların hiçbiri biz insanlar için "Hah, işte bu neşe demek" gibi net bir anlam taşımıyor. Modelin içinde "bu boyut resmiyeti ölçer" veya "şu eksen ironiyi temsil eder" gibi etiketler yok. Bu ayrımlar modelin derinliklerinde var, tıkır tıkır çalışıyor ve sonuç veriyor; ama bizim dünyamıza doğrudan tercüme edilemiyor.
-
-Güncel modellerde bu boyutlar binlerle ifade ediliyor. Yani her kelime tek bir anlam değil, sayısız özelliğin üst üste binmesiyle oluşan bir "koordinatta" yaşıyor. Anlam dediğimiz şey de o uzaydaki tek bir noktada değil, o devasa ilişkiler ağının içinde doğuyor.
-
-Modellerin en "büyülü" tarafı belki de bu: Matematiksel adımlarla ilerliyorlar ama oluşturdukları dünya bizim dilimize tam olarak çevrilemeyecek kadar derin ve çok boyutlu.
+Güncel modellerde bu boyutların sayısı genelde 4096 veya 8192 gibi rakamlara ulaşıyor. Anlam dediğimiz o soyut kavram, uzaydaki tek bir noktada değil, bu rakamların birbiriyle kurduğu devasa ilişkiler ağında doğuyor. Sadece basit çarpma ve toplama adımlarıyla ilerleyen bir sistemin, bizim bile tam olarak deşifre edemeyeceğimiz derinlikte bir dünya yaratması bu mimarinin en etkileyici tarafı.
       </div>
      </div>
 
