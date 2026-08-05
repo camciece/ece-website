@@ -7,6 +7,7 @@ import type { Locale } from "@/lib/locale";
 const postsDir = path.join(process.cwd(), "content", "posts");
 
 type Localized<T> = T | Partial<Record<Locale, T>>;
+const localizedPostBodyPattern = /\.(?:tr|en)\.mdx?$/;
 
 const normalizeLocalized = <T>(value: Localized<T>, locale: Locale): T => {
   if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -31,7 +32,11 @@ export function getAllPosts(locale: Locale): PostMeta[] {
   if (!fs.existsSync(postsDir)) return [];
   return fs
     .readdirSync(postsDir)
-    .filter((f) => f.endsWith(".md") || f.endsWith(".mdx"))
+    .filter(
+      (f) =>
+        (f.endsWith(".md") || f.endsWith(".mdx")) &&
+        !localizedPostBodyPattern.test(f),
+    )
     .map((filename) => {
       const slug = filename.replace(/\.mdx?$/, "");
       const raw = fs.readFileSync(path.join(postsDir, filename), "utf8");
@@ -56,12 +61,22 @@ export function getAllPosts(locale: Locale): PostMeta[] {
     .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
 
+function getLocalizedPostContent(slug: string, locale: Locale, fallbackContent: string) {
+  const candidates = [
+    path.join(postsDir, `${slug}.${locale}.mdx`),
+    path.join(postsDir, `${slug}.tr.mdx`),
+    path.join(postsDir, `${slug}.en.mdx`),
+  ];
+  const contentPath = candidates.find((candidate) => fs.existsSync(candidate));
+  return contentPath ? fs.readFileSync(contentPath, "utf8") : fallbackContent;
+}
+
 export function getPost(slug: string, locale: Locale) {
   const full = fs.readFileSync(path.join(postsDir, `${slug}.mdx`), "utf8");
   const { content, data } = matter(full);
   const localizedContent = data.content
     ? normalizeLocalized(data.content, locale)
-    : content;
+    : getLocalizedPostContent(slug, locale, content);
   const title = normalizeLocalized(data.title, locale);
   const excerpt = data.excerpt
     ? normalizeLocalized(data.excerpt, locale)
