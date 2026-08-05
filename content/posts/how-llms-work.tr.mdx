@@ -38,14 +38,14 @@ Ama tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine 
 
      Burada özellikle Transformer katmanında dönen işlem hacmi devasa olsa da, mimarinin kendisi şaşırtıcı derecede yalın. Modelin içinde olup bitenler aslında hep aynı tür işlemlerden ibaret: matrisi çarp, topla, normalize et ve tekrarla.
 
-      Paylaştığım şu küçük kod bloğuna bir bakalım:
+Paylaştığım şu küçük kod bloğuna bir bakalım:
     <div className="writingArticle__codeCard">
       <pre className="writingArticle__codeBlock">
         <code>
           <span className="codeLine">
             <span className="codeVar">prompt</span>
             <span className="codeEq"> = </span>
-            <span className="codeString">"Ghosting yapmadığımı anlatan ikna edici bir mesaj yaz"</span>
+            <span className="codeString">"CEO'nun yarınki yönetim kurulu sunumu için, üç aylık büyüme rakamlarını savunan ama olası zayıf noktaları da önceden yanıtlayan bir konuşma notu yaz"</span>
           </span>
           <br />
           <span className="codeLine">
@@ -146,59 +146,55 @@ Ama tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine 
       </pre>
     </div>
     
-  Düşündüğümüz kadar karmaşık kod yığınlarından bahsetmiyoruz. Hatta bazı açık kaynaklı modellerin çalışan örnekleri birkaç yüz satır Python koduyla ayağa kaldırılabiliyor. <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> gibi araştırmacıların PyTorch kullanarak bu mimarileri sıfırdan kurduğu o sade ve öğretici örnekler de bu zarafetin en güzel kanıtı.
-     
-     Mimarinin bu kadar yalın görünmesi, yapılan işin küçük olduğu anlamına gelmiyor; tam tersine, bu sadelik yapılan işin ne kadar devasa olduğunu daha net hissettiriyor. Modelin attığı her küçücük adım, aslında milyonlarca, hatta milyarlarca sayının aynı anda birbirini etkilemesi demek.
+  Yani düşündüğümüz kadar karmaşık kodlardan bahsetmiyoruz. Hatta bazı açık kaynaklı modellerin çalışan örnekleri birkaç yüz satır Python koduyla ayağa kaldırılabiliyor. <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> gibi araştırmacıların PyTorch kullanarak bu mimarileri sıfırdan kurduğu sade örnekler de bunun en güzel kanıtı.
+
+     Mimarinin bu kadar sade olması seni yanıltmasın. Aksine bu yalınlık, kaputun altındaki kaba kuvvetin (brute force) ne kadar korkunç boyutlarda olduğunu yüzümüze vuruyor. Modelin attığı en ufak bir adım bile, aslında milyarlarca sayının aynı anda birbiriyle çarpışması demek.
      
      <Note>
-       <span className="writingNote__icon" aria-hidden="true">!</span>
-       <strong>Perde arkasındaki dev maraton: Neden bu kadar çok hesaplama?</strong>
-       <br />
-      Kendiniz deneyimleyin: Bu maratonun nasıl işlediğini (her bir head’in kelimelere nasıl baktığını ve olasılıkların nasıl hesaplandığını, vb.) interaktif olarak görmek isterseniz <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracını mutlaka kurcalayın. Sayılar arasındaki o çizgilerin nasıl canlandığını gördüğünüzde taşlar tam olarak yerine oturacak.
+      Bu hesaplar öyle bir kez yapılıp bitmiyor. Sen tek bir cümle kurarken bile o meşhur Transformer katmanları aslında kendi içinde devasa bir maraton koşuyor. Eğer bu döngünün nasıl işlediğini canlı canlı görmek istersen <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracını mutlaka kurcala. Sayılar arasındaki o çizgilerin nasıl harmanlandığını gördüğünde taşlar tam olarak yerine oturuyor.
 
-       **Açıklama:**
+       **Bu maratonu üç ana aşamada özetleyebiliriz:**
 
-       Bu hesaplar öyle bir kez yapılıp bitmiyor. Siz tek bir cümle kurarken bile, o meşhur Transformer katmanları aslında kendi içinde devasa bir maraton koşuyor. Bu süreci görseldeki detaylarla anlamlandırırsak:
        <ul className="writingArticle__ArchitectureList">
-         <li>**Dikey Tırmanış (Blocks):** Modelin içinde tek bir işlem katmanı yok. Transformer Explainer sayfasının sağ üstünde gördüğünüz o "11 more identical Transformer Blocks" ifadesi, verinin aynı işlemlerden onlarca kez (bazı modellerde 96 katmana kadar çıkar) üst üste geçmesi demek.</li>
-         <li>**Paralel Bakış Açıları (Heads):** Her bir blokta, sayfadaki gibi birden fazla "Head" aynı anda çalışıyor. Kimi dil bilgisine, kimi kelimeler arası mesafeye, kimi de anlam derinliğine odaklanıyor. Tek bir blokta bazen onlarca farklı "kafa" aynı anda hesaplama yapıyor.</li>
-         <li>**Adım Adım Üretim (Autoregressive):** En kritik döngü ise şu; model tek seferde bütün bir cümreyi üretmiyor. Her bir kelimeyi (token) bulabilmek için tüm bu katmanları ve "head"leri en baştan (veya önceki bilgileri tazeleyerek) tekrar tekrar kullanıyor.</li>
+         <li>**Dikey tırmanış (Blocks):** Modelin içinde tek bir işlem katmanı yok. Veri, aynı işlemlerden onlarca kez (bazı modellerde 96 katmana kadar çıkar) üst üste geçiyor. Araçta göreceğin o "11 more identical blocks" ifadesi tam olarak bu dikey eforu, yani kaba kuvveti temsil ediyor.</li>
+         <li>**Paralel bakış (Heads):** Her bir blokta onlarca farklı head aynı anda çalışıyor. Kimi dil bilgisine, kimi kelimeler arası mesafeye, kimi de anlam derinliğine odaklanıyor. Yani tek bir katmanda bile farklı işlem hatları paralel olarak yürüyor.</li>
+         <li>**Adım adım üretim (Autoregressive):** Faturayı asıl kabartan döngü ise şu. Model koca bir cümleyi tek seferde üretmiyor. Sadece bir sonraki kelimeyi bulabilmek için tüm bu devasa katmanları ve head'leri tekrar tekrar baştan koşturmak zorunda kalıyor.</li>
        </ul>
-       İşte bu yüzden LLM’lerde "devasa" olan şey algoritmanın içinden çıkılmaz karmaşıklığı değil; bu basit adımların (çarpma ve toplama) çok fazla kere tekrarlanmasıdır. Gereken bu devasa işlem gücü ve enerji maliyeti, büyük teknoloji şirketlerinin neden yeni nükleer enerji anlaşmaları peşinde koştuğunu da çok iyi açıklıyor.
      </Note>
 
 
-  Artık büyük resmi gördüğümüze göre, gelin bu üretim bandının en başına, yani sizin ChatGPT'ye yazdığınız o metnin bu matematik dünyasının anlayacağı dile nasıl tercüme edildiğine bakalım.
+Büyük resim bu. Şimdi bu devasa üretim bandının en başına, her şeyin başladığı yere gidiyoruz. Senin ekrana yazdığın o düz metin, arka plandaki bu ağır matematiğin diline tam olarak nasıl çevriliyor? 
 
- Sahne sırası fabrikamızın ilk durağında: **Tokenizer**.
+İlk durak: **Tokenizer.**
 
    <h2>Tokenizer</h2>
 
-   Bir yapay zekâya "Naber?" dediğinizde, aslında o "Naber?" kelimesini bizim anladığımız anlamda görmez. Modelin kalbindeki o devasa matematiksel sistem, harflerle değil sayılarla konuşur. Bu yüzden yazdığınız her metnin, modelin işlemcilerine girmeden önce onun ana diline çevrilmesi gerekir. Tokenizer'ın görevi tam olarak budur: İnsan dilini, modelin üzerinde hesap yapabileceği atomik parçalara ayırmak.
-   
-   Ancak bu dönüşüm sandığımız kadar "kelime bazlı" işlemiyor. Biz günlük hayatta dili kelimeler üzerinden düşünürüz; aralara boşluklar koyar, kelimeleri net sınırlar olarak görürüz. Ama bir model için bu yaklaşım pek de akıllıca değil. Eğer her şeyi kelime kelime ele alsaydı; "kitap", "kitaplar", "kitapçı" gibi her türevi ayrı ayrı ezberlemesi gerekirdi. Bu hem sözlüğü (vocabulary) gereksiz yere şişirir hem de modelin yeni kelimeler karşısında "çaresiz" kalmasına neden olur.
-   
-   İşte bu yüzden günümüz modelleri **Subword Tokenization** dediğimiz bir yöntem kullanıyor. Yani "kitapçılık" kelimesini tek parça olarak değil, anlamlı alt parçalarına ayırıyor. Bu konu o kadar derin ve kritik ki, yapay zekâ dünyasının efsane isimlerinden <a href="https://karpathy.ai/" target="_blank" rel="noreferrer">Andrej Karpathy</a>'nin sadece sıfırdan bir tokenizer inşa etmek üzerine saatler süren meşhur bir <a href="https://www.youtube.com/watch?v=zduSFxRajkE/" target="_blank" rel="noreferrer">videosu</a> var.
-   
-  Bizim için şimdilik şu özet yeterli: Tokenizer, kelime kadar anlamlı ama harf kadar esnek olan o "altın ortayı" buluyor. Metni öyle bir parçalıyor ki, model hem bildiği köklerden anlam üretebiliyor hem de daha önce hiç görmediği bir kelimeyle karşılaştığında onu tanıdık parçalara bölerek bir mantık yürütebiliyor.
+   Yazdığın o prompt'un modele doğrudan metin olarak girmediğini zaten biliyorsun. Sistem harflerle değil, sayılarla konuşuyor. Ancak Tokenizer aşamasını sadece basit bir "metin çevirmeni" olarak düşünmek, kaputun altındaki en büyük maliyet kaçaklarından birini gözden kaçırmak demek. Çünkü tokenizer, modelin üzerinde hesap yapacağı atomik parçaları (token'ları) belirleyerek aslında doğrudan API faturanı ve ürününün tepki süresini (latency) belirliyor.
 
-  <h3>**Bir "metin bölücü"den çok daha fazlası**</h3>
+**Peki sistemi harf harf veya kelime kelime bölmek yerine neden Subword Tokenization (alt kelime parçalama) kullanılıyor?**
 
- Peki, bizim konuştuğumuz dildeki o canlı metinler, modelin soğuk ve hesaplanabilir dünyasındaki bu parçalara tam olarak nasıl dönüşüyor? Cevap ilk bakışta basit: Metni bir Tokenizer’dan geçiriyoruz.
+Çünkü dili kelimelere bölmek, modelin "kitap", "kitaplar", "kitapçı" gibi her türevi ayrı ayrı ezberlemesini gerektirirdi. Bu da sözlük (vocabulary) boyutunu sonsuza götürür ve modeli yeni/bilinmeyen kelimeler (Out-of-Vocabulary) karşısında çaresiz bırakırdı. Harf harf bölmek ise o çok değerli "context window"u (bağlam penceresini) saniyeler içinde çöpe atmak anlamına gelirdi.
 
- Ancak burada çok kritik bir nüans var: Tokenizer, öyle rastgele çalışan masum bir metin bölücü değil. O da tıpkı modelin kendisi gibi, *önceden eğitilmiş* bir sistem. Eğitimi sırasında devasa metin yığınlarını adeta bir dedektif gibi inceliyor; hangi harf dizilerinin yan yana gelmeyi sevdiğini öğreniyor. Türkçe’deki "-iyor" eki, İngilizce’deki "the" kelimesi veya teknik terimlerdeki "ing" gibi parçalar bu şekilde "anlamlı birimler" olarak kaydediliyor. Eğitim bittiğinde ise elinde on binlerce parçadan oluşan sabit ve değişmez bir liste kalıyor.
+Bu yüzden tokenizer, kelime kadar anlamlı ama harf kadar esnek olan o altın ortayı buluyor. "Kitapçılık" gibi bir terimi tek parça değil, mantıklı alt birimlere ayırarak hem sözlüğü şişirmiyor hem de esnekliğini koruyor.
    
+Bu konu o kadar derin ve kritik ki, yapay zekâ dünyasının efsane isimlerinden <a href="https://karpathy.ai/" target="_blank" rel="noreferrer">Andrej Karpathy</a>'nin sadece sıfırdan bir tokenizer inşa etmek üzerine saatler süren meşhur bir <a href="https://www.youtube.com/watch?v=zduSFxRajkE/" target="_blank" rel="noreferrer">videosu</a> var.
+   
+  <h3>**Tabii Tokenizer o kadar da masum bir bölücü değil, kendi önyargıları olan bir sistemden bahsediyoruz**</h3>
+
+Tokenizer'ı arka planda rastgele veya tarafsız çalışan masum bir algoritma sanmak büyük bir yanılgı. O da tıpkı bağlandığı dil modeli gibi kendi eğitim setine, kendi kurallarına ve doğal olarak kendi önyargılarına sahip bağımsız bir sistem.
+
+Eğitimi sırasında hangi harf dizilerinin yan yana gelmeyi sevdiğini öğreniyor. İşte tam bu yüzden, İngilizce ağırlıklı eğitilmiş bir tokenizer "the" kelimesini tek bir token (maliyet) olarak sayarken, spesifik bir Türkçe terimi veya kodu üç farklı token'a bölebiliyor. Yani modelin ne kadar zeki olursa olsun, tokenizer'ın kullandığın dilin dinamiklerine uygun değilse aynı işlem için daha fazla para ödüyor ve donanımı daha fazla yoruyorsun.
+
 Bu yüzden Tokenizer daha önce hiç görmediği yeni bir kelimeyle karşılaştığında "Dur şunu sözlüğüme ekleyeyim" demez. Onu, halihazırda bildiği parçalardan en mantıklı şekilde nasıl bölebileceğine bakar. Tıpkı Türkçe bilmeyen birinin uzun bir kelimeyi hecelerken zorlanması gibi, Tokenizer da sadece eğitildiği dünyanın kurallarıyla hareket eder.
    
-   Siz bir "prompt" girdiğinizde, arka planda şu üç aşamalı operasyon gerçekleşir:
-
+Sen bir prompt girdiğinde, ilk faturanın kesildiği o üç aşamalı operasyon şöyle işliyor:
       <ul className="writingArticle__ArchitectureList">
-       <li>**Parçalama:** Metni bildiği en uygun ve anlamlı alt parçalara (sub-tokens) ayırır.</li>
-       <li>**Eşleme:** Her parçayı o meşhur sözlüğündeki (vocabulary) doğru yere yerleştirir.</li>
-       <li>**ID Üretimi:** Ve her parçaya karşılık gelen, modelin asıl işlem yapacağı o benzersiz Token ID'yi üretir</li>
+       <li>**Parçalama:** Metni bildiği en verimli alt parçalara (sub-tokens) ayırıyor.</li>
+       <li>**Eşleme:** Her parçayı o devasa sözlüğündeki doğru konuma haritalıyor.</li>
+       <li>**ID Üretimi:** Matris çarpımlarına girecek olan o benzersiz Token ID'lerini üretiyor.</li>
      </ul>
 
-     💡 Kendiniz deneyimleyin: Eğer bu sürecin sizin yazdığınız cümlelerde nasıl çalıştığını canlı canlı görmek isterseniz, OpenAI’ın online <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noreferrer">tokenizer aracını</a> mutlaka kurcalayın. Yazdığınız her kelimenin nasıl renkli bloklara ve sayısal kimliklere büründüğünü görmek, meselenin mantığını kavramayı inanılmaz kolaylaştırıyor.
+     💡 **Kendi token faturanı test edebilirsin:** OpenAI’ın online  <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noreferrer">tokenizer aracı</a> ile İngilizce bir prompt ile Türkçe bir prompt arasındaki token yoğunluğu farkını saniyeler içinde görebilirsin. Aynı uzunluktaki iki metnin neden farklı maliyetler çıkardığını görmek için harika bir sağlama.
      
     <h2>Embeddings</h2>
 
