@@ -424,16 +424,20 @@ Maybe this is the most "magical" part of models: they move through mathematical 
     What do these three perspectives mean in practice? Let's translate the mathematical whispering through the tokens "bank" and "paid":
 
    <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-     <li>**Query (Q)** *"Which features should this token look for in the other tokens to understand the sentence correctly?"*</li>
+     <li>
+       **Query (Q)** *"Which features should this token look for in the other tokens to understand the sentence correctly?"*
 
-     For the token "bank," the model asks: "What kind of bank is this? Is there an action that points to a financial meaning? Is there a subject performing that action?" This wish list is the Query vector. If it finds strong matches in tokens like "paid" and "I," those tokens receive more attention.
+       For the token "bank," the model asks: "What kind of bank is this? Is there an action that points to a financial meaning? Is there a subject performing that action?" This wish list is the Query vector. If it finds strong matches in tokens like "paid" and "I," those tokens receive more attention.
+     </li>
 
-     <li>**Key (K)** *"Which signals does this token offer to the outside?"*</li>
+     <li>
+       **Key (K)** *"Which signals does this token offer to the outside?"*
 
-     The token "paid" offers labels such as: "I am a financial action, I involve transfer, I can point toward a bank, bill, account, or person." It is like the spine label on a book in a library.
+       The token "paid" offers labels such as: "I am a financial action, I involve transfer, I can point toward a bank, bill, account, or person." It is like the spine label on a book in a library.
+     </li>
 
      <li>**Value (V)** *"What information should be carried from this token into the context?"*</li>
-     </ol>
+   </ol>
 
      Q and K answer "Who should I look at?" V answers "If you look at me, what should you take from me?" In this example, "paid" helps push "bank" toward its financial meaning. The Value vector is the mathematical representation of that portable information.
 
@@ -441,11 +445,11 @@ Maybe this is the most "magical" part of models: they move through mathematical 
 
    These $\mathit{Q}$, $\mathit{K}$, and $\mathit{V}$ vectors do not fall from the sky. They are obtained by multiplying the **Embedding** matrix with three different learned matrices:
 
-    <div className="writingArticle__mathLines">
-      <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
-      <div className="writingArticle__mathLine">$K = Embeddings \times W_{K}$</div>
-      <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
-    </div>
+<div className="writingArticle__mathLines">
+  <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
+  <div className="writingArticle__mathLine">$K = Embeddings \times W_{K}$</div>
+  <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
+</div>
 
    The $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$, and $\mathit{W\scriptsize{V}}$ matrices are the parameters learned during training. At the beginning, they are filled with random numbers. The model starts with no language rules, and that is the point: it is not constrained by assumptions. During training, it compares its output with the correct answer, measures the error, and updates those numbers little by little. After billions of examples, the matrices become very good at answering:
 

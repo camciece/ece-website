@@ -17,19 +17,14 @@ Ancak bu modellerin mimarileri neredeyse aynı. Fark, o mimarinin etrafına dizi
 Ama tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine var. Hepsi Transformer tabanlı ve özünde next token prediction, yani bir sonraki parçayı tahmin etme ilkesiyle çalışıyorlar. Yani hepsi, önüne koyduğun metne bakıp buradan sonra gelmesi en muhtemel parça nedir sorusunu milyarlarca kez soran devasa birer olasılık motoru.
 
    <div className="writingArticle__callout">
-     Bu yazıda, bu motorun içini parça parça açacağız:
-     <ul className="writingArticle__ArchitectureList">
-       <li>Metnin model içinde nasıl sayılara (vektörlere) dönüştüğünü,</li>
-       <li>Bu sayıların hangi matematiksel duraklardan geçerek "anlam" kazandığını,</li>
-       <li>Modelin bağlamı nasıl tarttığını ve neden her cevabın kelime kelime üretildiğini göreceğiz.</li>
-     </ul>
+     Bu yazıda motorun içini üç ana parçada açıyoruz. Sisteme verdiğin düz bir metnin, hatta modern multimodal (çoklu modalite) sistemlerde yüklediğin bir fotoğrafın veya ses dosyasının bile içeride nasıl aynı sayılara, yani vektörlere dönüştüğünü göreceğiz. Bu rakamların hangi matematiksel duraklardan geçip anlam kazandığını ve modelin o koca bağlamı tartıp cevapları neden kelime kelime üretmek zorunda olduğunu adım adım çözeceğiz.
       </div>
 
-    <h2>LLM Mimarisi</h2>
+    <h2>Kaportanın altında ne var</h2>
 
-  Peki, bize bu kadar "insansı" cevaplar veren o muazzam matematik sistemi içeride nasıl çalışıyor? Dışarıdan bakınca hiper-ölçekli, aşırı karmaşık ve biraz da göz korkutucu göründüğü doğru. Ama işin asıl ilginç tarafı şu: Büyük dil modellerinin iç mimarisi, anlatıldığında beklediğinizden çok daha düzenli ve kendi içinde sürekli tekrarlanan bir akışa sahip.
-
-  Bu akışı anlamanın en kolay yolu, modeli tek parça bir "zihin" gibi düşünmek yerine, bir üretim bandı gibi hayal etmek. Metin bir uçtan giriyor, birkaç temel aşamadan geçiyor ve sonunda tekrar metin olarak diğer uçtan çıkıyor. Biz bu sürece (pipeline) dört ana bölümde bakabiliriz:
+ Peki bize bu kadar insansı cevaplar veren bu sistem içeride nasıl çalışıyor?Dışarıdan bakınca hiper ölçekli, aşırı karmaşık ve biraz da göz korkutucu göründüğü doğru. Ama işin asıl ilginç tarafı şu. Büyük dil modellerinin iç mimarisi, anlatıldığında beklediğinden çok daha düzenli ve kendi içinde sürekli tekrarlanan bir akışa sahip.
+ 
+ Bu akışı anlamanın en kolay yolu, modeli tek parça bir zihin gibi düşünmek yerine, bir üretim bandı gibi hayal etmek. Metin bir uçtan giriyor, birkaç temel aşamadan geçiyor ve sonunda tekrar metin olarak diğer uçtan çıkıyor. Biz bu süreci (pipeline) dört ana bölümde inceleyeceğiz.
         
   <figure className="writingArticle__media">
      <img src="/graph.svg" alt="graph" data-graph="true" />
@@ -37,7 +32,7 @@ Ama tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine 
       <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
        <li>**Tokenizer:** Metni küçük parçalara ayırıp sayısal etiketlere dönüştüren, fabrikamızın giriş kapısı</li>
        <li>**Embeddings:** Sayısal etiketlerin, kelime anlamlarını temsil eden çok boyutlu bir koordinat sistemine yerleştirildiği katman</li>
-       <li>**Transformer (Attention & Feedforward):** Kelimelerin birbirine bakıp anlam kazandığı ve milyarlarca çarpma işlemiyle bir sonraki adımı hesaplayan asıl "tahmin" motoru</li>
+       <li>**Transformer (Attention & Feedforward):** Kelimelerin birbirine bakıp anlam kazandığı ve milyarlarca çarpma işlemiyle bir sonraki adımı hesaplayan asıl tahmin motoru</li>
        <li>**Output:** Modelin bir sonraki adım için hesapladığı sayısal olasılık dağılımlarının üretildiği yer</li>
      </ol>
 
@@ -441,16 +436,20 @@ Modellerin en "büyülü" tarafı belki de bu: Matematiksel adımlarla ilerliyor
     Peki, bu üç farklı bakış açısı (Q, K, V) pratikte ne anlama geliyor? Gelin, "bankaya" ve "yatırdım" token'ları üzerinden bu matematiksel fısıldaşmayı tercüme edelim:
 
    <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-     <li>**Query (Q - Sorgu)** *“Bu token, cümleyi doğru anlamak için diğer token’larda hangi özelliklere dikkat etmeli?”*</li>
+     <li>
+       **Query (Q - Sorgu)** *“Bu token, cümleyi doğru anlamak için diğer token’larda hangi özelliklere dikkat etmeli?”*
 
-     Örneğin "yatırdım" token'ını düşünün. Bu token için model şu soruların peşine düşer: "Nereye yatırıldı? Ne yatırıldı? Bu eylemle ilişkili bir yer var mı?" İşte bu "istek listesi" Query vektörüdür. Bu vektör, “bankaya” ve “para” gibi token’larda güçlü eşleşmeler bulursa, onlara daha fazla dikkat verilmesini sağlar.
+       Örneğin "yatırdım" token'ını düşünün. Bu token için model şu soruların peşine düşer: "Nereye yatırıldı? Ne yatırıldı? Bu eylemle ilişkili bir yer var mı?" İşte bu "istek listesi" Query vektörüdür. Bu vektör, “bankaya” ve “para” gibi token’larda güçlü eşleşmeler bulursa, onlara daha fazla dikkat verilmesini sağlar.
+     </li>
 
-     <li>**Key (K - Anahtar)** *"Bu token, kendisiyle ilgili hangi sinyalleri dışarıya veriyor?"*</li>
+     <li>
+       **Key (K - Anahtar)** *"Bu token, kendisiyle ilgili hangi sinyalleri dışarıya veriyor?"*
 
-     "bankaya" token'ı ise dışarıya şu etiketleri sunar: "Ben bir yer bilgisi içeriyorum, finansal bir bağlam taşıyorum, eylemlerle ilişkilendirilebilirim." Bu, kelimenin kütüphane rafındaki sırt etiketidir.
+       "bankaya" token'ı ise dışarıya şu etiketleri sunar: "Ben bir yer bilgisi içeriyorum, finansal bir bağlam taşıyorum, eylemlerle ilişkilendirilebilirim." Bu, kelimenin kütüphane rafındaki sırt etiketidir.
+     </li>
 
      <li>**Value (V - Value)** *"Bu token'dan bağlama hangi bilgi taşınmalı?"*</li>
-     </ol>
+   </ol>
 
      Yani Q ve K, "Kime bakmalıyım?" sorusunu çözer; V ise "Baktıysan, benden neyi alacaksın?" sorusunun cevabıdır. "bankaya" token'ı burada finansal anlamını ve yer bilgisini paketleyip bir sonraki aşamaya iletir. V (Value) vektörü, bu taşınabilir bilginin matematiksel temsilidir.
 
@@ -458,11 +457,11 @@ Modellerin en "büyülü" tarafı belki de bu: Matematiksel adımlarla ilerliyor
 
    Bu $\mathit{Q}$, $\mathit{K}$ ve $\mathit{V}$ vektörleri gökten inmiyor. Bunlar, elimizdeki **Embedding** matrisinin üç farklı "öğrenilmiş matris" ile çarpılmasıyla elde ediliyor:
 
-    <div className="writingArticle__mathLines">
-      <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
-      <div className="writingArticle__mathLine">$K = Embeddings \times W_{K}$</div>
-      <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
-    </div>
+<div className="writingArticle__mathLines">
+  <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
+  <div className="writingArticle__mathLine">$K = Embeddings \times W_{K}$</div>
+  <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
+</div>
 
 
    Buradaki $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$ ve $\mathit{W\scriptsize{V}}$  matrisleri, modelin eğitimi sırasında öğrendiği asıl parametreler. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doludur; çünkü model en başta herhangi bir dil kuralı bilmez; zaten bilmesine gerek de yoktur. Modelin herhangi bir ön kabulle kısıtlanmaması, dildeki kalıpları ve kuralları tamamen kendi deneyimiyle, özgürce keşfetmesini sağlar. Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre matrislerin içindeki sayıları milim milim günceller. Milyarlarca örnekten sonra bu matrisler artık şu sorulara harika cevap verir hale gelir:
