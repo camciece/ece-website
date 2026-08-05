@@ -223,7 +223,7 @@ Güncel modellerde bu boyutların sayısı genelde 4096 veya 8192 gibi rakamlara
 
   **Sayıların koordinata dönüştüğü yer**
 
-  Görseldeki tabloya bir göz atalım: Buradaki her bir satır, aslında bir kelimenin (token’ın) modelin içindeki devasa "anlam sözlüğünden" aldığı karşılığı gösteriyor. Her bir sütun ise o kelimenin karakterini belirleyen farklı bir boyutu temsil ediyor.       
+  Görseldeki tablodaki her bir satır, Tokenizer'dan çıkan bir ID'nin model içindeki o devasa tablodan çektiği karşılığı gösteriyor. Her bir sütun ise o kelimenin karakterini belirleyen farklı bir boyutu (ekseni) temsil ediyor.      
     <div className="writingArticle__embedVisualization">
      <div className="writingArticle__embedTable">
      <div className="writingArticle__embedTableHeader">
@@ -265,88 +265,82 @@ Güncel modellerde bu boyutların sayısı genelde 4096 veya 8192 gibi rakamlara
     labels={["684", "704", "73963", "10709"]}
    />
    </div>
-         Süreci adım adım hayal edersek:
+         Bu dönüşüm sürecini iki net adımda özetleyebiliriz:
 
     <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-     <li>**Adım (Token'lar):** Elimizde Tokenizer’dan gelen tam sayılar var. Ama bunlar sadece birer etiket. Aralarında mesafe, benzerlik veya anlam gibi hiçbir bağ yok; model için hepsi birbirinden bağımsız numaralar.</li>
-     <li>**Adım (Embedding'ler):** Sihir burada başlıyor. Her sayı, modelin eğitimi sırasında ilmek ilmek işlenmiş o devasa tablodan kendi satırını buluyor. Artık elimizde tek bir rakam değil; o kelimenin çok boyutlu uzaydaki yerini belirleyen ondalıklı bir sayı listesi, yani bir vektör var.</li>
+     <li>**Ham Token'lar:** Elimizde Tokenizer'dan gelen tam sayılar var ama bunlar sadece birer kuru etiket. Aralarında mesafe, benzerlik veya anlam gibi hiçbir bağ yok. Model için hepsi birbirinden tamamen bağımsız numaralar.</li>
+     <li>**Embedding'ler (Vektörler):** Asıl matematik burada devreye giriyor. Her ID numarası, modelin eğitimi sırasında optimize edilmiş o devasa tablodan kendi satırını bulup eşleştiriyor. Artık elimizde tek bir rakam değil, o kelimenin çok boyutlu uzaydaki tam yerini belirleyen ondalıklı bir sayı listesi, yani bir vektör var.</li>
      </ol>
 
     <Note>
-      <span className="writingNote__icon" aria-hidden="true">!</span>
-      Bu embedding’ler ilk başta rastgele bir noktadan başlıyor. Model eğitildikçe, hata payına göre bu noktaların yerini milim milim ayarlıyor. Sonuçta birbirine benzer bağlamlarda kullanılan kelimeler bu uzayda yavaş yavaş yan yana gelmeye başlıyor; alakasız olanlar ise birbirine uzaklaşıyor.
+      💡 **Küçük bir detay:** Bu embedding'ler (vektörler) başlangıçta uzayda tamamen rastgele noktalara atanıyor. Model o ağır eğitim sürecinde milyarlarca kelimeyi işledikçe, hata payını (loss) düşürmek için bu koordinatları sürekli olarak milim milim güncelliyor. Aylar süren bu kaba kuvvetin sonunda, benzer bağlamdaki kelimeler bu devasa uzayda kusursuzca yan yana kümelenirken, alakasız olanlar birbirinden uzaklaşıyor.
     </Note>
 
-     **Statik Bir Haritadayız (Şimdilik!)**
+     **Henüz statik bir haritadayız**
 
-     Bu noktada token’lar ilk kez birbiriyle kıyaslanabilir hale geliyor. Ancak burada karıştırılmaması gereken ince bir detay var: Anlam hâlâ doğrudan ortaya çıkmış değil, sadece anlamın kurulabileceği matematiksel zemin hazırlandı.
+     Bu noktada token'lar ilk kez birbiriyle kıyaslanabilir hale geliyor. Ancak atlanmaması gereken çok ince bir detay var. Ortada henüz gerçek bir anlam yok. Sadece o anlamın üzerine inşa edileceği matematiksel zemin hazırlandı.
      
      <Note>
-       <span className="writingNote__icon" aria-hidden="true">!</span>
-       "Kelimeler birbirine yaklaşıyor" dediğimizde, bu modelin aylar süren eğitim sürecinde gerçekleşen bir durumdur. Model dili öğrenirken bu koordinatları ayarlar. Ancak model çalışırken (biz ona bir soru sorduğumuzda), bu embedding tablosu artık sabittir.
+       💡 **Eğitim (Training) vs. Çıkarım (Inference):** Kelimelerin uzayda birbirine yaklaşması aylar süren ve milyonlarca dolar yakan o eğitim aşamasında gerçekleşiyor. Ancak modeli canlıda çalıştırdığımızda (inference) yani ona bir prompt girdiğimizde, bu embedding tablosu artık tamamen sabittir. Sistem o an yeni bir şey öğrenmez, sadece var olan haritadan koordinat çeker.
      </Note>
      
      
-     Buradaki kilit nokta; Embedding’ler kelimeye özeldir, cümleye değil. "Banka" kelimesi, tek başına ele alındığında sözlükten hep aynı koordinatı çeker. Bu koordinat, kelimenin hangi bağlamda kullanıldığını henüz ayırt edemez. "Parktaki banka oturdum" ile "Maaşın yattığı banka" arasındaki farkı model bu aşamada hâlâ anlayamaz; çünkü her iki cümlede de "banka" kelimesi için aynı satırdaki aynı sayı listesini kullanır.
-     
-     Embeddings'in yaptığı şey, token’ları devasa ama statik bir haritaya yerleştirmektir. Model bu noktada hâlâ şu kritik soruların cevabını bilmez:
+     Buradaki kilit nokta şu: Embedding'ler cümleye değil, kelimeye özeldir. "Banka" kelimesi sözlükten her zaman aynı koordinatı çeker. Bu koordinat o kelimenin hangi bağlamda kullanıldığını henüz umursamaz. Parktaki banka oturdum cümlesindeki banka ile maaşın yattığı banka arasındaki farkı model bu aşamada kesinlikle ayırt edemez. Çünkü her iki cümlede de aynı ID için aynı sayı dizisi çağrılır.
+
+Özetle Embeddings katmanının tek yaptığı şey, token'ları devasa ama statik bir haritaya yerleştirmektir. Model bu aşamada o koca bağlamı çözecek şu kritik soruların cevabını hâlâ bilmiyor:
        <ul className="writingArticle__ArchitectureList">
-       <li>"Bu cümlede hangi kelime daha kritik?"</li>
-       <li>"Şu an hangi kelimeye odaklanmalıyım?"</li>
-       <li>"Yanındaki kelime, bu kelimenin anlamını nasıl değiştiriyor?"</li>
+       <li>Bu cümlede asıl ağırlığı hangi kelime taşıyor?</li>
+       <li>Şu an metnin tam olarak neresine odaklanmalıyım?</li>
+       <li>Yanındaki kelime, bu kelimenin anlamını (vektörünü) nasıl değiştiriyor?</li>
      </ul>
 
-  İşte tam bu noktada sahneye **Transformer** mimarisi çıkıyor. Bu statik ve "ruhsuz" koordinatları alıp, **Attention (Dikkat)** mekanizmasıyla birbirine çarptırarak onlara can veren yer burası.            
-   
+İşte tam bu noktada asıl motor, yani **Transformer mimarisi** devreye giriyor. Bu statik ve ruhsuz koordinatları alıp o meşhur Attention (Dikkat) mekanizmasıyla birbirine çarptırarak bağlamı inşa eden yer burası.
+
    <h2 className="writingArticle__transformerTitle">Transformer</h2>
 
-  Embeddings aşamasında kelimeleri sayılara çevirdik ve her birini çok boyutlu bir haritadaki koordinatlarına yerleştirdik. Bu noktada her token’ın bir adresi var ama bu adres tek başına "anlam" demek değil. İşte Transformer katmanının görevi burada başlıyor: Bu ruhsuz ve statik vektörleri alıp, cümledeki diğer token’larla etkileşime sokmak ve onları bağlama göre yeniden şekillendirmek. Yani yapay zekanın o meşhur "anlamlandırma" yeteneği, ilk kez burada filizleniyor.
+Embeddings aşamasında kelimeleri sayılara çevirip çok boyutlu bir haritadaki koordinatlarına yerleştirdik. Artık her token’ın bir adresi var ama bu adres tek başına bir anlam ifade etmiyor. Transformer katmanının görevi tam olarak burada başlıyor. Bu statik ve ruhsuz vektörleri alıp cümledeki diğer token’larla çarpıştırarak onları bağlama göre yeniden şekillendiriyor. Yapay zekanın o meşhur anlamlandırma illüzyonu ilk kez burada filizleniyor.
 
-    ***Statik* vektörlerden → Bağlamı inşa eden *dinamik* vektörlere**
+    ***Statik* vektörlerden dinamik bağlama**
     
-    Embedding aşamasında her kelime, cümleden bağımsız olarak uzayda tek bir noktaya karşılık geliyordu. Örneğin "banka" kelimesi, hangi cümlede geçerse geçsin başlangıçta aynı koordinattaydı. Ancak gerçek dil böyle çalışmaz:
-
+Embedding aşamasında her kelime cümleden bağımsız olarak uzayda tek bir noktaya sabitlenmişti. Az önce bahsettiğimiz örneği düşün:
     <ul className="writingArticle__ArchitectureList">
-       <li>*"Parktaki eski bir banka oturup dinlendi."*</li>
-       <li>*"Banka şubesine giderek yeni bir hesap açtı."*</li>
+       <li>Parktaki eski bir banka oturup dinlendi.</li>
+       <li>Banka şubesine giderek yeni hesap açtı</li>
      </ul>
 
-     Bu iki cümlede kelime aynı olsa da anlamlar dünyalar kadar farklıdır. Transformer’ın yaptığı sihir, bu farkı matematiksel olarak görünür kılmaktır. Statik embedding’leri alır, cümledeki diğer kelimelerle bir nevi "konuşturur" ve her token’ı bulunduğu bağlama göre haritada yeniden konumlandırır. Artık her kelime sadece "ne olduğu" ile değil, diğer kelimelerle kurduğu ilişki üzerinden temsil edilir.
-
-     Bu dönüşüm birkaç farklı mekanizma üzerinden yapılsa da, sistemin kalbinde tek bir altın kural var: **Her kelime eşit derecede önemli değildir.** İşte tam bu noktada, modelin hangi kelimeye ne kadar odaklanacağını seçtiği o meşhur **Attention (Dikkat)** mekanizması devreye girer.
-    
+Kelime aynı olsa da taşıdığı anlamlar tamamen farklı. Transformer'ın yaptığı şey, bu farkı görünür kılmak. Statik embedding’leri alır, cümledeki diğer kelimelerle etkileşime sokar ve her token’ı o anki bağlama göre haritada yepyeni bir konuma taşır. Artık her kelime sadece sözlükteki köküyle değil, etrafındaki diğer kelimelerle kurduğu ilişki üzerinden temsil edilir.
+     
+Bu dönüşüm birkaç farklı matematiksel adımdan geçse de sistemin kalbinde tek bir altın kural yatıyor: Her kelime eşit derecede önemli değildir. İşte tam bu noktada, modelin hangi kelimeye ne kadar odaklanacağını hesaplayan ve o devasa işlem gücünü asıl tüketen **Attention (Dikkat)** mekanizması devreye giriyor.    
 
    <h3 className="writingArticle__transformerTitle">Attention: Hangi token, ne kadar önemli?</h3>
 
-   Attention mekanizması aslında şu basit ama hayati soruyu sorar: "Bu cümleyi doğru anlamak için, şu anda hangi token’lara, ne kadar odaklanmalıyım?"
+Attention mekanizması aslında şu basit ama hayati soruyu soruyor: Bu cümleyi doğru anlamak için şu anda hangi token'lara, ne kadar odaklanmalıyım?
 
-   Model metni işlerken yine parça parça (token token) ilerler. Ancak buradaki kritik fark şudur: Model bir token'a geldiğinde, geçmişteki tüm token'lara eşit davranmaz. Onları önem derecelerine göre tartar ve ağırlıklı bir kombinasyon oluşturur.
+   Model metni işlerken yine parça parça ilerliyor. Ancak buradaki kritik fark şu: Model bir token'a geldiğinde geçmişteki tüm token'lara eşit davranmıyor. Onları önem derecelerine göre tartıyor ve ağırlıklı bir kombinasyon oluşturuyor.
 
-   Örneğin, *"Parayı bankaya yatırdım"* cümlesinde model "yatırdım" token'ına ulaştığında, önceki parçaları kafasında kabaca şöyle ağırlıklandırabilir:
+   Örneğin, *Parayı bankaya yatırdım* cümlesinde model yatırdım token'ına ulaştığında, önceki parçaları kabaca şöyle ağırlıklandırıyor:
    <ul className="writingArticle__TokenizerList">
-     <li>**%48 → bankaya:** Eylemin tam olarak nereye yapıldığını belirlediği için aslan payı buraya gider.</li>
-     <li>**%34 → parayı:** Neyin yatırıldığını söylediği için ikinci kritik odak noktasıdır.</li>
-     <li>**%18 → yatırdım öncesi bağlam:** Zaman, gramer ve akış sinyalleri gibi yardımcı unsurlar.</li>
+     <li>**%48 → bankaya:** Eylemin tam olarak nereye yapıldığını belirlediği için aslan payı buraya gidiyor.</li>
+     <li>**%34 → parayı:** Neyin yatırıldığını söylediği için ikinci kritik odak noktası.</li>
+     <li>**%18 → geçmiş bağlam:** Zaman, gramer ve akış sinyalleri gibi yardımcı unsurlar.</li>
    </ul>
 
-   Model, bu token'ların embedding’lerini bu oranlarda harmanlayarak ortaya yeni bir **bağlamsal vektör** çıkarır. Bu yeni vektör, artık sadece "banka" kelimesini değil; "finansal bir işlem için kullanılan banka" anlamını taşır.
+Model bu token'ların embedding'lerini bu oranlarda harmanlayarak ortaya yepyeni bir bağlamsal vektör çıkarıyor. Bu yeni vektör artık sadece sıradan bir banka kelimesini değil, doğrudan finansal bir işlem için kullanılan banka anlamını taşıyor.
 
   <Note>
-    <span className="writingNote__icon" aria-hidden="true">!</span>
-    Bu dikkat süreci sadece yanıt üretirken çalışmaz. Model, sizin yazdığınız prompt’u anlamaya çalışırken de tam olarak aynı mekanizmayı çalıştırır. Siz ne kadar net ve detaylı bir çerçeve çizerseniz, modelin kurduğu o bağlamsal ağ da o kadar sağlam olur.
-
-  Tam da bu yüzden **Prompt Engineering** dediğimiz uzmanlık dalı doğdu. Yazdığınız her bir kelime, modelin "dikkatini" nereye odaklayacağına dair birer komut niteliğinde. Yani promptlarınızın kalitesi, aslında modelin içindeki o milyarlarca matris çarpımının ne kadar isabetli olacağını belirliyor.
+    💡 **Prompt Engineering neden var?** Bu dikkat süreci sadece yanıt üretirken çalışmıyor. Model senin yazdığın prompt'u anlamaya çalışırken de tam olarak aynı mekanizmayı çalıştırıyor. Sen ne kadar net ve detaylı bir çerçeve çizersen, modelin kurduğu o bağlamsal ağ da o kadar sağlam oluyor. Prompt Engineering dediğimiz uzmanlık dalı tam da bu yüzden doğdu. Yazdığın her kelime, modelin dikkatini nereye odaklayacağına dair birer donanım komutu niteliğinde. Yani prompt'unun kalitesi, kaputun altındaki o milyarlarca matris çarpımının ne kadar isabetli olacağını doğrudan belirliyor.
   </Note>
 
    
    **Attention bunu matematiksel olarak nasıl yapıyor? → Q, K, V**
 
-   Kısa bir matematik molası veriyoruz. Ama hemen belirteyim; amacımız formüllere boğulmak değil, modelin bu "odaklanma" işini perde arkasında nasıl bir mantıkla hesapladığını sezgisel olarak kavramak.
+   Kısa bir matematik molası. Amacımız formüllere boğulmak değil, modelin bu odaklanma işini perde arkasında nasıl bir mantıkla hesapladığını sezgisel olarak kavramak.
 
-   Az önce bahsettiğimiz o "dikkat oranları" (%48, %34...) modelin içine vahiy yoluyla inmiyor. Her şey tamamen matematiksel işlemlerle, adım adım hesaplanıyor. Şimdi bu süreci basitleştirilmiş bir örnek üzerinden görelim:
+Az önce bahsettiğimiz o dikkat oranları (%48, %34) modelin içine vahiy yoluyla inmiyor. Her şey tamamen matris çarpımlarıyla, adım adım hesaplanıyor. Şimdi bu süreci basitleştirilmiş bir örnek üzerinden görelim.
+
+Prompt’umuz yine aynı olsun: *Parayı bankaya yatırdım.*
 
    <ul className="writingArticle__TokenizerList">
-     <li> **Prompt’umuz yine aynı olsun:** “Parayı bankaya yatırdım”</li>
      <li>**Token ID’ler hazır:** Tokenizer bu cümleyi dört parçaya böldü: [Parayı] [bankaya] [yatır] [dım]</li>
      <li>**Embedding’ler:** Görselleştirmeyi kolaylaştırmak için n=3 boyutlu bir dünyada olduğumuzu hayal edelim. (Gerçekte bu binlerce boyuttur ama mekanizmayı anlamak için bu mini matris bize yeter.)</li>
    </ul>
