@@ -48,13 +48,15 @@ export default async function Home() {
                   <p className="writingCard__summary">{latest.excerpt}</p>
                 ) : null}
               </div>
-              <div className="writingCard__visual">
-                <img
-                  className="writingCard__media writingCard__media--one"
-                  src="/LLMs.png"
-                  alt="LLMs"
-                />
-              </div>
+              {latest.image ? (
+                <div className="writingCard__visual">
+                  <img
+                    className="writingCard__media writingCard__media--one"
+                    src={latest.image}
+                    alt=""
+                  />
+                </div>
+              ) : null}
             </Link>
           ) : null}
         </div>
