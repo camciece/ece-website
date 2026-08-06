@@ -575,15 +575,6 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
 
    **Bu işlemin sonucunda elimize geçen Output (Çıktı) vektörleri, artık Transformer'a ilk başta giren o ruhsuz ve birbirinden habersiz kelimeler değil, cümlenin bütününden haberdar olan, diğer kelimelerin anlamlarıyla (dikkat oranlarına göre) yoğrulmuş, yepyeni ve dinamik Bağlamsal Vektörlerdir.**
 
-   <Scatterplot3DDemo 
-    id={'output'}
-    pointSets={[
-      { name: 'Embeddings', points: [[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]},
-      { name: 'Output', points: [[-0.3, 0, 0.6], [0.3, 0, 0.1], [0.3, 0.2, 0], [0, 0.2, 0.3]]}
-     ]}
-    labels={["796", "35569", "6922", "5094"]}
-   />
- 
  Ancak model hâlâ bir kelime üretmemiştir. bu çıktılar, son durağımız olan **Feedforward (İleri Besleme)** ağına gönderilecek zenginleştirilmiş hammaddelerdir.
           
             <h3 className="writingArticle__transformerTitle">Attention token'lar arasında kimin kiminle ilgili olduğunu bulur, Feedforward o ilişkiden bir sonuç çıkarır (parayı + bankaya = finansal işlem)</h3>
