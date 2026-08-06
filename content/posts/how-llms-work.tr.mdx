@@ -20,7 +20,7 @@ Ama tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine 
      Bu yazıda motorun içini üç ana parçada açıyoruz. Sisteme verdiğin düz bir metnin, hatta modern multimodal (çoklu modalite) sistemlerde yüklediğin bir fotoğrafın veya ses dosyasının bile içeride nasıl aynı sayılara, yani vektörlere dönüştüğünü göreceğiz. Bu rakamların hangi matematiksel duraklardan geçip anlam kazandığını ve modelin o koca bağlamı tartıp cevapları neden kelime kelime üretmek zorunda olduğunu adım adım çözeceğiz.
       </div>
 
-    <h2>Kaportanın altında ne var</h2>
+    <h2>Kaputun altında ne var</h2>
 
  Peki bize bu kadar insansı cevaplar veren bu sistem içeride nasıl çalışıyor?Dışarıdan bakınca hiper ölçekli, aşırı karmaşık ve biraz da göz korkutucu göründüğü doğru. Ama işin asıl ilginç tarafı şu. Büyük dil modellerinin iç mimarisi, anlatıldığında beklediğinden çok daha düzenli ve kendi içinde sürekli tekrarlanan bir akışa sahip.
  
@@ -573,7 +573,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
      <Matrix values={[[-0.3, 0.0, 0.6], [0.3, 0.0, 0.1], [0.3, 0.2, 0.0], [0.0, 0.2, 0.3]]} title={{ text:"output" }}/>
    </div>
 
-   **Sonuç: Hazır bir "Bağlamsal Vektör"**
+   **Bu işlemin sonucunda elimize geçen Output (Çıktı) vektörleri, artık Transformer'a ilk başta giren o ruhsuz ve birbirinden habersiz kelimeler değil, cümlenin bütününden haberdar olan, diğer kelimelerin anlamlarıyla (dikkat oranlarına göre) yoğrulmuş, yepyeni ve dinamik Bağlamsal Vektörlerdir.**
 
    <Scatterplot3DDemo 
     id={'output'}
@@ -583,91 +583,74 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
      ]}
     labels={["796", "35569", "6922", "5094"]}
    />
-  
-  Bu çarpımın sonucunda elimize geçen Output vektörleri, artık Transformer’a giren o ilk "statik" kelimeler değildir. Bunlar:
-
-  <ul className="writingArticle__TokenizerList">  
-     <li>Cümlenin parçası olarak anlam kazanmış,</li>
-      <li>Bağlamın içine yerleştirilmiş,</li>
-     <li>Hangi kelimenin ne kadar önemli olduğu bilgisiyle yoğurulmuş **dinamik temsillerdir**.</li>
-   </ul>
  
- Ancak heyecanlanmayın, model hala bir kelime üretmedi! Bu çıkan vektörler nihai karar değil; sadece bir sonraki aşamada **(Feedforward (FFN))** daha da işlenmek üzere hazırlanmış, anlamı derinleşmiş ara temsilcilerdir.
-         
-            <h3 className="writingArticle__transformerTitle">Feedforward: Anlamın pişirildiği mutfak</h3>
+ Ancak model hâlâ bir kelime üretmemiştir. bu çıktılar, son durağımız olan **Feedforward (İleri Besleme)** ağına gönderilecek zenginleştirilmiş hammaddelerdir.
+          
+            <h3 className="writingArticle__transformerTitle">Attention token'lar arasında kimin kiminle ilgili olduğunu bulur, Feedforward o ilişkiden bir sonuç çıkarır (parayı + bankaya = finansal işlem)</h3>
 
-  Attention mekanizması görevini tamamlayıp her token için diğer kelimelerle harmanlanmış o bağlamsal matrisi (Output) önümüze koyduğunda, aslında sadece "kimin kiminle ne kadar ilişkili olduğunu" çözmüş oluruz. Ancak sadece konuşmak yetmez; bu konuşmadan çıkan mesajın işlenmesi, rafine edilmesi ve kalıcı bir "bilgiye" dönüşmesi gerekir.  
+            Örneğin, Attention mekanizması *parayı* ve *bankaya* kelimelerinin birbiriyle güçlü bir bağı olduğunu tespit edip bu iki kelimeyi birbirine bağlar. Feedforward katmanı ise bu *parayı* + *bankaya* kombinasyonunu alır ve modelin eğitim aşamasında oluşturduğu milyarlarca parametrelik bilgi havuzuna sokarak şu net sonucu çıkarır: *"Bu bir finansal işlemdir."*
   
-  **Feedforward (FFN)** katmanı tam olarak burasıdır. Attention'dan çıkan o bağlamsal vektörleri alır ve onları adeta bir mutfağa sokar:
-    <ul className="writingArticle__TokenizerList">
-     <li>**Bireysel işleme** - Attention tüm token’lara bir bütün olarak, aralarındaki ilişkiyi tartarak bakarken; Feedforward her bir token’ı (vektörü) kendi özelinde ele alır. "Senin diğer kelimelerle ilişkin bu, şimdi bu yeni kimliğini daha derin bir mantık süzgecinden geçirelim" der.</li>
-     <li>**Derinleştirme ve dünya bilgisi** - Birçok araştırmacı, modellerin eğitim sırasında öğrendiği "Türkiye’nin başkenti Ankara’dır" gibi temel dünya bilgilerinin büyük oranda bu Feedforward katmanlarındaki ağırlıklarda saklandığını düşünüyor. Burası, modelin basit bir istatistiksel eşleşmeden çıkıp, kavramsal bir derinlik kazandığı yerdir.</li>
-     <li>**Doğrusal olmayan (Non-linear) dokunuş** - Bu katmanda veriler karmaşık matematiksel fonksiyonlardan (genellikle ReLU veya GELU) geçer. Bu sayede model, dilin içindeki o düz olmayan, karmaşık ve çok katmanlı mantık yapılarını taklit etme yeteneği kazanır.</li>
-   </ul>
+ Attention tüm token'lara kuşbakışı bakıp aralarındaki ilişki ağını kurarken, Feedforward ağı her bir token'ı kendi özelinde ele alır. Sistemin *"Bu iki kelime yan yana gelmiş, demek ki burada şu kavramdan bahsediliyor"* diyerek o ilişkiden bir anlam (desen) ürettiği yer burasıdır.
 
-   Özetle; **Attention** "ilişkiyi" kurar, **Feedforward** o ilişkiden çıkan "anlamı" inşa eder.
+Bu ağın kaputunun altında çalışan **ReLU** veya **GELU** adı verilen fonksiyonlar tam olarak bu desen eşleştirmesini yapar. Hatta birçok araştırmacı, modelin *Türkiye’nin başkenti Ankara’dır.* gibi eğitim sırasında ezberlediği somut gerçeklerin doğrudan bu Feedforward katmanlarındaki milyarlarca parametrede (yapay zeka jargonuyla *ağırlıklarda*), devasa bir ansiklopedi gibi depolandığını kabul eder.
 
-    <Note>
-      <span className="writingNote__icon" aria-hidden="true">!</span>
-      Teknik detayları bir kenara bırakırsak: Feedforward katmanının yaptığı
-      şey, Attention ile toplanan bilgiden gerçekten işe yarayan
-      kombinasyonları çıkarmak.
-  
-      Unutmamak gerekir ki; Feedforward katmanı yeni bir bağlam eklemez.
-      Dikkati yeniden dağıtmaz veya token’lar arasında yeni ilişkiler
-      kurmaz. Tek görevi, Attention çıktısını daha anlamlı ve daha
-      güçlü bir iç temsile dönüştürmek.
+**Özetle** Feedforward katmanı yeni bir bağlam eklemez veya token'lar arasında baştan bir ilişki kurmaz. Tek görevi, Attention'ın kurduğu o ilişkiyi alıp modelin geçmişte öğrendiği bilgilerle harmanlayarak ortaya kavramsal bir sonuç çıkarmaktır. Bu yüzden modern LLM mimarilerinde bu ikili her zaman ayrılmaz bir paket **(Transformer Bloğu)** olarak çalışır.
 
-      Özetle: Attention, hangi bilginin önemli olduğunu
-      seçer; Feedforward, seçilen bu bilgiyi yoğurur ve derinleştirir. Bu
-      yüzden Transformer mimarisinde bu iki adım her zaman ayrılmaz bir ikili
-      olarak çalışır; biri bağı kurar, diğeri o bağı işler.
-    </Note>
+  <h3 className="writingArticle__transformerTitle">Bu Attention ve Feedforward işlemleri, onlarca katman boyunca tekrarlanır</h3>
 
-  <h3 className="writingArticle__transformerTitle">Transformer Blokları (Attention + Feedforward): Döngünün defalarca tekrarlanması</h3>
+  Bir Transformer bloğu (Attention ve Feedforward) görevini tamamladığında süreç sona ermez. Modern dil modelleri tek bir bloktan değil, üst üste dizilmiş onlarca, bazen yüzlerce katmandan oluşur. <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracında gördüğün *11 more identical Transformer Blocks* ifadesi tam olarak bu dikey mimariye işaret ediyor.
 
-  Bu noktada durup bir perspektif kazanalım: Bir Transformer bloğu (Attention + Feedforward) bittiğinde süreç hemen sona ermiyor. <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Paylaştığımız o interaktif görsellerdeki</a> "11 more identical Transformer Blocks" ifadesi, bu sürecin dikey bir maraton olduğunu fısıldıyor.
+Bir bloktan çıkan işlenmiş veri, hemen bir üstteki bloğun girdisi olur ve yeniden Attention ile Feedforward işlemlerinden geçer. Veri bu katmanları tek tek aştıkça, içerisindeki bağlam giderek daha karmaşık ve soyut bir yapıya dönüşür.
 
-Her bir bloktan geçen veri, bir üstteki blokta tekrar Attention ve Feedforward süzgeçlerinden geçiyor. Bu dikey yolculuk sırasında anlam her katmanda biraz daha rafine ediliyor, soyutlaşıyor ve derinleşiyor. Bu işlem binlerce kez tekrarlandığında, karşımıza o her şeyi bilen, mantık yürütebilen devasa zeka çıkıyor. En alt katmanlarda sadece kelime ilişkilerini çözen model, en üst katmanlara çıktığında artık cümlenin tonunu, niyetini ve mantıksal kurgusunu tam olarak kavramış oluyor.
+En alt katmanlardaki bloklar genellikle basit dilbilgisi kurallarını ve yüzeysel kelime ilişkilerini (hangi sıfat hangi ismi niteliyor) çözer. Ancak veri üst katmanlara doğru tırmandıkça, model artık metnin genel tonunu, arka plandaki niyeti ve cümlenin asıl kurgusunu işlemeye başlar.
 
-    <h2>Transformer'dan çıkış: Olasılıkların sahnesi </h2>
+Kaputun altındaki o devasa zeka illüzyonu, aslında bu örneğin ("parayı bankaya") onlarca katmandan geçerek gitgide netleşmesinden ibarettir. İlk katmanda sadece parayı ile bankaya arasında bir bağ vardır.  Son katmana geldiğinde ise aynı dört token'ın vektörleri üzerinde, artık bunun tam olarak ne tür bir finansal işlem olduğunu, hangi tonda anlatıldığını kavramış oluyor. Girdiye dışarıdan hiçbir yeni bilgi eklenmiyor, aynı sayılar üzerinde işlem tekrar tekrar derinleşiyor.
 
-Tüm katmanlardaki "maraton" bittikten sonra, elimizdeki vektörler artık en olgun haline ulaştı. Ama hala birer sayı dizisiler. İşte bu noktada Transformer’dan çıkıp Output (Probabilities) katmanına, yani modelin bize bir cevap vereceği son aşamaya geçiyoruz:
+    <h2>Transformer'dan olgunlaşarak çıkan vektör, son aşamada kelime olasılıklarına dönüştürülür </h2>
 
-<ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-     <li>**Sözlükle Vedalaşma (Linear Layer)** - Model, bu olgunlaşmış vektörü alır ve onu sahip olduğu on binlerce kelimelik devasa hazinesine yansıtır. Her bir kelime için "Bir sonraki parça ben olabilirim!" diyen bir adaylık puanı hesaplanır.</li>
+Onlarca katmandan süren o dikey yolculuk bittiğinde, elimizde cümlenin bütün mantığını kavramış çok zengin bir bağlam vektörü vardır. Ancak bu hâlâ bir sayı dizisidir. Modelin bize bir cevap verebilmesi için bu sayıları tekrar kelimelere çevirmesi gerekir.
 
-     Örneğin; "Parayı bankaya..." diye başlayan bir cümlede, bir sonraki token için [yatırdım], [gönderdim], [bıraktım] gibi adaylar yüksek puanlar alırken, [elma] gibi alakasız adaylar listenin en sonunda kalır.
+Burada **Linear Layer (Doğrusal Katman)** devreye girer. Bu katman, elimizdeki o son vektörü alır ve modelin sözlüğündeki (genellikle 50-100 bin kelimelik) tüm token adaylarıyla teker teker çarpıştırır. Sözlükteki her bir kelime için matematiksel bir uygunluk puanı hesaplanır.
 
-     <li>**Olasılık Filtresi (Softmax)** - Bu puanlar Softmax süzgecinden geçerek, toplamı %100 eden net yüzdelere dönüşür:</li>
-         <ul className="writingArticle__TokenizerList">
+Örneğin, *Parayı bankaya* bağlamı için [yatırdım], [gönderdim] ve [havale] gibi kelimeler devasa puanlar alırken, [elma] kelimesinin puanı dibe vurur.
+
+Ardından bu ham puanlar, daha önce de kullandığımız Softmax filtresinden geçerek toplamı %100 eden net olasılık yüzdelerine dönüşür:
+   <ul className="writingArticle__TokenizerList">
      <li>[yatırdım] -> %88</li>
      <li>[gönderdim] -> %7</li>
      <li>[havale ettim] -> %4</li>
       <li>...</li>
    </ul>
-     <li>**Kelimelerin Doğuşu (Sampling & Temperature)** - Model her zaman en yüksek olasılıklı kelimeyi seçmez. Sampling (örnekleme) stratejileri tam burada devreye girer. Temperature (Sıcaklık) ayarıyla modelin ne kadar "yaratıcı" veya "risk alan" bir seçim yapacağını belirlersiniz. Top-k ve Top-p gibi tekniklerle de olasılığı çok düşük olan "mantıksız" kelimeler elenir ve modelin tutarlı ama doğal bir cevap vermesi sağlanır.</li>
-     </ol>
 
-      <h2>Ve döngü tamamlanır: Otoregresif süreç</h2>
+   **Sistemin *yaratıcılığı* olasılıklar arasında zar atmasından gelir**
 
-      Buradaki asıl "zeka" illüzyonu şurada gizli: Model tek seferde koca bir paragraf üretmiyor. Sadece tek bir kelime (token) seçiyor. Örneğin [yatırdım] kelimesini seçtiyse, şimdi bu kelimeyi alıyor ve kendi girdi (input) kısmının en sonuna ekliyor: "Parayı bankaya yatırdım..."
-      
-      Şimdi tüm bu devasa işlem bandı (Tokenizer -> Embedding -> Attention -> FFN), cümleye devam edecek bir sonraki kelimeyi (belki bir nokta, belki "ve" bağlacı) bulmak için saniyeler içinde tekrar koşturuyor. Siz akıcı bir cevap okurken arka planda bu "tahmin motoru" her bir parça için en baştan ter döküyor.
+Puanlar hesaplandıktan sonra sistemin işi sadece ekrana [yatırdım] kelimesini basmak gibi görünebilir. Ancak model her zaman en yüksek olasılıklı kelimeyi (buradaki %88'i) seçmek zorunda değildir.
+
+Eğer sistem sürekli en yüksek olasılıklı kelimeyi seçmeye programlansaydı, son derece robotik, ruhsuz ve sürekli kendini tekrar eden metinler üretirdi. Tam bu noktada **Temperature (Sıcaklık)** ve **Sampling (örnekleme)** stratejileri devreye girer.
+
+Sıcaklık ayarı, sisteme bu yüzdeler arasından mantıklı bir *zar atma* izni verir. Düşük sıcaklık modeli sadece en garanti cevapları vermeye zorlar. Sıcaklığı artırmak, modelin %7'lik veya %4'lük alternatifleri de denemesini sağlar. Bizim ekranda gördüğümüz o ***yaratıcı***, akıcı ve insansı dil illüzyonu, aslında donanımın bu kontrollü zar atma mekanizmasından ibarettir.
+
+      <h2>Veee..sistem her yeni kelimeyi bulmak için tüm mimariyi sıfırdan tekrar çalıştırır (Autoregressive süreç)</h2>
+
+      Bütün bu devasa mimari (milyarlarca parametrelik matrisler ve üst üste dizilmiş onlarca katman) hiçbir zaman tek seferde koca bir paragraf veya tam bir cümle üretmez. Bütün o matematiksel şovun tek bir görevi vardır o da sıradaki tek bir kelimeyi (token'ı) seçmek.
+
+Diyelim ki model, olasılık hesaplamalarının sonunda ve zar atma işleminin ardından [yatırdım] kelimesini seçti. Bu noktada üretim durmaz! Model bu yeni kelimeyi alır ve kendi mevcut girdisinin en sonuna ekler. *Parayı bankaya yatırdım...*
+
+Ve sistemin literatürdeki adıyla Autoregressive (kendi çıktısını girdi olarak alan) döngüsü tam burada başlar. Cümleye eklenecek bir sonraki parçayı (bu bir nokta, virgül veya yeni bir bağlaç olabilir) bulmak için tüm o devasa işlem bandı (Tokenizer ➔ Embedding ➔ Attention ➔ Feedforward) baştan sona tekrar çalıştırılır.
+
+Siz ekranda akıcı ve insansı bir cevabın saniyeler içinde sular seller gibi aktığını görürken, kaputun altındaki donanım aslında ekrana basılan her bir kelime, hece veya noktalama işareti için tüm bu devasa tahmin motorunu yüzlerce kez sıfırdan tetiklemektedir.
 
    <div className="writingArticle__callout">
    
-   **Yazarın notu: Neden buradayız?** 
+   **Sonraki adımımız tahmin motorlarından aksiyon alan ajanlara geçmek olacak** 
    
-   Büyük Dil Modelleri (LLM) dünyasında her gün yeni bir model, yeni bir benchmark ve yeni bir heyecan dalgasıyla karşılaşıyoruz. Ancak bu devasa makinenin altındaki çarkların nasıl döndüğünü anlamak; sadece teknolojiyi kullanmakla, ona yön vermek arasındaki o ince çizgiyi belirliyor.
-   
-   Bu yazıda, bir kelimenin sayıya dönüşmesinden, milyarlarca matrisin birbiriyle 'konuşarak' anlam yaratmasına kadar olan o büyüleyici yolculuğu birlikte izledik. Amacım, bu karmaşık görünen dünyayı biraz daha şeffaf ve anlaşılır kılarak, hepimizi bekleyen o büyük geleceğe bir tık daha hazırlamaktı.
-   
-   Peki, bu temel mimariyi neden bu kadar detaylı konuştuk? Çünkü bir sonraki duraklarda, bu 'kelime tahmin motorlarının' sadece konuşan botlar olmaktan çıkıp, bizim yerimize kararlar alan ve aksiyon geçen Agentic AI sistemlerine nasıl dönüştüğünü konuşacağız. Çünkü gelecek, sadece tahmin edenlerin değil, o tahminleri hedeflere dönüştüren ajanların olacak.
-   
-   Bir sonraki yazıda, bu mimarinin üzerine inşa edilen o akıllı dünyada buluşmak üzere!
+   Bu yazıda bir dil modelinin kaputunun altında yatan o devasa "sıradaki kelimeyi tahmin etme" motorunu tüm mimari gerçekliğiyle inceledik. Peki bu temel donanım mimarisini neden bu kadar detaylı konuştuk?
+
+Çünkü sektörün bir sonraki durağında, sadece bizimle konuşan botları değil; bu metin tahmin yeteneğini bir "akıl yürütme" motoru olarak kullanıp, bizim yerimize kararlar alan ve aksiyona geçen Agentic AI (Ajan Yapay Zeka) sistemlerini konuşacağız. Sektörün geleceği, sadece sıradaki kelimeyi tahmin edenlerin değil, o tahminleri alıp somut hedeflere dönüştüren ajanların olacak.
+
+Bir sonraki yazıda, bu statik mimarinin üzerine inşa edilen o akıllı ve otonom dünyada buluşmak üzere!
             <br />
 
-   **P.S.** Bu yazının 'debug' sürecinde yanımda olan, teknik kısımlardaki pürüzleri birlikte giderdiğimiz developer arkadaşım <a className="writingArticle__link" href="https://www.linkedin.com/in/arindenizkoklu/" target="_blank" rel="noreferrer">Arın Deniz Köklü</a>’ye destekleri için teşekkürler!
+   **P.S.** Bu yazının teknik okumalarında yanımda olan ve detaylardaki pürüzleri birlikte giderdiğimiz software developer arkadaşım <a className="writingArticle__link" href="https://www.linkedin.com/in/arindenizkoklu/" target="_blank" rel="noreferrer">Arın Deniz Köklü</a>’ye destekleri için teşekkürler!
 
    </div>
