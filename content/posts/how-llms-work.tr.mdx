@@ -491,8 +491,9 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
       <li>**K (Anahtar - Transpoz edilmiş):** Bankaya kelimesinin sunduğu kimliği temsil eder.</li>
    </ul>
 İşte bu çarpım işlemi ($Q \times K^T$), bir kelimenin talebi ile diğer kelimenin arzı arasındaki matematiksel kesişimi bulur. Çarpım sonucunda ortaya devasa bir Scores (Skorlar) tablosu çıkar. Bu tablo, *Hangi kelime diğerinin bağlam boşluğunu ne kadar iyi dolduruyor?* sorusuna verilen net bir alaka (relevance) puanıdır.
-  
-     <div className="writingArticle__codeRow writingArticle__codeRow--compactMatrix">
+
+
+            <div className="writingArticle__codeRow writingArticle__codeRow--compactMatrix">
      <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
      <Matrix values={[[-0.1, -0.1, -0.6, -0.4], [-0.1, -0.5, 0.1, 0.4], [0.6, -0.1, -0.8, 0.6]]} title={{ text:"transpose (Kᵀ)" }}/>
@@ -500,51 +501,70 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
      <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0.0, -0.1], [0.2, -0.2, 0.0, 0.6]]} title={{ text:"scores" }}/>
    </div>
 
-    <Note>
-      <span className="writingNote__icon" aria-hidden="true">!</span> Şu ana kadar token’lar arasındaki benzerlikleri tamamen serbest bir şekilde hesapladık. Yani her token, diğer tüm token’lara bakabiliyor. Buna gelecekteki token’lar da dahil. Ama burada ciddi bir problem var: Dil modelleri metni soldan sağa üretir. Yani model “yatırdım” kelimesini üretirken, henüz yazılmamış olan kelimeleri bilmemelidir. Aksi halde model, cevabı önceden görmüş olur. Bu da öğrenmeyi anlamsız hale getirir.
+**Modelin, henüz yazılmamış tokenlardan kopya çekmesini engellemek için bir çeşit maskeleme (masking) uyguluyoruz**
 
-      Bu noktada **mask** devreye girer.
-    </Note>
-
-   **Masking: Geleceği görmeyi engellemek**
-
- Skor tablosunu oluşturduk ama burada çok hayati bir kural devreye giriyor: Dürüstlük. Eğitim sırasında modelin bir sonraki kelimeyi tahmin etmesini istiyoruz. Eğer model, skor tablosunda kendisinden sonra gelen kelimelere bakabilirse, bu bir kopya çekme işlemi olur.
+ Skor tablosunu oluşturduk ve token'ların birbirleriyle olan alakasını hesapladık. Ancak şu anki tabloda ciddi bir mimari problem var: Her token, sağındaki ve solundaki tüm token'lara serbestçe bakabiliyor.
  
- Bunu engellemek için Masking mekanizmasını kullanıyoruz:
-   <div className="writingArticle__codeRow">
+ **Şu soruyu sorabilirsin:** *"Model sağındaki (gelecekteki) kelimelere bakarsa ne olur? Kopya çekmesinin sisteme ne zararı var?"*
+ 
+ Aslında bu, sistemin çalışıp çalışmayacağını belirleyen en kritik donanımsal noktadır. Çünkü bu modellerin tek bir varoluş amacı var: Sadece geçmişe bakarak bir sonraki kelimeyi tahmin etmek.
+ 
+ Eğitim aşamasında modele trilyonlarca *tamamlanmış* cümle veriyoruz. Eğer model bankaya kelimesini işlerken sağa bakıp sıradaki kelimenin yatırdım olduğunu görebilirse, iki kelime arasındaki bağlamı öğrenmesine gerek kalmaz, doğrudan cevabı kopyalar. Tıpkı sınavda cevap anahtarını gören bir öğrencinin matematiği asla öğrenmemesi gibi, %100 başarı gösterir ama hiçbir şey *anlamaz*.
+ 
+ İşin asıl felaket kısmı model canlıya alındığında (ürün olarak kullanıma açıldığında) patlak verir. Sen ekrana *"Parayı bankaya..."* yazdığında, ortada modelin kopya çekebileceği bir *gelecek* yoktur. Gelecek henüz yazılmamıştır. Eğer model eğitimde sıradaki kelimeyi bulmak için sürekli sağ tarafa bakmaya alışmışsa, canlı kullanımda o geleceği bulamadığı an sistem tamamen çuvallar, tek bir mantıklı cümle kuramaz. 
+ 
+ İşte bu yüzden sisteme acımasız bir matematiksel zaman disiplini dayatıyoruz, o da **Maskeleme (Masking)**. Skor tablosunda, henüz üretilmemiş token'lara denk gelen hücreleri eksi sonsuz ($-\infty$) değeriyle doldurarak o kısmı tamamen karartıyoruz. Bu maske sayesinde model, sıradaki adımı tahmin edebilmek için mecbur kalıp kelimelerin birbirleriyle olan gerçek ilişkilerini (Q ve K eşleşmelerini) öğrenmeye zorlanıyor.
+
+ <details className="writingArticle__accordion">
+       <summary className="writingArticle__accordionSummary">Maskeleme hesaplamasını göster</summary>
+       <div className="writingArticle__accordionBody">
+            <div className="writingArticle__codeRow">
      <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0, -0.1], [0.2, -0.2, 0, 0.6]]} title={{ text:"scores" }} prefix={{ text: "mask(" }} suffix={{ text: ")" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
      <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }}/>
    </div>
+       </div>
+     </details>
 
-   -inf (eksi sonsuz) değerleri, modelin "geleceğe" bakmasını matematiksel olarak imkansız hale getirir. Bu sayede her token, sadece kendisinden önce gelenlerin bağlamıyla karar vermeye zorlanır. Yani attention mekanizmasına bir "zaman disiplini" kazandırıyoruz.
+   **Maskelemeden sonra, bir çeşit filtreleme ile ham skorları temiz yüzdelere dönüştürüyoruz**
 
-   **Softmax: Skorları ağırlıklara dönüştürmek**
+   Maskeleme bittikten sonra elimizde hâlâ eksi sonsuzlarla ve ham sayılarla dolu, birbiriyle kıyaslanması zor bir tablo var. İşte tam burada devreye makine öğrenmesinin en bilinen süzgeçlerinden biri olan **Softmax** giriyor.
 
-   Maskeleme bittikten sonra elimizde hala ham ve karşılaştırılması zor sayılar var. Burada Softmax devreye giriyor ve bu sayıları alıp toplamı 1 (yani %100) eden, tertemiz olasılık ağırlıklarına dönüştürüyor:
+   Softmax işlemi, bu dağınık sayıları alıp her bir satırın toplamını 1 (yani %100) yapacak şekilde, pürüzsüz olasılık ağırlıklarına dönüştürür. İşin en şık tarafı, maskeleme aşamasında geleceği gizlemek için koyduğumuz o eksi sonsuz ($-\infty$) değerleri, Softmax filtresinden geçince matematiksel olarak tam sıfıra (0) dönüşür.
+   
+   Ortaya çıkan bu nihai tabloya **Attention Ağırlık Matrisi (Weights)** diyoruz. Bu matrise baktığında, dördüncü satırdaki bir kelimenin, kendisinden önceki üç kelimeye yüzde kaç oranında odaklandığını net bir şekilde görebilirsin. Sıfır olan hücreler (maskelenmiş kısımlar), modelin o tarafa (henüz yazılmamış kelimelere) fiilen hiç bakamadığının donanımsal garantisidir.
+
         <div className="writingArticle__codeRow">
      <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }} prefix={{ text: "softmax(" }} suffix={{ text: ")" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
      <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
    </div>
 
-   Ortaya çıkan sonuç artık bir **Attention Ağırlık Matrisidir**. Bu matrise baktığınızda, dördüncü satırdaki bir kelimenin, kendisinden önceki üç kelimeye yüzde kaç oranında odaklandığını net bir şekilde görebilirsiniz. Sıfır olan hücreler (maskelenmiş kısımlar), modelin o tarafa fiilen hiç bakmadığını garantiler.
+   **Value matrisi ile odaklanılan kelimeden alınacak saf bilgiyi paketliyoruz** 
 
-   **Value (V) ve Output'un oluşması: Anlamı paketlemek** 
+   Şu ana kadar Query (Q) ve Key (K) matrislerini çarpıştırarak sadece tek bir sorunun cevabını bulduk. *Hangi kelimeye, yüzde kaç oranında dikkat etmeliyiz*
+   
+   Ancak bu oranlar (yüzdeler) tek başlarına bir anlam ifade etmez. Modelin, dikkat etmeye karar verdiği o kelimelerden asıl **özü (anlamı)** çekip alması gerekir. İşte burada sistemin üçüncü ve son filtresi olan **Value (V) matrisi** devreye giriyor.
+   
+   Value (V) matrisini, o kelimenin *taşınabilir bilgi paketi (payload)* olarak düşünebilirs. Q ve K eşleşmesi bittiği için bu aşamada artık *"Ne arıyoruz?"* sorusu devreden çıkar ve geriye sadece karşı tarafa aktarılacak saf içerik kalır. Daha önce olduğu gibi, burada da modelin eğitim sırasında öğrendiği bir $W_v$ matrisi kullanılır ve token'ların ham halleri transfer edilecek bilgi paketlerine dönüştürülür.
 
-   Şimdiye kadar sadece "kiminle ne kadar ilgiliyiz?" sorusuna yanıt aradık. Peki, o ilgili olduğumuz kelimeden hangi bilgiyi alacağız? İşte burada $Value(V)$ matrisi devreye giriyor.
-
-   <div className="writingArticle__codeRow">
+   <details className="writingArticle__accordion">
+       <summary className="writingArticle__accordionSummary">Value (V) matrisi hesaplamasını göster</summary>
+       <div className="writingArticle__accordionBody">
+            <div className="writingArticle__codeRow">
      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
      <Matrix values={[[0.6, -0.2, 0.1], [0.3, 0.7, -0.4], [-0.5, 0.2, 0.8]]} title={{ text:"WV" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
      <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
    </div>
+       </div>
+     </details>
 
-          V matrisini, embedding’lerin “taşınabilir içerik” hâli gibi düşünebiliriz. Bu aşamada artık "ne arıyoruz?" sorusu biter; sadece "içerik" kalır. Daha önce olduğu gibi, burada da eğitim sırasında öğrenilmiş bir WV matrisi vardır. Bu matrisi kullanarak token embedding’lerini V matrisine dönüştürürüz.
+    **Ağırlık yüzdeleri ile Value matrisini çarparak anlamı harmanlıyoruz**
 
-   Son adımda, Softmax’ten çıkan o hassas ağırlıklar ile V matrisini çarparız ($Weights \times V$):
+    Artık son vuruşu yapma zamanı. Elimizde iki veri var: Hangi kelimeden ne kadar bilgi alacağımızı söyleyen Weights (yüzdeler) ve o kelimelerin taşıdığı saf bilgi olan Value (V).Yapacağımız son işlem, Softmax'ten çıkan o hassas yüzdeler ile V matrisini çarpmaktır ($Weights \times V$). Bu işlem, her bir kelimenin kendi yüzdesi kadar bilgi paketini alıp, mevcut kelimenin üzerine eklemesini sağlar.
+
     <div className="writingArticle__codeRow">
      <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
