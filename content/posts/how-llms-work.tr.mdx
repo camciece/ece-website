@@ -442,52 +442,63 @@ Olayın mantığı şu şekilde işler:
 Başlangıçta bu ağırlık matrislerinin içi rastgele sayılarla dolu. Model dildeki hiçbir kuralı bilmiyor. Eğitim boyunca önüne konan milyarlarca cümleyi okuyor ve sürekli bir sonraki kelimeyi tahmin etmeye çalışıyor. Sayılar rastgele olduğu için başlarda hep saçmalıyor. Ancak her yanlış tahminde, gerçek cevapla kendi tahmini arasındaki matematiksel uçurumu (loss, yani kayıp) hesaplıyor. Sonra geriye dönüyor ve bir dahaki sefere daha az hata yapmak için matrislerin içindeki o sayıları milim milim güncelliyor. Aylar süren o devasa işlem gücü (compute) harcamasının sonunda $W_q$, $W_k$ ve $W_v$, hangi sinyalin gürültü olduğunu ve hangi kelimelerin birbiriyle gerçekten bağ kurduğunu kusursuzca keşfediyor.
 
 Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trilyon parametreli yeni model efsanesi var ya, işte o parametreler tam olarak bu matrislerin içindeki küçük ondalıklı sayılardan ibaret. Tek başlarına hiçbir şey ifade etmiyorlar ama milyarlarcası bir araya geldiğinde o devasa anlam illüzyonunu yaratıyorlar.
+
+     <details className="writingArticle__accordion">
+       <summary className="writingArticle__accordionSummary">Q ve K matris hesaplamalarını göster</summary>
+       <div className="writingArticle__accordionBody">
+         <div className="writingArticle__accordionIntro">
+           Bu aşamada yaptığımız şey henüz bir dikkat (attention) hesaplamak değil. Her token’ın "aradığını" (Q) ve "sunduğunu" (K) iki ayrı matematiksel dönüşümle aynı evrensel uzayda ifade etmek.
+         </div>
+
+         <div className="writingArticle__codeRow">
+           <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+           <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+           <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"WQ" }} />
+           <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+           <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q"}}/>
+         </div>
+
+          <div className="writingArticle__codeRow">
+           <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
+           <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
+           <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"WK" }}/>
+           <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
+          <Matrix values={[[-0.1, -0.1, 0.6], [-0.1, -0.5, -1.0], [-0.6, 0.1, -0.8], [-0.4, 0.4, 0.6]]} title={{ text:"K" }}/>
+         </div>
+
+         <div className="writingArticle__accordionFootnote">
+           Matrislere bakarsanız, Q ve K matrislerinin boyutları bilinçli olarak aynı tutulur. Sebebi; birazdan bu iki temsili doğrudan birbiriyle matematiksel bir "tokalaşmaya" sokacağız. Yani bu adımda henüz "Kim kime ne kadar dikkat ediyor?" sorusunu sormuyoruz, sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
+         </div>
+       </div>
+     </details>
    </div>
-
-   **Şimdi matematik konuşsun: Q ve K matrislerini hesaplayalım**
-
-  Bu aşamada yaptığımız şey henüz bir dikkat (attention) hesaplamak değil; her token’ın "aradığını" ($Q$) ve "sunduğunu" ($K$) iki ayrı matematiksel dönüşümle aynı evrensel uzayda ifade etmek.
-
-   <div className="writingArticle__codeRow">
-     <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
-     <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-     <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"WQ" }} />
-     <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
-     <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q"}}/>
-   </div>
-
-    <div className="writingArticle__codeRow">
-     <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
-     <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
-     <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"WK" }}/>
-     <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
-     <Matrix values={[[-0.1, -0.1, 0.6], [-0.1, -0.5, -1.0], [-0.6, 0.1, -0.8], [-0.4, 0.4, 0.6]]} title={{ text:"K" }}/>
-   </div>
-
-   Matrislere bakarsanız, $\mathit{Q}$ ve $\mathit{K}$ matrislerinin boyutları bilinçli olarak aynı tutulur. Sebebi; birazdan bu iki temsili doğrudan birbiriyle matematiksel bir "tokalaşmaya" sokacağız. Yani bu adımda henüz "Kim kime ne kadar dikkat ediyor?" sorusunu sormuyoruz, sadece bu soruyu sorabilmek için gerekli altyapıyı kuruyoruz.
           
-   **$Q$ ve $K$ nihayet karşı karşıya: Matrislerin tokalaşması**
+   **Bir sonraki aşamada, prompt'taki token'ların birbirine ne kadar alakalı olduğunu skorluyoruz**
 
-   Altyapıyı kurduk; her token için elimizde ne aradığını bilen bir Query ($Q$) ve ne sunduğunu söyleyen bir Key ($K$) var. Şimdi asıl büyüleyici kısma geliyoruz: Bu iki matrisin birbiriyle çarpılmasıyla elde edilen **Attention Scores (Dikkat Skorları)**.
-
-   Matematiksel olarak yaptığımız şey, $Q$ matrisi ile $K$ matrisinin transpozunu çarpmaktır ($Q \times K^T$). Bu işlem aslında şu anlama gelir: Model, "A kelimesinin aradığı özellikler, B kelimesinin sunduğu etiketlerle ne kadar örtüşüyor?" sorusuna her bir kelime çifti için sayısal bir puan verir.
-
-   Bu çarpım sonucunda karşımıza her kelimenin diğer her kelimeyle olan "alaka düzeyini" gösteren dev bir tablo (skor matrisi) çıkar.
-     
-     <div className="writingArticle__codeRow">
+ Q ve K matrislerini hesapladıktan sonra yapacağımız ilk iş, bu iki matrisi matematiksel olarak çarpıştırmak ($Q \times K^T$).
+ 
+ Dikkat edersen formülde K'nın üzerinde bir "T" (Transpoz) harfi var. Transpoz, bir tablonun satırlarını sütun haline getirmek, yani matrisi yan yatırmak demekti. Peki bu matematiksel taklayı neden atıyoruz ve çıkan sonuca neden "skor" diyoruz? 
+ 
+ Matris çarpım kuralı gereği, birinci tablonun satırları, ikinci tablonun sütunlarıyla çarpılır. Amaç, Q matrisindeki her bir token'ın sorgusunu (satırını), K matrisindeki diğer tüm token'ların kimlikleriyle (satırlarıyla) teker teker kıyaslamak. K matrisini yan yatırdığımızda, her bir kelimenin arayışını (Q), sistemdeki tüm anahtarlarla (K) tek bir hamlede, paralel ve süper hızlı bir şekilde tarayabilir hale geliriz.
+ 
+ Peki bu eşleşmeyi neden doğrudan başlangıçtaki kelime vektörlerini çarparak yapmıyoruz?
+ 
+ Vektör matematiğinde iki sayı listesini birbiriyle çarptığınızda (dot product) elde ettiğin sonuca skor denir. Bu skor, o iki vektörün uzayda ne kadar aynı yöne baktığını, yani birbiriyle ne kadar hizalandığını (alakalı olduğunu) gösterir. Doğrudan kelimelerin kendisini (embedding'leri) çarpmadık, çünkü dil sözlük anlamıyla çalışmaz. Yatırdım kelimesi ile bankaya kelimesi sözlükte birbirine hiç benzeme. Doğrudan çarparsan, skorları çok düşük çıkar. 
+ 
+ Ancak sistemin kurduğu bu *arama motoru* mantığında:
+  <ul className="writingArticle__TokenizerList">  
+     <li>**Q (Sorgu):** Yatırdım kelimesinin bağlam arayışını (finansal bir mekan aramasını) temsil eder.</li>
+      <li>**K (Anahtar - Transpoz edilmiş):** Bankaya kelimesinin sunduğu kimliği temsil eder.</li>
+   </ul>
+İşte bu çarpım işlemi ($Q \times K^T$), bir kelimenin talebi ile diğer kelimenin arzı arasındaki matematiksel kesişimi bulur. Çarpım sonucunda ortaya devasa bir Scores (Skorlar) tablosu çıkar. Bu tablo, *Hangi kelime diğerinin bağlam boşluğunu ne kadar iyi dolduruyor?* sorusuna verilen net bir alaka (relevance) puanıdır.
+  
+     <div className="writingArticle__codeRow writingArticle__codeRow--compactMatrix">
      <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
      <Matrix values={[[-0.1, -0.1, -0.6, -0.4], [-0.1, -0.5, 0.1, 0.4], [0.6, -0.1, -0.8, 0.6]]} title={{ text:"transpose (Kᵀ)" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
      <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0.0, -0.1], [0.2, -0.2, 0.0, 0.6]]} title={{ text:"scores" }}/>
    </div>
-
-   <ul className="writingArticle__TokenizerList">  
-     <li>**Satırlar ve Sütunlar** - Scores tablosundaki her bir satır "şu anki token’ı", her bir sütun ise "bakılan token’ı" temsil eder. Yani tabloya baktığınızda, modelin o satırdaki kelimeyi anlamlandırmak için diğer sütunlardaki kelimelere ne kadar "danıştığını" görürsünüz.</li>
-      <li>**Noktasal Çarpım (Dot Product)** - Tablodaki her bir hücre, ilgili iki vektörün ($Q$ ve $K$) noktasal çarpımıdır. Bu işlem, iki vektörün uzayda ne kadar aynı yöne baktığını ölçer; yani matematiksel bir "hizalanma" skorudur.</li>
-     <li>**Skorlar ne anlatıyor?** - Aslında burada yaptığımız şey, token’lar arası bir "uyum testi". Ortaya çıkan sayı ne kadar büyükse, iki kelime arasındaki bağ o kadar güçlüdür. Örneğin; "yatırdım" token’ının sorgusu ($Q$) ile "bankaya" token’ının anahtarı ($K$) çarpıldığında yüksek bir skor çıkması, modelin bu iki kelimeyi bağlamsal olarak birbiriyle çok alakalı bulduğunu gösterir. Sayı sıfıra yaklaştıkça bu alaka zayıflar, negatif değerler ise bu kelimelerin anlam evreninde birbirini ittiği ve farklı yönlere baktığı bir sinyal gibi okunur.</li>
-     <li>**Scores matrsinin boyutu** - Embedding boyutuyla değil, prompt’taki token sayısıyla ilgilidir. Yani 4 token varsa 4×4, 20 token varsa 20×20 bir tablo oluşur.</li>
-   </ul>
 
     <Note>
       <span className="writingNote__icon" aria-hidden="true">!</span> Şu ana kadar token’lar arasındaki benzerlikleri tamamen serbest bir şekilde hesapladık. Yani her token, diğer tüm token’lara bakabiliyor. Buna gelecekteki token’lar da dahil. Ama burada ciddi bir problem var: Dil modelleri metni soldan sağa üretir. Yani model “yatırdım” kelimesini üretirken, henüz yazılmamış olan kelimeleri bilmemelidir. Aksi halde model, cevabı önceden görmüş olur. Bu da öğrenmeyi anlamsız hale getirir.
