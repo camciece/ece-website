@@ -332,20 +332,17 @@ Model bu token'ların embedding'lerini bu oranlarda harmanlayarak ortaya yepyeni
   </Note>
 
    
-   **Attention bunu matematiksel olarak nasıl yapıyor? → Q, K, V**
+   **Attention bunu nasıl yapıyor? (Q, K, V mantığı)**
 
-   Kısa bir matematik molası. Amacımız formüllere boğulmak değil, modelin bu odaklanma işini perde arkasında nasıl bir mantıkla hesapladığını sezgisel olarak kavramak.
+   Az önce bahsettiğimiz o %48, %34 gibi dikkat oranları modelin içinde sihirli bir şekilde oluşmuyor. Arka planda tamamen matris çarpımlarına dayanan, her kelimenin ihtiyacı olan bağlamı diğerlerinden çektiği devasa bir sinyal eşleşmesi yatıyor.
 
-Az önce bahsettiğimiz o dikkat oranları (%48, %34) modelin içine vahiy yoluyla inmiyor. Her şey tamamen matris çarpımlarıyla, adım adım hesaplanıyor. Şimdi bu süreci basitleştirilmiş bir örnek üzerinden görelim.
+   Şimdi bu süreci basitleştirilmiş bir örnek üzerinden adım adım görelim. Prompt’umuz yine aynı olsun: *Parayı bankaya yatırdım.*
+<ul className="writingArticle__TokenizerList">
+   <li>**Token'lar:** Tokenizer bu cümleyi dört parçaya böldü: [Parayı], [bankaya], [yatır], [dım]</li>
+   <li>**Embedding'ler (Başlangıç Matrisi):** Görselleştirmeyi kolaylaştırmak için n=3 boyutlu bir dünyada olduğumuzu hayal edelim (gerçekte bu binlerce boyuttur ama mekanizmayı kavramak için bu mini matris bize yeter).</li>  
+</ul>
 
-Prompt’umuz yine aynı olsun: *Parayı bankaya yatırdım.*
-
-   <ul className="writingArticle__TokenizerList">
-     <li>**Token ID’ler hazır:** Tokenizer bu cümleyi dört parçaya böldü: [Parayı] [bankaya] [yatır] [dım]</li>
-     <li>**Embedding’ler:** Görselleştirmeyi kolaylaştırmak için n=3 boyutlu bir dünyada olduğumuzu hayal edelim. (Gerçekte bu binlerce boyuttur ama mekanizmayı anlamak için bu mini matris bize yeter.)</li>
-   </ul>
-   
-    <div className="writingArticle__codeRow">
+  <div className="writingArticle__codeRow">
      <div className="writingArticle__codeCard writingArticle__codeCard--narrow">
        <pre className="writingArticle__codeBlock">
          <code>
@@ -418,30 +415,19 @@ Prompt’umuz yine aynı olsun: *Parayı bankaya yatırdım.*
      <div className="writingArticle__codeSymbol" aria-hidden="true">→</div>
      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"Embedding Matrix" }} />
     </div> 
-   Bu noktada Attention mekanizması devreye girer ve bu embedding’lere 3 farklı lensten bakar. (Yani model, her bir embedding’i alır ve onu üç farklı matematiksel dönüşümden geçirir.) Bu üç dönüşüme **Query (Sorgu)**, **Key (Anahtar)** ve **Value (Değer)** diyoruz.                      
-    <div className="writingArticle__callout">
 
+Bu 4 satır ve 3 sütundan oluşan tablo bizim operasyonumuzun ham maddesidir. Her kelimenin kendi statik koordinatı bellidir ama henüz yanındakinden haberi yoktur. Tam bu noktada Attention mekanizması devreye girer ve bu ham embedding tablosuna 3 farklı filtreden (lensten) bakar. Model, her bir kelimenin vektörünü alır ve onu kendi içinde üç farklı matematiksel dönüşümden geçirir. Bu üç dönüşüme Query (Sorgu), Key (Anahtar) ve Value (Değer) diyoruz.
+
+Olayın mantığı şu şekilde işler:
+
+<ul className="writingArticle__TokenizerList">
+     <li>**Query (Ne arıyorum?):** *Yatırdım* token'ı, cümleyi doğru kurmak için diğerlerinden ne koparmalı? *"Bana nereye veya neyin yatırıldığını söyleyen bir kelime lazım"* der. Bu onun arama motoruna yazdığı sorgudur.</li>
+     <li>**Key (Ben kimim?):** *Bankaya* token'ı dışarıya hangi sinyali veriyor? *"Ben bir mekanım ve finansal bağlam taşıyorum"* der. Bu da onun sistemdeki kimlik kartıdır.</li>
+     <li>**Value (Özüm ne?):** Q ve K eşleşirse, karşı tarafa aktarılacak asıl anlam (vektör) paketi.</li>
+   </ul>
     **Q ve K karar verir, V aktarılır**
-
-    Peki, bu üç farklı bakış açısı (Q, K, V) pratikte ne anlama geliyor? Gelin, "bankaya" ve "yatırdım" token'ları üzerinden bu matematiksel fısıldaşmayı tercüme edelim:
-
-   <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-     <li>
-       **Query (Q - Sorgu)** *“Bu token, cümleyi doğru anlamak için diğer token’larda hangi özelliklere dikkat etmeli?”*
-
-       Örneğin "yatırdım" token'ını düşünün. Bu token için model şu soruların peşine düşer: "Nereye yatırıldı? Ne yatırıldı? Bu eylemle ilişkili bir yer var mı?" İşte bu "istek listesi" Query vektörüdür. Bu vektör, “bankaya” ve “para” gibi token’larda güçlü eşleşmeler bulursa, onlara daha fazla dikkat verilmesini sağlar.
-     </li>
-
-     <li>
-       **Key (K - Anahtar)** *"Bu token, kendisiyle ilgili hangi sinyalleri dışarıya veriyor?"*
-
-       "bankaya" token'ı ise dışarıya şu etiketleri sunar: "Ben bir yer bilgisi içeriyorum, finansal bir bağlam taşıyorum, eylemlerle ilişkilendirilebilirim." Bu, kelimenin kütüphane rafındaki sırt etiketidir.
-     </li>
-
-     <li>**Value (V - Value)** *"Bu token'dan bağlama hangi bilgi taşınmalı?"*</li>
-   </ol>
-
-     Yani Q ve K, "Kime bakmalıyım?" sorusunu çözer; V ise "Baktıysan, benden neyi alacaksın?" sorusunun cevabıdır. "bankaya" token'ı burada finansal anlamını ve yer bilgisini paketleyip bir sonraki aşamaya iletir. V (Value) vektörü, bu taşınabilir bilginin matematiksel temsilidir.
+                   
+    <div className="writingArticle__callout">
 
    **Matematiksel Dönüşüm: W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub> Matrisleri**
 
