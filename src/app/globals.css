@@ -3049,44 +3049,40 @@ body.text-\[--text\] {
   max-width: 920px;
 }
 
-.writingArticle__accordionBody .writingArticle__codeRow {
+.writingArticle__codeRow--matrixOperation {
   flex-wrap: nowrap;
   justify-content: flex-start;
-  gap: 0 10px;
-  margin: 10px 0;
-  overflow-x: auto;
-}
-
-.writingArticle__codeRow--compactMatrix {
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  gap: 0 10px;
+  align-items: center;
+  gap: 0 12px;
   margin: 10px 0 18px;
   overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
 }
 
-.writingArticle__accordionBody .writingArticle__codeCard--matrix {
-  flex: 0 0 clamp(170px, 29%, 220px) !important;
+.writingArticle__codeRow--matrixOperation .writingArticle__codeCard--matrix {
+  flex: 0 0 280px !important;
   margin: 8px 0;
-  padding: 10px 8px;
+  padding: 12px 10px;
 }
 
-.writingArticle__codeRow--compactMatrix .writingArticle__codeCard--matrix {
-  flex: 0 0 clamp(170px, 29%, 220px) !important;
-  margin: 8px 0;
-  padding: 10px 8px;
+.writingArticle__codeRow--matrixOperation
+  .writingArticle__codeCard--matrix[data-matrix-cols='4'] {
+  flex-basis: 352px !important;
 }
 
-.writingArticle__accordionBody .writingArticle__codeSymbol {
+.writingArticle__codeRow--matrixOperation
+  .writingArticle__codeCard--matrix[data-matrix-affix='true'] {
+  flex-basis: 390px !important;
+}
+
+.writingArticle__codeRow--matrixOperation .writingArticle__codeSymbol {
   flex: 0 0 auto;
-  padding: 0 2px;
-  font-size: 20px;
-}
-
-.writingArticle__codeRow--compactMatrix .writingArticle__codeSymbol {
-  flex: 0 0 auto;
-  padding: 0 2px;
-  font-size: 20px;
+  padding: 0 4px;
+  font-size: 24px;
+  line-height: 1;
 }
 
 .writingArticle__calloutList {

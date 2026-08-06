@@ -450,7 +450,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
            Bu aşamada yaptığımız şey henüz bir dikkat (attention) hesaplamak değil. Her token’ın "aradığını" (Q) ve "sunduğunu" (K) iki ayrı matematiksel dönüşümle aynı evrensel uzayda ifade etmek.
          </div>
 
-         <div className="writingArticle__codeRow">
+         <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
            <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
            <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
            <Matrix values={[[0.5, -0.4, 0.1], [0.3, 0.8, -0.4], [-0.6, 0.4, 0.9]]} title={{ text:"WQ" }} />
@@ -458,7 +458,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
            <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q"}}/>
          </div>
 
-          <div className="writingArticle__codeRow">
+          <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
            <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
            <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
            <Matrix values={[[0.1, -0.7, -0.6], [-0.8, 0.5, -0.8], [-0.3, 0.2, 0.9]]} title={{ text:"WK" }}/>
@@ -493,7 +493,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
 İşte bu çarpım işlemi ($Q \times K^T$), bir kelimenin talebi ile diğer kelimenin arzı arasındaki matematiksel kesişimi bulur. Çarpım sonucunda ortaya devasa bir Scores (Skorlar) tablosu çıkar. Bu tablo, *Hangi kelime diğerinin bağlam boşluğunu ne kadar iyi dolduruyor?* sorusuna verilen net bir alaka (relevance) puanıdır.
 
 
-            <div className="writingArticle__codeRow writingArticle__codeRow--compactMatrix">
+            <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
      <Matrix values={[[-0.4, 0.1, 0.7], [0.7, -0.2, -0.2], [0.4, 0.5, -0.2], [-0.5, 0.5, 0.4]]} title={{ text:"Q" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
      <Matrix values={[[-0.1, -0.1, -0.6, -0.4], [-0.1, -0.5, 0.1, 0.4], [0.6, -0.1, -0.8, 0.6]]} title={{ text:"transpose (Kᵀ)" }}/>
@@ -518,7 +518,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
  <details className="writingArticle__accordion">
        <summary className="writingArticle__accordionSummary">Maskeleme hesaplamasını göster</summary>
        <div className="writingArticle__accordionBody">
-            <div className="writingArticle__codeRow">
+            <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
      <Matrix values={[[0.5, -0.1, -0.3, 0.6], [-0.2, 0.1, -0.3, -0.5], [-0.2, -0.3, 0, -0.1], [0.2, -0.2, 0, 0.6]]} title={{ text:"scores" }} prefix={{ text: "mask(" }} suffix={{ text: ")" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
      <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }}/>
@@ -534,7 +534,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
    
    Ortaya çıkan bu nihai tabloya **Attention Ağırlık Matrisi (Weights)** diyoruz. Bu matrise baktığında, dördüncü satırdaki bir kelimenin, kendisinden önceki üç kelimeye yüzde kaç oranında odaklandığını net bir şekilde görebilirsin. Sıfır olan hücreler (maskelenmiş kısımlar), modelin o tarafa (henüz yazılmamış kelimelere) fiilen hiç bakamadığının donanımsal garantisidir.
 
-        <div className="writingArticle__codeRow">
+       <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
      <Matrix values={[[0.5, "-∞", "-∞", "-∞"], [-0.2, 0.1, "-∞", "-∞"], [-0.2, -0.3, 0, "-∞"], [0.2, -0.2, 0, 0.6]]} title={{ text:"masked" }} prefix={{ text: "softmax(" }} suffix={{ text: ")" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">=</div>
      <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
@@ -551,7 +551,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
    <details className="writingArticle__accordion">
        <summary className="writingArticle__accordionSummary">Value (V) matrisi hesaplamasını göster</summary>
        <div className="writingArticle__accordionBody">
-            <div className="writingArticle__codeRow">
+            <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
      <Matrix values={[[0.2, -0.1, 0.7], [0.9, 0.3, -0.2], [0.4, 0.8, 0.1], [-0.3, 0.2, 0.6]]} title={{ text:"embeddings" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
      <Matrix values={[[0.6, -0.2, 0.1], [0.3, 0.7, -0.4], [-0.5, 0.2, 0.8]]} title={{ text:"WV" }}/>
@@ -565,7 +565,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
 
     Artık son vuruşu yapma zamanı. Elimizde iki veri var: Hangi kelimeden ne kadar bilgi alacağımızı söyleyen Weights (yüzdeler) ve o kelimelerin taşıdığı saf bilgi olan Value (V).Yapacağımız son işlem, Softmax'ten çıkan o hassas yüzdeler ile V matrisini çarpmaktır ($Weights \times V$). Bu işlem, her bir kelimenin kendi yüzdesi kadar bilgi paketini alıp, mevcut kelimenin üzerine eklemesini sağlar.
 
-    <div className="writingArticle__codeRow">
+    <div className="writingArticle__codeRow writingArticle__codeRow--matrixOperation">
      <Matrix values={[[1.0, 0.0, 0.0, 0.0], [0.4, 0.6, 0.0, 0.0], [0.3, 0.3, 0.4, 0.0], [0.3, 0.2, 0.2, 0.4]]} title={{ text:"weights" }}/>
      <div className="writingArticle__codeSymbol" aria-hidden="true">×</div>
      <Matrix values={[[-0.3, 0.0, 0.6], [0.7, 0.0, -0.2], [0.4, 0.5, -0.2], [-0.4, 0.3, 0.4]]} title={{ text:"V" }}/>
@@ -644,9 +644,9 @@ Siz ekranda akıcı ve insansı bir cevabın saniyeler içinde sular seller gibi
    
    **Sonraki adımımız tahmin motorlarından aksiyon alan ajanlara geçmek olacak** 
    
-   Bu yazıda bir dil modelinin kaputunun altında yatan o devasa "sıradaki kelimeyi tahmin etme" motorunu tüm mimari gerçekliğiyle inceledik. Peki bu temel donanım mimarisini neden bu kadar detaylı konuştuk?
+   Bu yazıda bir dil modelinin kaputunun altında yatan o devasa sıradaki kelimeyi tahmin etme motorunu tüm mimari gerçekliğiyle inceledik. Peki bu temel donanım mimarisini neden bu kadar detaylı konuştuk?
 
-Çünkü sektörün bir sonraki durağında, sadece bizimle konuşan botları değil; bu metin tahmin yeteneğini bir "akıl yürütme" motoru olarak kullanıp, bizim yerimize kararlar alan ve aksiyona geçen Agentic AI (Ajan Yapay Zeka) sistemlerini konuşacağız. Sektörün geleceği, sadece sıradaki kelimeyi tahmin edenlerin değil, o tahminleri alıp somut hedeflere dönüştüren ajanların olacak.
+Çünkü sektörün bir sonraki durağında, sadece bizimle konuşan botları değil; bu metin tahmin yeteneğini bir akıl yürütme motoru olarak kullanıp, bizim yerimize kararlar alan ve aksiyona geçen Agentic AI sistemlerini konuşacağız. Sektörün geleceği, sadece sıradaki kelimeyi tahmin edenlerin değil, o tahminleri alıp somut hedeflere dönüştüren ajanların olacak.
 
 Bir sonraki yazıda, bu statik mimarinin üzerine inşa edilen o akıllı ve otonom dünyada buluşmak üzere!
             <br />

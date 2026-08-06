@@ -55,6 +55,8 @@ export default function Matrix({ values, title, prefix, suffix }: MatrixProps) {
   return (
     <div
       className="writingArticle__matrixCard writingArticle__codeCard--matrix"
+      data-matrix-cols={cols}
+      data-matrix-affix={prefix || suffix ? 'true' : undefined}
       style={{ flex: `0 ${totalViewBoxWidth}px` }}
     >
       <div className="writingArticle__embedMatrix writingArticle__embedMatrix--full">
