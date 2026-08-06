@@ -429,9 +429,9 @@ Olayın mantığı şu şekilde işler:
                    
     <div className="writingArticle__callout">
 
-   **Matematiksel Dönüşüm: W<sub>Q</sub>, W<sub>K</sub> ve W<sub>V</sub> Matrisleri**
+   **💡 Şu meşhur **"trilyonlarca parametre"** muhabbeti aslında ne?**
 
-   Bu $\mathit{Q}$, $\mathit{K}$ ve $\mathit{V}$ vektörleri gökten inmiyor. Bunlar, elimizdeki **Embedding** matrisinin üç farklı "öğrenilmiş matris" ile çarpılmasıyla elde ediliyor:
+   Q, K ve V filtreleri havadan gelmiyor. O başlangıçtaki *Embedding* matrisinin modelin içine gömülü üç farklı ağırlık matrisiyle ($W_q$, $W_k$, $W_v$) çarpılmasıyla üretiliyor.
 
 <div className="writingArticle__mathLines">
   <div className="writingArticle__mathLine">$Q = Embeddings \times W_{Q}$</div>
@@ -439,16 +439,9 @@ Olayın mantığı şu şekilde işler:
   <div className="writingArticle__mathLine">$V = Embeddings \times W_{V}$</div>
 </div>
 
+Başlangıçta bu ağırlık matrislerinin içi rastgele sayılarla dolu. Model dildeki hiçbir kuralı bilmiyor. Eğitim boyunca önüne konan milyarlarca cümleyi okuyor ve sürekli bir sonraki kelimeyi tahmin etmeye çalışıyor. Sayılar rastgele olduğu için başlarda hep saçmalıyor. Ancak her yanlış tahminde, gerçek cevapla kendi tahmini arasındaki matematiksel uçurumu (loss, yani kayıp) hesaplıyor. Sonra geriye dönüyor ve bir dahaki sefere daha az hata yapmak için matrislerin içindeki o sayıları milim milim güncelliyor. Aylar süren o devasa işlem gücü (compute) harcamasının sonunda $W_q$, $W_k$ ve $W_v$, hangi sinyalin gürültü olduğunu ve hangi kelimelerin birbiriyle gerçekten bağ kurduğunu kusursuzca keşfediyor.
 
-   Buradaki $\mathit{W\scriptsize{Q}}$, $\mathit{W\scriptsize{K}}$ ve $\mathit{W\scriptsize{V}}$  matrisleri, modelin eğitimi sırasında öğrendiği asıl parametreler. Başlangıçta bu matrislerin içi tamamen rastgele sayılarla doludur; çünkü model en başta herhangi bir dil kuralı bilmez; zaten bilmesine gerek de yoktur. Modelin herhangi bir ön kabulle kısıtlanmaması, dildeki kalıpları ve kuralları tamamen kendi deneyimiyle, özgürce keşfetmesini sağlar. Ve eğitim boyunca, ürettiği çıktıyı doğru cevapla karşılaştırır, hatasını ölçer ve bu hataya göre matrislerin içindeki sayıları milim milim günceller. Milyarlarca örnekten sonra bu matrisler artık şu sorulara harika cevap verir hale gelir:
-
-    <ul className="writingArticle__TokenizerList">
-     <li>"Hangi özellikler birbiriyle gerçekten ilgili?"</li>
-     <li>"Hangi sinyaller bağlam için önemli, hangileri gürültü?"</li>
-   </ul>
-
-   Sıkça duyduğumuz "175 milyar parametre" kavramı aslında bu matrislerin içindeki o küçük ondalıklı sayılardır. Her biri tek başına bir şey ifade etmez ama birlikte çalıştıklarında, tıpkı beynimizdeki nöronlar gibi, devasa bir davranış bütünü ve "anlam" oluştururlar.
-
+Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trilyon parametreli yeni model efsanesi var ya, işte o parametreler tam olarak bu matrislerin içindeki küçük ondalıklı sayılardan ibaret. Tek başlarına hiçbir şey ifade etmiyorlar ama milyarlarcası bir araya geldiğinde o devasa anlam illüzyonunu yaratıyorlar.
    </div>
 
    **Şimdi matematik konuşsun: Q ve K matrislerini hesaplayalım**
