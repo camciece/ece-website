@@ -1395,6 +1395,10 @@ body.text-\[--text\] {
 }
 
 .writingPage {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
   background: #f2f2f2;
   color: #1a1a1a;
   padding: 0 0 96px;
@@ -1428,6 +1432,7 @@ body.text-\[--text\] {
 }
 
 .writingArticle {
+  --article-content-width: calc(min(100vw, 1120px) - 2 * clamp(28px, 7vw, 120px));
   width: min(100%, 1120px);
   margin: 24px auto 0;
   padding: 112px clamp(28px, 7vw, 120px) 72px;
@@ -1890,8 +1895,8 @@ body.text-\[--text\] {
 .writingArticle__body > details,
 .writingArticle__body > .writingArticle__codeCard,
 .writingArticle__body > .writingArticle__matrixCard {
-  width: min(100vw - 40px, 1040px);
-  max-width: min(100vw - 40px, 1040px);
+  width: min(var(--article-content-width), 1040px);
+  max-width: min(var(--article-content-width), 1040px);
   justify-self: center;
 }
 
@@ -2786,6 +2791,7 @@ body.text-\[--text\] {
 .writingArticle__media img {
   width: 800px;
   max-width: 100%;
+  min-width: 0;
   height: auto;
   display: block;
   margin-bottom: -18px;
@@ -2847,13 +2853,6 @@ body.text-\[--text\] {
   fill: #cfd5de;
   font-size: 12px;
   font-family: 'Google Sans', system-ui, sans-serif;
-}
-
-@media (max-width: 900px) {
-  .writingArticle__media img {
-    width: 900px;
-    max-width: none;
-  }
 }
 
 .tokenDemo {
@@ -3453,7 +3452,7 @@ body.text-\[--text\] {
   margin: 0;
   padding-left: 3px;
   font-family: var(--font-news), Georgia, 'Times New Roman', serif;
-  font-size: clamp(22px, 2.1vw, 31px);
+  font-size: clamp(18px, 1.45vw, 22px);
   font-weight: 500;
   line-height: 1.48;
 }
@@ -3486,7 +3485,7 @@ ol.writingArticle__TokenizerList {
   margin: 0;
   padding-left: 3px;
   font-family: var(--font-news), Georgia, 'Times New Roman', serif;
-  font-size: clamp(22px, 2.1vw, 31px);
+  font-size: clamp(18px, 1.45vw, 22px);
   font-weight: 500;
   line-height: 1.48;
 }
@@ -3546,10 +3545,17 @@ ol.writingArticle__TokenizerList {
   margin: 16px 50px 20px;
   display: grid;
   gap: 10px;
+  overflow-x: auto;
 }
 
 .writingArticle__mathLine {
   font-size: 16px;
+}
+
+@media (max-width: 900px) {
+  .writingArticle__mathLines {
+    margin: 16px 20px 20px;
+  }
 }
 
 .scatterplot3d__button {
@@ -3591,7 +3597,7 @@ ol.writingArticle__TokenizerList {
     margin: 0;
   }
 
-  .writingArticle__embedVisualization > div:last-child {
+  .writingArticle__embedVisualization > div:last-child:not(.writingArticle__embedTable) {
     flex: 1;
   }
 }
@@ -3684,7 +3690,6 @@ ol.writingArticle__TokenizerList {
   display: flex;
   gap: 0 18px;
   align-items: stretch;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -3956,6 +3961,21 @@ ol.writingArticle__TokenizerList {
 .closingSection {
   width: min(100%, var(--frame-max));
   margin: 0px auto 0;
+}
+
+/* The article page's .writingArticle deliberately uses its own independent
+   width formula instead of --frame-max/--frame-pad, so the shared Footer
+   needs a matching override here to stay visually aligned with it. Explicit
+   max-width neutralizes the legacy 960px/480px caps applied elsewhere in
+   this file at the 1279px/767px breakpoints. */
+.writingPage:has(> .writingArticle) .closingSection {
+  width: min(100%, 1120px);
+  max-width: 1120px;
+}
+
+.writingPage:has(> .writingArticle) .closingPanel {
+  padding-left: clamp(28px, 7vw, 120px);
+  padding-right: clamp(28px, 7vw, 120px);
 }
 
 .closingSection--meet {
@@ -5031,7 +5051,7 @@ ol.writingArticle__TokenizerList {
 @media (max-width: 720px) {
   .writingArticle {
     margin-top: 16px;
-    padding: 96px var(--frame-pad) 56px;
+    padding: 96px clamp(28px, 7vw, 120px) 56px;
   }
 
   .writingHeader {
@@ -5093,9 +5113,6 @@ ol.writingArticle__TokenizerList {
   .closingSection {
     max-width: 960px;
   }
-  .writingArticle {
-    max-width: 960px;
-  }
   .meetSectionFrame {
     max-width: 960px;
   }
@@ -5117,9 +5134,6 @@ ol.writingArticle__TokenizerList {
   }
 
   .meetSectionFrame {
-    max-width: 480px;
-  }
-  .writingArticle {
     max-width: 480px;
   }
   .writingGrid {
@@ -5287,7 +5301,6 @@ ol.writingArticle__TokenizerList {
    distinct (fixed reading-column) widths. */
 main,
 section,
-.site-layout,
 .container,
 .topBar__wrap,
 .homeHeroBg,
