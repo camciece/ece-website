@@ -1,4 +1,3 @@
-import Scatterplot3DDemo from '@/components/3d-scatterplot-demo'
 import EmbeddingsDemo from '@/components/embeddings-demo'
 import EngagementSection from '@/components/engagement-section'
 import Footer from '@/components/footer'
@@ -112,7 +111,6 @@ export default async function Post({
               EmbeddingsDemo,
               Matrix,
               Note,
-              Scatterplot3DDemo,
             }}
             options={{
               // next-mdx-remote v6 strips all JSX expression props by default
