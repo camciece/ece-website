@@ -16,6 +16,7 @@ type SiteCopy = {
   }
   writing: {
     filterAll: string
+    tagFilterLabel: string
     tags: Record<PostTag, string>
   }
   meet: {
@@ -119,6 +120,7 @@ const copy: Record<Locale, SiteCopy> = {
     },
     writing: {
       filterAll: 'All',
+      tagFilterLabel: 'Topic',
       tags: {
         'ai-infra': 'AI Infra',
         'ai-apps': 'AI Apps',
@@ -280,6 +282,7 @@ const copy: Record<Locale, SiteCopy> = {
     },
     writing: {
       filterAll: 'Tümü',
+      tagFilterLabel: 'Konu',
       tags: {
         'ai-infra': 'AI Altyapı',
         'ai-apps': 'AI Uygulama',

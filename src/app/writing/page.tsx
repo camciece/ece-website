@@ -70,6 +70,9 @@ export default async function Writing({
         </div>
         {showTagFilters ? (
           <div className="writingFilters writingFilters--tags">
+            <span className="writingFilters__label">
+              {copy.writing.tagFilterLabel}
+            </span>
             {POST_TAGS.map((tag) => {
               const isActive = activeTags.includes(tag)
               const nextTags = isActive
