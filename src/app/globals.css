@@ -1891,9 +1891,7 @@ body.text-\[--text\] {
 }
 
 .writingArticle__body > .writingArticle__codeRow,
-.writingArticle__body > .writingArticle__callout,
 .writingArticle__body > details,
-.writingArticle__body > .writingArticle__codeCard,
 .writingArticle__body > .writingArticle__matrixCard {
   width: min(var(--article-content-width), 1040px);
   max-width: min(var(--article-content-width), 1040px);
@@ -3262,7 +3260,7 @@ body.text-\[--text\] {
   max-width: 920px;
 }
 
-.writingArticle__codeRow--matrixOperation {
+.writingArticle__codeRow.writingArticle__codeRow--matrixOperation {
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
@@ -3498,15 +3496,15 @@ ol.writingArticle__TokenizerList {
 }
 
 .writingNote {
-  margin: 14px 0 18px;
-  padding: 16px 18px;
-  border-radius: 14px;
+  margin: 6px 0 16px;
+  padding: 20px 24px;
+  border-radius: 18px;
   background: #fff7e6;
   border: 1px solid #f3d7a5;
   color: #3b2f1f;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
-  box-shadow: 0 10px 22px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 10px 26px rgba(20, 20, 20, 0.08);
 }
 
 .writingNote__icon {
@@ -3690,14 +3688,12 @@ ol.writingArticle__TokenizerList {
   display: flex;
   gap: 0 18px;
   align-items: stretch;
-  flex-wrap: wrap;
-}
-
-@media (min-width: 1200px) {
-  .writingArticle__codeRow {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
 }
 
 .writingArticle__codeSymbol {
@@ -3709,13 +3705,13 @@ ol.writingArticle__TokenizerList {
 }
 
 .writingArticle__codeCard--narrow {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   width: fit-content;
-  max-width: 100%;
 }
 
 .writingArticle__codeCard--matrix {
   flex: 0 1 320px;
+  flex-shrink: 0 !important;
   padding: 18px;
   display: flex;
   align-items: center;
@@ -4953,10 +4949,6 @@ ol.writingArticle__TokenizerList {
   .meetSectionFrame {
     padding: 20px var(--frame-pad);
   }
-
-  .writingArticle__codeSymbol {
-    margin: 0 33%;
-  }
 }
 
 @media (max-width: 600px) {
@@ -5093,7 +5085,6 @@ ol.writingArticle__TokenizerList {
     transform: none;
   }
   .writingArticle__codeSymbol {
-    width: 100%;
     text-align: center;
   }
 }
