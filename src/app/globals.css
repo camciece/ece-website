@@ -11,8 +11,13 @@
   --accent: #61dafb;
   --accent-2: #ff4c00;
   --border: #1b1e24;
-  --frame-max: 1200px;
-  --frame-pad: clamp(18px, 4vw, 48px);
+  --content-max: 1684px;
+  --content-gutter: clamp(24px, 4vw, 80px);
+  --frame-max: 100%;
+  --frame-pad: max(
+    var(--content-gutter),
+    calc((100vw - var(--content-max)) / 2)
+  );
   --writing-pad: clamp(48px, 8vw, 72px);
   --scatterplot-width: 640px;
   --matrix-colour: black;
@@ -53,6 +58,7 @@ body {
 }
 body {
   /* radial gradient background + solid */
+  margin: 0;
   background: #fff;
   line-height: 1.6;
   font-family:
@@ -89,13 +95,15 @@ a:hover {
 
 /* Layout helpers (names reused from your HTML) */
 .site-layout {
-  max-width: 1440px;
-  margin: auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   background-color: #fff;
 }
 .container {
-  max-width: 1040px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   padding: 0 20px;
 }
 @media (min-width: 1280px) {
@@ -108,14 +116,17 @@ a:hover {
 @media (min-width: 1280px) {
   :root {
     --frame-max: 100%;
-    --frame-pad: 100px;
+    --frame-pad: max(
+      var(--content-gutter),
+      calc((100vw - var(--content-max)) / 2)
+    );
     --writing-pad: clamp(48px, 16vw, 250px);
   }
   .topBar__wrap {
-    width: 1240px;
-    max-width: 1240px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
   }
   .homeHeroBg,
   .homeHeroFrame,
@@ -575,23 +586,9 @@ section h2 {
   position: relative; /* needed for absolute centering */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 3px;
   padding: 0 var(--frame-pad);
-}
-
-@media (min-width: 1280px) {
-  .topBar__wrap {
-    width: min(100%, var(--frame-max));
-    max-width: 1440px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .closingSection {
-    margin-left: auto;
-    margin-right: auto;
-  }
 }
 
 /* Common island */
@@ -746,16 +743,17 @@ section h2 {
 
 /* CENTER nav island (absolute center technique) */
 .island--nav {
-  width: clamp(760px, 74vw, 980px); /* nav adası daha geniş */
-  max-width: calc(100vw - 120px); /* logo+search iyice yaklaşsın */
+  flex: 1;
+  width: auto;
+  max-width: none;
   justify-content: center;
   padding: 0 8px;
 }
 
 @media (min-width: 1280px) {
   .island--nav {
-    width: 1240px;
-    max-width: 1240px;
+    width: auto;
+    max-width: none;
   }
 }
 
@@ -1040,6 +1038,41 @@ body.text-\[--text\] {
   padding: 140px var(--frame-pad) 45px;
 }
 
+.writingFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.writingFilters__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #d7d7d7;
+  color: #111;
+  background: #fff;
+  font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.writingFilters__pill:hover {
+  border-color: #a8a8a8;
+}
+
+.writingFilters__pill--active {
+  background: #141414;
+  border-color: #141414;
+  color: #fff;
+}
+
 .writingGrid__rows {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1055,35 +1088,51 @@ body.text-\[--text\] {
   color: inherit;
 }
 
-.writingCard--featured {
-  max-width: 1040px;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 32px;
+.writingGrid--home .writingGrid__rows {
+  gap: 44px;
 }
 
-.writingCard--featured .writingCard__media {
-  height: 320px;
-  border-radius: 14px;
+.writingGrid--home .writingCard {
+  gap: 0;
 }
 
-.writingCard--featured .writingCard p {
+.writingGrid--home .writingCard__rule {
+  margin-bottom: 14px;
+}
+
+
+.writingGrid--home .writingCard h3 {
+  font-size: clamp(20px, 1.6vw, 26px);
+  line-height: 1.22;
+  margin: 0 0 8px -0.045em;
+}
+
+.writingGrid--home .writingCard__summary {
   max-width: none;
+  color: #3c3c3c;
+  font-size: 15px;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.writingGrid--featured .writingGrid__rows {
-  grid-template-columns: 1fr;
+.writingGrid--home .writingCard__visual {
+  flex: none;
+  margin-top: 20px;
 }
 
-.writingCard__body {
-  flex: 1;
-  display: grid;
-  gap: 18px;
+.writingGrid--home .writingCard__visual .writingCard__media {
+  height: 200px;
+  margin-top: 0;
+  border-radius: 4px;
+  box-shadow: none;
 }
 
 .writingCard__summary {
   margin: 0;
-  padding-left: 10px;
+  padding-left: 0;
   color: #2f2a25;
   font-size: 16px;
   line-height: 1.7;
@@ -1146,10 +1195,28 @@ body.text-\[--text\] {
   max-width: none;
 }
 
+.writingGrid--list .writingCard h3 {
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.2;
+  margin: 0 0 0px -0.045em;
+}
+
+.writingGrid--list .writingCard__summary {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #3c3c3c;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .writingGrid--list .writingCard__media {
-  width: clamp(220px, 28vw, 360px);
-  height: clamp(160px, 20vw, 260px);
-  margin-top: 36px;
+  width: clamp(200px, 22vw, 280px);
+  height: clamp(140px, 16vw, 190px);
+  margin-top: 4px;
+  border-radius: 8px;
+  box-shadow: none;
   flex-shrink: 0;
   order: -1;
   align-self: flex-start;
@@ -1169,26 +1236,16 @@ body.text-\[--text\] {
   margin-bottom: 16px;
 }
 
-.writingCard__tag {
-  font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #111;
-  font-weight: 700;
-  margin-bottom: 28px;
-  margin-left: 0;
-}
-
 .writingCard h3 {
   font-family: var(--font-news), Georgia, 'Times New Roman', serif;
   font-size: clamp(35px, 5.2vw, 76px);
-  margin: 0 0 24px;
+  margin: 0 0 24px -0.045em;
   color: #050505;
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: 0;
   transition: color 0.15s ease;
+  padding: 8px 0px;
 }
 
 .writingCard p {
@@ -1312,9 +1369,7 @@ body.text-\[--text\] {
   background: #1c2230;
 }
 
-.writingPage[data-reading-mode='dark'] .writingArticle__tag {
-  color: #b9a79b;
-}
+
 
 .writingPage[data-reading-mode='dark'] .writingArticle__title {
   color: #f5f6f8;
@@ -1643,21 +1698,11 @@ body.text-\[--text\] {
   justify-items: start;
 }
 
-.writingArticle__tag {
-  font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #0d0d0d;
-  font-weight: 700;
-  margin-bottom: 24px;
-}
-
 .writingArticle__title {
   margin: 0 0 20px;
   width: 100%;
   font-family: var(--font-news), Georgia, 'Times New Roman', serif;
-  font-size: clamp(30px, 3vw, 40px);
+  font-size: clamp(30px, 3vw, 45px);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: 0;
@@ -1707,6 +1752,7 @@ body.text-\[--text\] {
 
 .writingArticle__body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   padding-top: 0px;
   min-width: 0;
@@ -4851,10 +4897,6 @@ ol.writingArticle__TokenizerList {
     height: 210px;
     margin-top: 0;
   }
-  .writingCard--featured {
-    flex-direction: column;
-    align-items: stretch;
-  }
   .writingCard__visual {
     flex-basis: auto;
   }
@@ -4880,7 +4922,7 @@ ol.writingArticle__TokenizerList {
   }
 
   .writingArticle__title {
-    font-size: clamp(30px, 8vw, 38px);
+    font-size: clamp(30px, 8vw, 45px);
     line-height: 1.08;
   }
 
@@ -4949,15 +4991,6 @@ ol.writingArticle__TokenizerList {
 @media (min-width: 1280px) {
   .meetAlbum__grid {
     gap: 50px;
-  }
-
-  .writingCard--featured {
-    max-width: none;
-    width: 100%;
-  }
-
-  .writingCard__visual {
-    margin-left: auto;
   }
 }
 
@@ -5132,4 +5165,31 @@ ol.writingArticle__TokenizerList {
 
 .writingArticle__matrixCard--alt .matrixNumber--scores {
   fill: #4c1d95;
+}
+
+/* Full-width page and section layout, tied to the same 3-tier --frame-max
+   system the topbar uses so every general section stays aligned with it.
+   .writingArticle / .disclaimerShell / .writingArticle__body keep their own
+   distinct (fixed reading-column) widths. */
+main,
+section,
+.site-layout,
+.container,
+.topBar__wrap,
+.homeHeroBg,
+.homeHeroFrame,
+.writingGrid,
+.writingHero,
+.writingHeader,
+.homeSplit,
+.closingSection,
+.contactSection,
+.legalSection,
+.meetSection,
+.meetHeroFrame,
+.meetSectionFrame,
+.simpleSection {
+  width: min(100%, var(--frame-max));
+  margin-left: auto;
+  margin-right: auto;
 }

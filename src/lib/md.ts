@@ -17,11 +17,19 @@ const normalizeLocalized = <T>(value: Localized<T>, locale: Locale): T => {
   return value as T;
 };
 
+export type PostCategory = "ai-series" | "projects" | "heroes";
+
+export const POST_CATEGORIES: PostCategory[] = ["ai-series", "projects", "heroes"];
+
+export const isPostCategory = (value: unknown): value is PostCategory =>
+  typeof value === "string" && (POST_CATEGORIES as string[]).includes(value);
+
 export type PostMeta = {
   title: string;
   date: string;
   excerpt?: string;
   tags?: string[];
+  category: PostCategory;
   readingTime?: string;
   image?: string;
   shareDescription?: boolean;
@@ -46,6 +54,7 @@ export function getAllPosts(locale: Locale): PostMeta[] {
         ? normalizeLocalized(data.excerpt, locale)
         : undefined;
       const tags = data.tags ? (data.tags as string[]) : undefined;
+      const category = isPostCategory(data.category) ? data.category : "ai-series";
       const readingTime = data.readingTime as string | undefined;
       const image = data.image
         ? (normalizeLocalized(data.image, locale) as string)
@@ -56,7 +65,7 @@ export function getAllPosts(locale: Locale): PostMeta[] {
         data.date instanceof Date
           ? data.date.toISOString().slice(0, 10)
           : String(data.date);
-      return { slug, title, excerpt, tags, readingTime, date, image, shareDescription };
+      return { slug, title, excerpt, tags, category, readingTime, date, image, shareDescription };
     })
     .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }

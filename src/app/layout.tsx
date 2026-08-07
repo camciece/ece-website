@@ -9,7 +9,7 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin', 'latin-ext'], variable: '--font-inter' })
 const newsreader = Newsreader({
-  weight: ['500', '700'],
+  weight: 'variable',
   subsets: ['latin', 'latin-ext'],
   variable: '--font-news',
 })

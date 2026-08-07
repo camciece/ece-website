@@ -86,9 +86,7 @@ export default async function Post({
           <ReadingModeToggle />
         </div>
         <header className="writingHeader">
-          <div className="writingArticle__tag">
-            {post.frontmatter.tags?.[0] ?? 'AI'}
-          </div>
+      
           <h1 className="writingArticle__title">{post.frontmatter.title}</h1>
           <div className="writingAuthor">
             <div className="writingAuthor__avatar" aria-hidden="true" />

@@ -1,4 +1,5 @@
 import type { Locale } from '@/lib/locale'
+import type { PostCategory } from '@/lib/md'
 
 type Topic = {
   title: string
@@ -12,6 +13,9 @@ type SiteCopy = {
     heroCta: string
     latestTitle: string
     viewAll: string
+  }
+  writing: {
+    filterAll: string
   }
   meet: {
     heroTitle: string
@@ -111,6 +115,9 @@ const copy: Record<Locale, SiteCopy> = {
       heroCta: 'Read the first post',
       latestTitle: 'Latest writing',
       viewAll: 'View all',
+    },
+    writing: {
+      filterAll: 'All',
     },
     meet: {
       heroTitle: 'Meet Ece',
@@ -266,6 +273,9 @@ const copy: Record<Locale, SiteCopy> = {
       viewAll: 'Tümünü gör',
       heroCta: 'İlk yazıyı oku',
     },
+    writing: {
+      filterAll: 'Tümü',
+    },
     meet: {
       heroTitle: 'Ece ile Tanışın',
       intro: [
@@ -414,3 +424,12 @@ const copy: Record<Locale, SiteCopy> = {
 }
 
 export const getCopy = (locale: Locale) => copy[locale]
+
+const categoryTopicIndex: Record<PostCategory, number> = {
+  'ai-series': 0,
+  projects: 1,
+  heroes: 2,
+}
+
+export const getCategoryLabel = (locale: Locale, category: PostCategory): string =>
+  copy[locale].meet.topics[categoryTopicIndex[category]]?.title ?? category

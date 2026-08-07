@@ -1,12 +1,12 @@
 import Footer from '@/components/footer'
 import { getAllPosts } from '@/lib/md'
 import { getRequestLocale } from '@/lib/server-locale'
-import { getCopy } from '@/lib/static-copy'
+import { getCategoryLabel, getCopy } from '@/lib/static-copy'
 import Link from 'next/link'
 
 export default async function Home() {
   const locale = await getRequestLocale()
-  const [latest] = getAllPosts(locale)
+  const latestPosts = getAllPosts(locale).slice(0, 3)
   const copy = getCopy(locale)
   return (
     <main className="home">
@@ -23,7 +23,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="writingGrid writingGrid--featured">
+      <section className="writingGrid writingGrid--home">
         <div className="sectionHeader">
           <h2>{copy.home.latestTitle}</h2>
           <Link className="sectionLink" href="/writing">
@@ -31,34 +31,33 @@ export default async function Home() {
           </Link>
         </div>
         <div className="writingGrid__rows">
-          {latest ? (
+          {latestPosts.map((post) => (
             <Link
-              className="writingCard writingCard--featured writingCard--link"
-              href={`/writing/${latest.slug}`}
+              key={post.slug}
+              className="writingCard writingCard--home writingCard--link"
+              href={`/writing/${post.slug}`}
             >
-              <div className="writingCard__body">
-                <div className="writingCard__content">
-                  <div className="writingCard__rule" />
-                  <div className="writingCard__tag">
-                    {latest.tags?.[0] ?? 'AI'}
-                  </div>
-                  <h3>{latest.title}</h3>
+              <div className="writingCard__content">
+                <div className="writingCard__rule" />
+                <div className="writingCard__tag">
+                  {getCategoryLabel(locale, post.category)}
                 </div>
-                {latest.excerpt ? (
-                  <p className="writingCard__summary">{latest.excerpt}</p>
+                <h3>{post.title}</h3>
+                {post.excerpt ? (
+                  <p className="writingCard__summary">{post.excerpt}</p>
                 ) : null}
               </div>
-              {latest.image ? (
+              {post.image ? (
                 <div className="writingCard__visual">
                   <img
                     className="writingCard__media writingCard__media--one"
-                    src={latest.image}
+                    src={post.image}
                     alt=""
                   />
                 </div>
               ) : null}
             </Link>
-          ) : null}
+          ))}
         </div>
       </section>
 
