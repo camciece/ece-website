@@ -7,10 +7,10 @@ import { Analytics } from '@vercel/analytics/next'
 import { Inter, Newsreader } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const inter = Inter({ subsets: ['latin', 'latin-ext'], variable: '--font-inter' })
 const newsreader = Newsreader({
   weight: ['500', '700'],
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-news',
 })
 
