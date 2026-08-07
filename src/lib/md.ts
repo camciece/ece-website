@@ -24,11 +24,31 @@ export const POST_CATEGORIES: PostCategory[] = ["ai-series", "projects", "heroes
 export const isPostCategory = (value: unknown): value is PostCategory =>
   typeof value === "string" && (POST_CATEGORIES as string[]).includes(value);
 
+// Cross-cutting topics within a category (a post can carry more than one),
+// e.g. an AI Series post can bridge both the infra and app layers.
+export type PostTag = "ai-infra" | "ai-apps";
+
+export const POST_TAGS: PostTag[] = ["ai-infra", "ai-apps"];
+
+export const isPostTag = (value: unknown): value is PostTag =>
+  typeof value === "string" && (POST_TAGS as string[]).includes(value);
+
+export const buildWritingHref = (category?: PostCategory, tags: PostTag[] = []) => {
+  const params = new URLSearchParams();
+  if (category) params.set("category", category);
+  tags.forEach((tag) => params.append("tag", tag));
+  const query = params.toString();
+  return query ? `/writing?${query}` : "/writing";
+};
+
+const parsePostTags = (value: unknown): PostTag[] =>
+  Array.isArray(value) ? value.filter(isPostTag) : [];
+
 export type PostMeta = {
   title: string;
   date: string;
   excerpt?: string;
-  tags?: string[];
+  tags: PostTag[];
   category: PostCategory;
   readingTime?: string;
   image?: string;
@@ -53,7 +73,7 @@ export function getAllPosts(locale: Locale): PostMeta[] {
       const excerpt = data.excerpt
         ? normalizeLocalized(data.excerpt, locale)
         : undefined;
-      const tags = data.tags ? (data.tags as string[]) : undefined;
+      const tags = parsePostTags(data.tags);
       const category = isPostCategory(data.category) ? data.category : "ai-series";
       const readingTime = data.readingTime as string | undefined;
       const image = data.image
@@ -90,7 +110,7 @@ export function getPost(slug: string, locale: Locale) {
   const excerpt = data.excerpt
     ? normalizeLocalized(data.excerpt, locale)
     : undefined;
-  const tags = data.tags ? (data.tags as string[]) : undefined;
+  const tags = parsePostTags(data.tags);
   const readingTime = data.readingTime as string | undefined;
   const image = data.image
     ? (normalizeLocalized(data.image, locale) as string)

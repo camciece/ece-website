@@ -1,5 +1,5 @@
 import type { Locale } from '@/lib/locale'
-import type { PostCategory } from '@/lib/md'
+import type { PostCategory, PostTag } from '@/lib/md'
 
 type Topic = {
   title: string
@@ -16,6 +16,7 @@ type SiteCopy = {
   }
   writing: {
     filterAll: string
+    tags: Record<PostTag, string>
   }
   meet: {
     heroTitle: string
@@ -118,6 +119,10 @@ const copy: Record<Locale, SiteCopy> = {
     },
     writing: {
       filterAll: 'All',
+      tags: {
+        'ai-infra': 'AI Infra',
+        'ai-apps': 'AI Apps',
+      },
     },
     meet: {
       heroTitle: 'Meet Ece',
@@ -275,6 +280,10 @@ const copy: Record<Locale, SiteCopy> = {
     },
     writing: {
       filterAll: 'Tümü',
+      tags: {
+        'ai-infra': 'AI Altyapı',
+        'ai-apps': 'AI Uygulama',
+      },
     },
     meet: {
       heroTitle: 'Ece ile Tanışın',
@@ -433,3 +442,6 @@ const categoryTopicIndex: Record<PostCategory, number> = {
 
 export const getCategoryLabel = (locale: Locale, category: PostCategory): string =>
   copy[locale].meet.topics[categoryTopicIndex[category]]?.title ?? category
+
+export const getTagLabel = (locale: Locale, tag: PostTag): string =>
+  copy[locale].writing.tags[tag] ?? tag

@@ -1,7 +1,7 @@
 import Footer from '@/components/footer'
-import { getAllPosts } from '@/lib/md'
+import { buildWritingHref, getAllPosts } from '@/lib/md'
 import { getRequestLocale } from '@/lib/server-locale'
-import { getCategoryLabel, getCopy } from '@/lib/static-copy'
+import { getCategoryLabel, getCopy, getTagLabel } from '@/lib/static-copy'
 import Link from 'next/link'
 
 export default async function Home() {
@@ -32,17 +32,38 @@ export default async function Home() {
         </div>
         <div className="writingGrid__rows">
           {latestPosts.map((post) => (
-            <Link
-              key={post.slug}
-              className="writingCard writingCard--home writingCard--link"
-              href={`/writing/${post.slug}`}
-            >
+            <article key={post.slug} className="writingCard writingCard--home">
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
-                <div className="writingCard__tag">
-                  {getCategoryLabel(locale, post.category)}
+                <div className="writingCard__metaRow">
+                  <Link
+                    href={buildWritingHref(post.category)}
+                    className="writingCard__tag writingCard__tag--link"
+                  >
+                    {getCategoryLabel(locale, post.category)}
+                  </Link>
+                  {post.tags.length > 0 ? (
+                    <div className="writingCard__tags">
+                      {post.tags.map((tag) => (
+                        <Link
+                          key={tag}
+                          href={buildWritingHref(undefined, [tag])}
+                          className="writingCard__tagChip writingCard__tagChip--link"
+                        >
+                          {getTagLabel(locale, tag)}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
-                <h3>{post.title}</h3>
+                <h3>
+                  <Link
+                    href={`/writing/${post.slug}`}
+                    className="writingCard__titleLink"
+                  >
+                    {post.title}
+                  </Link>
+                </h3>
                 {post.excerpt ? (
                   <p className="writingCard__summary">{post.excerpt}</p>
                 ) : null}
@@ -56,7 +77,7 @@ export default async function Home() {
                   />
                 </div>
               ) : null}
-            </Link>
+            </article>
           ))}
         </div>
       </section>
