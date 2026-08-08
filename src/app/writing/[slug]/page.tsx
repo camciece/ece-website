@@ -92,11 +92,14 @@ export default async function Post({
             <div className="writingAuthor__avatar" aria-hidden="true" />
             <div className="writingAuthor__info">
               <span>{copy.article.byLabel}</span>
-              <span>
-                {copy.article.publishedOnPrefix}
-                {post.frontmatter.date}
-                {copy.article.publishedOnSuffix}
-              </span>
+              {copy.article.publishedOnPrefix !== undefined ||
+              copy.article.publishedOnSuffix !== undefined ? (
+                <span>
+                  {copy.article.publishedOnPrefix}
+                  {post.frontmatter.date}
+                  {copy.article.publishedOnSuffix}
+                </span>
+              ) : null}
             </div>
           </div>
         </header>

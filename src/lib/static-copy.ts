@@ -1,5 +1,5 @@
 import type { Locale } from '@/lib/locale'
-import type { PostCategory, PostTag } from '@/lib/md'
+import type { PostTag } from '@/lib/md'
 
 type Topic = {
   title: string
@@ -103,8 +103,8 @@ type SiteCopy = {
   }
   article: {
     byLabel: string
-    publishedOnPrefix: string
-    publishedOnSuffix: string
+    publishedOnPrefix?: string
+    publishedOnSuffix?: string
   }
 }
 
@@ -330,7 +330,7 @@ const copy: Record<Locale, SiteCopy> = {
       sourceCta: 'GitHub’da kodu görebilirsiniz',
     },
     thoughts: {
-      title: 'Yazılar',
+      title: 'AI Serisi',
       lead: 'Burası yazılar sayfası olacak. Hazır olunca yazıları buraya ekle.',
     },
     projects: {
@@ -428,23 +428,12 @@ const copy: Record<Locale, SiteCopy> = {
       closing: 'Analitik kullanılıyorsa, hafif ve gizlilik odaklıdır.',
     },
     article: {
-      byLabel: 'Ece Çamcı tarafından',
-      publishedOnPrefix: '',
-      publishedOnSuffix: ' tarihinde yayınlandı',
+      byLabel: 'Ece Çamcı tarafından 27 Ocak 2026 tarihinde yayınlandı',
     },
   },
 }
 
 export const getCopy = (locale: Locale) => copy[locale]
-
-const categoryTopicIndex: Record<PostCategory, number> = {
-  'ai-series': 0,
-  projects: 1,
-  heroes: 2,
-}
-
-export const getCategoryLabel = (locale: Locale, category: PostCategory): string =>
-  copy[locale].meet.topics[categoryTopicIndex[category]]?.title ?? category
 
 export const getTagLabel = (locale: Locale, tag: PostTag): string =>
   copy[locale].writing.tags[tag] ?? tag

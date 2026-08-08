@@ -1,7 +1,7 @@
 import Footer from '@/components/footer'
 import { buildWritingHref, getAllPosts } from '@/lib/md'
 import { getRequestLocale } from '@/lib/server-locale'
-import { getCategoryLabel, getCopy, getTagLabel } from '@/lib/static-copy'
+import { getCopy, getTagLabel } from '@/lib/static-copy'
 import Link from 'next/link'
 
 export default async function Home() {
@@ -36,18 +36,12 @@ export default async function Home() {
               <div className="writingCard__content">
                 <div className="writingCard__rule" />
                 <div className="writingCard__metaRow">
-                  <Link
-                    href={buildWritingHref(post.category)}
-                    className="writingCard__tag writingCard__tag--link"
-                  >
-                    {getCategoryLabel(locale, post.category)}
-                  </Link>
                   {post.tags.length > 0 ? (
                     <div className="writingCard__tags">
                       {post.tags.map((tag) => (
                         <Link
                           key={tag}
-                          href={buildWritingHref(undefined, [tag])}
+                          href={buildWritingHref([tag])}
                           className="writingCard__tagChip writingCard__tagChip--link"
                         >
                           {getTagLabel(locale, tag)}

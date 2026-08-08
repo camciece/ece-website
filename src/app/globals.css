@@ -1045,44 +1045,6 @@ body.text-\[--text\] {
   margin-bottom: 40px;
 }
 
-.writingFilters:has(+ .writingFilters--tags) {
-  margin-bottom: 14px;
-}
-
-.writingFilters--tags {
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.writingFilters__label {
-  font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #a3a3a3;
-  margin-right: 2px;
-}
-
-.writingFilters__pill--tag {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #666;
-  border-color: #e6e6e6;
-}
-
-.writingFilters__pill--tag:hover {
-  border-color: #b5b5b5;
-  color: #111;
-}
-
-.writingFilters__pill--tag.writingFilters__pill--active {
-  background: #ececec;
-  border-color: #ececec;
-  color: #111;
-}
-
 .writingFilters__pill {
   display: inline-flex;
   align-items: center;
@@ -1139,15 +1101,10 @@ body.text-\[--text\] {
   z-index: 0;
 }
 
-.writingCard__tag--link,
 .writingCard__tagChip--link {
   position: relative;
   z-index: 1;
   text-decoration: none;
-}
-
-.writingCard__tag--link:hover {
-  text-decoration: underline;
 }
 
 .writingCard__tagChip--link:hover {
@@ -1169,10 +1126,6 @@ body.text-\[--text\] {
 
 .writingGrid--home .writingCard__metaRow {
   margin-bottom: 10px;
-}
-
-.writingGrid--home .writingCard__tag {
-  font-size: 12px;
 }
 
 .writingGrid--home .writingCard__tagChip {
@@ -1324,15 +1277,6 @@ body.text-\[--text\] {
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
-}
-
-.writingCard__tag {
-  font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #111;
-  font-weight: 700;
 }
 
 .writingCard__tags {
@@ -1816,7 +1760,7 @@ body.text-\[--text\] {
   display: grid;
   gap: 16px;
   width: min(100%, 760px);
-  margin: 0 auto 52px;
+  margin: 0 auto 30px;
   justify-items: start;
 }
 
@@ -1824,7 +1768,7 @@ body.text-\[--text\] {
   margin: 0 0 20px;
   width: 100%;
   font-family: var(--font-news), Georgia, 'Times New Roman', serif;
-  font-size: clamp(30px, 3vw, 45px);
+  font-size: clamp(30px, 8vw, 45px);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: 0;
@@ -1847,7 +1791,7 @@ body.text-\[--text\] {
   gap: 18px;
   margin-bottom: 5px;
   font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
-  font-size: 17px;
+  font-size: 14px;
   color: #111;
 }
 
@@ -1920,9 +1864,8 @@ body.text-\[--text\] {
 }
 
 .writingArticle__body p:has(> strong:only-child) {
-  margin: 34px 0 8px;
+  margin: 9px 0 8px;
   font-family: 'Google Sans', var(--font-inter), system-ui, sans-serif;
-  font-size: clamp(21px, 1.9vw, 28px);
   font-weight: 700;
   line-height: 1.14;
   letter-spacing: 0;
@@ -5061,8 +5004,8 @@ ol.writingArticle__TokenizerList {
   }
 
   .writingArticle__body h2,
-  .writingArticle__body h3,
-  .writingArticle__body p:has(> strong:only-child) {
+  .writingArticle__body h3
+ {
     font-size: 22px;
     line-height: 1.18;
   }
@@ -5298,7 +5241,6 @@ section,
 .homeHeroFrame,
 .writingGrid,
 .writingHero,
-.writingHeader,
 .homeSplit,
 .closingSection,
 .contactSection,

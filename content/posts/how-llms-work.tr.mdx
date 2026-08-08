@@ -1,44 +1,43 @@
-**Sistemin kapasitesi, bir bilinç illüzyonu yaratıyor**
+<h3>Neden buradan başlıyoruz? Bunu anlamak neden önemli?</h3>
 
-Ama işin aslı şu, o seni zerre kadar anlamıyor. Karşında düşünen bir bilinç değil, tıkır tıkır işleyen devasa bir ihtimal hesabı var.
+<h3>Sistemin kapasitesi, bir bilinç illüzyonu yaratıyor</h3>
 
-Tam bu noktada haklı olarak işini bu kadar iyi yapıyorsa neden arka odaya girip bu sistemin matematiğini anlamak zorundayım diye sorabilirsin. Sonuçta araba kullanmak için motor ustası olmamız gerekmiyor.
+Bir modele 50 sayfalık bir doküman veriyorsun ve saniyeler içinde sana kıdemli bir analist seviyesinde kusursuz bir analiz sunuyor. Ray Kurzweil'in <a className="writingArticle__link" href="https://share.google/ZhxiIVzXMIQRBxu8O">The Singularity is Nearer</a> kitabında vurguladığı o net gerçekle tam da burada yüzleşiyoruz. İnsanın biyolojik donanımı, veriyi bu ölçekte ve hızda işlemek için artık fazlasıyla yetersiz. Kendi biyolojik sınırlarımızın bu kadar rahat aşıldığını gördüğümüzde, doğal olarak karşımızda okuduğunu anlayan bilinçli bir süper zeka olduğunu düşünüyoruz.
 
-Haklı bir isyan ama kurumsal dünyada günün sonunda her şey hıza, veri güvenliğine ve ay sonu gelen bulut faturalarına dayanıyor. Mesela bugün prompt caching yani önbellekleme mantığını doğru kurgulayarak token maliyetlerini on kata kadar düşürmek mümkün.
+Evet, kaputun altında insan bilişini taklit eden muazzam bir soyut mimari var. Ancak burayı devasa bir matematik fabrikası gibi düşünmek gerekiyor. O soyut mimari fabrikanın içindeki üretim bandı, en temeldeki silikon çipler ise bu banda güç veren motorlar.
 
-Peki neden? Çünkü sisteme yüklediğin o koca PDF düz bir metin olarak okunmuyor. İçindeki her kelimenin sayılara çevrilip transformer katmanlarının her birinden tek tek geçirilmesi gerekiyor. Asıl işlem gücünü, yani parayı yakan şey bu geçiş süreci. Sistemin arka planda metni değil de bu hesaplanmış ağır matrisleri hafızada tuttuğunu bilmezsen, o faturayı nasıl düşüreceğini ya da sistemi nasıl hızlandıracağını asla tam olarak çözemezsin. Bir model halüsinasyon gördüğünde, RAG sistemin aynı soruyu saniyelerce beklettiğinde veya API faturan aniden patladığında ortada bir sihir olmadığını bilmen şart. Karşında bir bilinç yok, sadece sınırlarını ve potansiyelini anlaman gereken devasa bir istatistik motoru var. Bu yazıda tam olarak o motorun kaputunu açıyoruz.
+Bu dev makinenin içinde bir niyet, farkındalık veya metni gerçekten anlama durumu yok. Gördüğümüz o zeka parıltıları makinenin düşünmesinden değil, o üretim bandındaki işlem gücünün, bizim biyolojik limitlerimizi ezip geçerek bir sonraki adımı en yüksek doğrulukla hesaplamasından kaynaklanıyor.
 
-**Sürekli yenisi çıkan bu modellerin ortak noktası ne peki?**
+Eğer bu teknolojinin üzerine bir vizyon, bir ürün veya yeni bir altyapı inşa ediyorsan, illüzyonun bittiği ve matematiğin başladığı o sınıra inmen mecburi, bu yüzden buradan başlıyoruz.
 
-Sektördeki rekabet artık sadece OpenAI, Anthropic veya Google'ın proprietary ekosistemleri arasında dönmüyor. Bugün veri güvenliği veya büyük ölçekli operasyonlarda token maliyetlerini optimize etmek için doğrudan kendi sunucularında koşturabildiğin, open-weight Llama, Qwen, Mistral veya DeepSeek gibi modellerle oyunun kuralları tamamen değişti. SOTA döngüsünün aylardan haftalara indiği, her yeni lansmanla benchmark skorlarının ve Arena liderlik tablolarının altüst olduğu hiper-dinamik bir dönemdeyiz.
+<h3>Sürekli yenisi çıkan bu modellerin ortak bir noktası var</h3>
 
-Ancak bu modellerin mimarileri neredeyse aynı. Fark, o mimarinin etrafına dizilen birkaç tercihten çıkıyor ve bunlar kulağa geldiği kadar soyut şeyler değil. Tokenizer seçimlerinden eğitim verisinin bileşimine, modelin eğitimden sonra insan tercihlerine göre şekillendirildiği post-training süreçlerinden (RLHF bunun en bilinen örneği) güvenlik filtrelerine kadar birkaç somut tercih bu farkı yaratıyor.
+Yapay zeka yarışı dışarıdan bakıldığında baş döndürücü bir kaos gibi görünüyor. Teknoloji devlerinin kapalı ekosistemlerinden, liderlik tablolarını her hafta altüst eden açık kaynaklı modellere (Llama, DeepSeek, Mistral) kadar uzanan bu hiper-dinamik rekabet, birbirinden tamamen bağımsız yüzlerce farklı zeka inşa edildiği yanılgısını yaratıyor.
 
-Ama tüm bu farklı kimliklerin arkasında, kalbi aynı fikirle atan bir makine var. Hepsi Transformer tabanlı ve özünde next token prediction, yani bir sonraki parçayı tahmin etme ilkesiyle çalışıyorlar. Yani hepsi, önüne koyduğun metne bakıp buradan sonra gelmesi en muhtemel parça nedir sorusunu milyarlarca kez soran devasa birer olasılık motoru.
+Oysa markaları, logoları ve fiyat etiketlerini bir kenara bıraktığınızda, kaputun altındaki mimari şaşırtıcı derecede tekdüze.
 
-   <div className="writingArticle__callout">
-     Bu yazıda motorun içini üç ana parçada açıyoruz. Sisteme verdiğin düz bir metnin, hatta modern multimodal (çoklu modalite) sistemlerde yüklediğin bir fotoğrafın veya ses dosyasının bile içeride nasıl aynı sayılara, yani vektörlere dönüştüğünü göreceğiz. Bu rakamların hangi matematiksel duraklardan geçip anlam kazandığını ve modelin o koca bağlamı tartıp cevapları neden kelime kelime üretmek zorunda olduğunu adım adım çözeceğiz.
-      </div>
+Modeller arasındaki o karakteristik farklar yeni bir felsefeden değil; eğitim verisinin kalitesi, veriyi parçalama biçimi (tokenizer) veya sonradan yapılan RLHF ayarları gibi somut mühendislik tercihlerinden doğuyor. Tüm bu ambalajı sıyırdığında, hepsinin kalbinde aynı makine atıyor: Transformer 
 
-    <h2>Kaputun altında ne var</h2>
+İsimleri veya boyutları ne olursa olsun, hepsi özünde devasa birer olasılık motoru. Yaptıkları tek şey, sağladığın girdiye bakıp milyarlarca kez aynı soruyu sormak: "Buradan sonra gelmesi en muhtemel parça nedir?"
 
- Peki bize bu kadar insansı cevaplar veren bu sistem içeride nasıl çalışıyor?Dışarıdan bakınca hiper ölçekli, aşırı karmaşık ve biraz da göz korkutucu göründüğü doğru. Ama işin asıl ilginç tarafı şu. Büyük dil modellerinin iç mimarisi, anlatıldığında beklediğinden çok daha düzenli ve kendi içinde sürekli tekrarlanan bir akışa sahip.
- 
- Bu akışı anlamanın en kolay yolu, modeli tek parça bir zihin gibi düşünmek yerine, bir üretim bandı gibi hayal etmek. Metin bir uçtan giriyor, birkaç temel aşamadan geçiyor ve sonunda tekrar metin olarak diğer uçtan çıkıyor. Biz bu süreci (pipeline) dört ana bölümde inceleyeceğiz.
+    <h2>İllüzyonu inşa eden dört aşamalı üretim bandı</h2>
+
+Dışarıdan bakıldığında hiper ölçekli ve aşılmaz görünen bu sistem, içeride beklediğinden çok daha düzenli bir yapıya sahip. Modeli tek parça ve gizemli bir zihin gibi düşünmek yerine, bir üretim bandı (pipeline) gibi hayal edebilirsin. Metin bir uçtan giriyor, birkaç temel aşamadan geçiyor ve sonunda tekrar metin olarak diğer uçtan çıkıyor. Biz bu süreci dört ana bölümde inceleyeceğiz.
         
   <figure className="writingArticle__media">
      <img src="/graph.svg" alt="graph" data-graph="true" />
    </figure>
       <ol className="writingArticle__TokenizerList writingArticle__TokenizerList--ordered">
-       <li>**Tokenizer:** Metni küçük parçalara ayırıp sayısal etiketlere dönüştüren, fabrikamızın giriş kapısı</li>
+       <li>**Tokenizer:** Metni küçük parçalara ayırıp sayısal etiketlere dönüştüren, fabrikanın giriş kapısı</li>
        <li>**Embeddings:** Sayısal etiketlerin, kelime anlamlarını temsil eden çok boyutlu bir koordinat sistemine yerleştirildiği katman</li>
        <li>**Transformer (Attention & Feedforward):** Kelimelerin birbirine bakıp anlam kazandığı ve milyarlarca çarpma işlemiyle bir sonraki adımı hesaplayan asıl tahmin motoru</li>
        <li>**Output:** Modelin bir sonraki adım için hesapladığı sayısal olasılık dağılımlarının üretildiği yer</li>
      </ol>
 
-     Burada özellikle Transformer katmanında dönen işlem hacmi devasa olsa da, mimarinin kendisi şaşırtıcı derecede yalın. Modelin içinde olup bitenler aslında hep aynı tür işlemlerden ibaret: matrisi çarp, topla, normalize et ve tekrarla.
+Bu bandın üzerindeki işlem hacmi muazzam olsa da mimarinin kendisi şaşırtıcı derecede yalın. Modelin içinde olup bitenler temelde hep aynı tür işlemlerden ibaret: Matrisi çarp, topla, normalize et ve tekrarla.
 
-Paylaştığım şu küçük kod bloğuna bir bakalım:
+Bu akışın temel mantığı şu basit pseudocode'a sığacak kadar net:
+
     <div className="writingArticle__codeCard">
       <pre className="writingArticle__codeBlock">
         <code>
@@ -148,32 +147,29 @@ Paylaştığım şu küçük kod bloğuna bir bakalım:
     
   Yani düşündüğümüz kadar karmaşık kodlardan bahsetmiyoruz. Hatta bazı açık kaynaklı modellerin çalışan örnekleri birkaç yüz satır Python koduyla ayağa kaldırılabiliyor. <a href="https://magazine.sebastianraschka.com/" target="_blank" rel="noreferrer">Sebastian Raschka</a> gibi araştırmacıların PyTorch kullanarak bu mimarileri sıfırdan kurduğu sade örnekler de bunun en güzel kanıtı.
 
-     Mimarinin bu kadar sade olması seni yanıltmasın. Aksine bu yalınlık, kaputun altındaki kaba kuvvetin (brute force) ne kadar korkunç boyutlarda olduğunu yüzümüze vuruyor. Modelin attığı en ufak bir adım bile, aslında milyarlarca sayının aynı anda birbiriyle çarpışması demek.
+     Ancak mimarinin bu kadar sade olması seni yanıltmasın. Aksine bu yalınlık, kaputun altındaki kaba kuvvetin (brute force) ne kadar korkunç boyutlarda olduğunu yüzümüze vuruyor. Modelin attığı en ufak bir adım bile, aslında milyarlarca sayının aynı anda birbiriyle çarpışması demek.
      
-     <Note>
-      Bu hesaplar öyle bir kez yapılıp bitmiyor. Sen tek bir cümle kurarken bile o meşhur Transformer katmanları aslında kendi içinde devasa bir maraton koşuyor. Eğer bu döngünün nasıl işlediğini canlı canlı görmek istersen <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracını mutlaka kurcala. Sayılar arasındaki o çizgilerin nasıl harmanlandığını gördüğünde taşlar tam olarak yerine oturuyor.
+   <h3>Bu hesaplar öyle bir kez yapılıp bitmiyor.</h3>
+
+      Sen tek bir cümle kurarken bile o meşhur Transformer katmanları aslında kendi içinde devasa bir maraton koşuyor. (Eğer bu döngünün nasıl işlediğini canlı canlı görmek istersen <a className="writingArticle__link" href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer</a> aracını mutlaka kurcala. Sayılar arasındaki o çizgilerin nasıl harmanlandığını gördüğünde taşlar biraz yerine oturuyor.)
 
        **Bu maratonu üç ana aşamada özetleyebiliriz:**
 
        <ul className="writingArticle__ArchitectureList">
-         <li>**Dikey tırmanış (Blocks):** Modelin içinde tek bir işlem katmanı yok. Veri, aynı işlemlerden onlarca kez (bazı modellerde 96 katmana kadar çıkar) üst üste geçiyor. Araçta göreceğin o "11 more identical blocks" ifadesi tam olarak bu dikey eforu, yani kaba kuvveti temsil ediyor.</li>
-         <li>**Paralel bakış (Heads):** Her bir blokta onlarca farklı head aynı anda çalışıyor. Kimi dil bilgisine, kimi kelimeler arası mesafeye, kimi de anlam derinliğine odaklanıyor. Yani tek bir katmanda bile farklı işlem hatları paralel olarak yürüyor.</li>
-         <li>**Adım adım üretim (Autoregressive):** Faturayı asıl kabartan döngü ise şu. Model koca bir cümleyi tek seferde üretmiyor. Sadece bir sonraki kelimeyi bulabilmek için tüm bu devasa katmanları ve head'leri tekrar tekrar baştan koşturmak zorunda kalıyor.</li>
+         <li>**Dikey tırmanış (Blocks):** Veri tek bir işlem katmanından geçmez. Aynı operasyonlar (bazen 96 katmana kadar) üst üste tekrarlanır. Derinlik buradan gelir. Araçta göreceğin o "11 more identical blocks" ifadesi tam olarak bu dikey eforu, yani kaba kuvveti temsil ediyor.</li>
+         <li>**Paralel bakış (Heads):** Her bir blokta onlarca farklı işlem hattı aynı anda çalışır. Kimi dil bilgisine, kimi kelimeler arası mesafeye, kimi de anlam derinliğine odaklanır. Yani tek bir katmanda bile farklı işlem hatları paralel olarak yürür.</li>
+         <li>**Adım adım üretim (Autoregressive):** Faturayı asıl kabartan darboğaz burasıdır. Model cümleyi tek seferde üretmez. Sadece bir sonraki kelimeyi bulabilmek için tüm bu devasa katmanları ve paralel hatları her kelimede baştan çalıştırmak zorundadır.</li>
        </ul>
-     </Note>
 
-
-Büyük resim bu. Şimdi bu devasa üretim bandının en başına, her şeyin başladığı yere gidiyoruz. Senin ekrana yazdığın o düz metin, arka plandaki bu ağır matematiğin diline tam olarak nasıl çevriliyor? 
-
-İlk durak: **Tokenizer.**
+Büyük resim bu. Şimdi bu üretimin sıfır noktasına, insan dilinin makinenin matematiğine dönüştüğü o ilk aşamaya iniyoruz: Tokenizer.
 
    <h2>Tokenizer</h2>
 
-   Yazdığın o prompt'un modele doğrudan metin olarak girmiyor. Sistem harflerle değil, sayılarla konuşuyor. Ancak Tokenizer aşamasını sadece basit bir "metin çevirmeni" olarak düşünmek, kaputun altındaki en büyük maliyet kaçaklarından birini gözden kaçırmak demek. Çünkü tokenizer, modelin üzerinde hesap yapacağı atomik parçaları (token'ları) belirleyerek aslında doğrudan API faturanı ve ürününün tepki süresini (latency) belirliyor.
+Modele verdiğin metin, sisteme doğrudan kelimeler halinde girmez, makine sadece sayılarla konuşur. Ancak tokenizer'ı basit bir metin çevirmeni olarak görmek, mimarideki en büyük maliyet kaçaklarından birini gözden kaçırmaktır. Tokenizer, modelin hesap yapacağı atomik birimleri (token) belirler. (Yani API faturan, ürününün tepki süresi (latency) gibi kritik metriklerini doğrudan etkiler.)
 
-**Peki sistemi harf harf veya kelime kelime bölmek yerine neden Subword Tokenization (alt kelime parçalama) kullanılıyor?**
+Sistemin metni kelime veya harf yerine alt-kelime (subword) mantığıyla parçalamasının arkasında saf bir verimlilik hesabı var:
 
-Çünkü dili kelimelere bölmek, modelin "kitap", "kitaplar", "kitapçı" gibi her türevi ayrı ayrı ezberlemesini gerektirirdi. Bu da sözlük (vocabulary) boyutunu sonsuza götürür ve modeli yeni/bilinmeyen kelimeler (Out-of-Vocabulary) karşısında çaresiz bırakırdı. Harf harf bölmek ise o çok değerli "context window"u (bağlam penceresini) saniyeler içinde çöpe atmak anlamına gelirdi.
+
 
 Bu yüzden tokenizer, kelime kadar anlamlı ama harf kadar esnek olan o altın ortayı buluyor. "Kitapçılık" gibi bir terimi tek parça değil, mantıklı alt birimlere ayırarak hem sözlüğü şişirmiyor hem de esnekliğini koruyor.
    
@@ -200,7 +196,7 @@ Sen bir prompt girdiğinde, ilk faturanın kesildiği o üç aşamalı operasyon
        <li>**ID Üretimi:** Matris çarpımlarına girecek olan o benzersiz Token ID'lerini üretiyor.</li>
      </ul>
 
-     💡 **Kendi token faturanı test edebilirsin:** OpenAI’ın online  <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noreferrer">tokenizer aracı</a> ile İngilizce bir prompt ile Türkçe bir prompt arasındaki token yoğunluğu farkını saniyeler içinde görebilirsin. Aynı uzunluktaki iki metnin neden farklı maliyetler çıkardığını görmek için harika bir sağlama.
+    **Kendi token faturanı test edebilirsin:** OpenAI’ın online  <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noreferrer">tokenizer aracı</a> ile İngilizce bir prompt ile Türkçe bir prompt arasındaki token yoğunluğu farkını saniyeler içinde görebilirsin. Aynı uzunluktaki iki metnin neden farklı maliyetler çıkardığını görmek için harika bir sağlama.
      
     <h2>Embeddings</h2>
 
@@ -266,7 +262,10 @@ Güncel modellerde bu boyutların sayısı genelde 4096 veya 8192 gibi rakamlara
      </ol>
 
     <Note>
-      💡 **Küçük bir detay:** Bu embedding'ler (vektörler) başlangıçta uzayda tamamen rastgele noktalara atanıyor. Model o ağır eğitim sürecinde milyarlarca kelimeyi işledikçe, hata payını (loss) düşürmek için bu koordinatları sürekli olarak milim milim güncelliyor. Aylar süren bu kaba kuvvetin sonunda, benzer bağlamdaki kelimeler bu devasa uzayda kusursuzca yan yana kümelenirken, alakasız olanlar birbirinden uzaklaşıyor.
+    <div className="writingArticle__calloutTitle">Küçük bir detay</div>
+    <div className="writingArticle__calloutBody">
+    Bu embedding'ler (vektörler) başlangıçta uzayda tamamen rastgele noktalara atanıyor. Model o ağır eğitim sürecinde milyarlarca kelimeyi işledikçe, hata payını (loss) düşürmek için bu koordinatları sürekli olarak milim milim güncelliyor. Aylar süren bu kaba kuvvetin sonunda, benzer bağlamdaki kelimeler bu devasa uzayda kusursuzca yan yana kümelenirken, alakasız olanlar birbirinden uzaklaşıyor.
+    </div>
     </Note>
 
      **Henüz statik bir haritadayız**
@@ -274,7 +273,10 @@ Güncel modellerde bu boyutların sayısı genelde 4096 veya 8192 gibi rakamlara
      Bu noktada token'lar ilk kez birbiriyle kıyaslanabilir hale geliyor. Ancak atlanmaması gereken çok ince bir detay var. Ortada henüz gerçek bir anlam yok. Sadece o anlamın üzerine inşa edileceği matematiksel zemin hazırlandı.
      
      <Note>
-       💡 **Eğitim (Training) vs. Çıkarım (Inference):** Kelimelerin uzayda birbirine yaklaşması aylar süren ve milyonlarca dolar yakan o eğitim aşamasında gerçekleşiyor. Ancak modeli canlıda çalıştırdığımızda (inference) yani ona bir prompt girdiğimizde, bu embedding tablosu artık tamamen sabittir. Sistem o an yeni bir şey öğrenmez, sadece var olan haritadan koordinat çeker.
+     <div className="writingArticle__calloutTitle">Eğitim (Training) vs. Çıkarım (Inference)</div>
+     <div className="writingArticle__calloutBody">
+      Kelimelerin uzayda birbirine yaklaşması aylar süren ve milyonlarca dolar yakan o eğitim aşamasında gerçekleşiyor. Ancak modeli canlıda çalıştırdığımızda (inference) yani ona bir prompt girdiğimizde, bu embedding tablosu artık tamamen sabittir. Sistem o an yeni bir şey öğrenmez, sadece var olan haritadan koordinat çeker.
+     </div>
      </Note>
      
      
@@ -321,7 +323,10 @@ Attention mekanizması aslında şu basit ama hayati soruyu soruyor: Bu cümleyi
 Model bu token'ların embedding'lerini bu oranlarda harmanlayarak ortaya yepyeni bir bağlamsal vektör çıkarıyor. Bu yeni vektör artık sadece sıradan bir banka kelimesini değil, doğrudan finansal bir işlem için kullanılan banka anlamını taşıyor.
 
   <Note>
-    💡 **Prompt Engineering neden var?** Bu dikkat süreci sadece yanıt üretirken çalışmıyor. Model senin yazdığın prompt'u anlamaya çalışırken de tam olarak aynı mekanizmayı çalıştırıyor. Sen ne kadar net ve detaylı bir çerçeve çizersen, modelin kurduğu o bağlamsal ağ da o kadar sağlam oluyor. Prompt Engineering dediğimiz uzmanlık dalı tam da bu yüzden doğdu. Yazdığın her kelime, modelin dikkatini nereye odaklayacağına dair birer donanım komutu niteliğinde. Yani prompt'unun kalitesi, kaputun altındaki o milyarlarca matris çarpımının ne kadar isabetli olacağını doğrudan belirliyor.
+  <div className="writingArticle__calloutTitle">Prompt Engineering neden var?</div>
+  <div className="writingArticle__calloutBody">
+  Bu dikkat süreci sadece yanıt üretirken çalışmıyor. Model senin yazdığın prompt'u anlamaya çalışırken de tam olarak aynı mekanizmayı çalıştırıyor. Sen ne kadar net ve detaylı bir çerçeve çizersen, modelin kurduğu o bağlamsal ağ da o kadar sağlam oluyor. Prompt Engineering dediğimiz uzmanlık dalı tam da bu yüzden doğdu. Yazdığın her kelime, modelin dikkatini nereye odaklayacağına dair birer donanım komutu niteliğinde. Yani prompt'unun kalitesi, kaputun altındaki o milyarlarca matris çarpımının ne kadar isabetli olacağını doğrudan belirliyor.
+  </div>
   </Note>
 
    
@@ -421,8 +426,8 @@ Olayın mantığı şu şekilde işler:
     **Q ve K karar verir, V aktarılır**
                    
     <div className="writingArticle__callout">
-
-   **💡 Şu meşhur **"trilyonlarca parametre"** muhabbeti aslında ne?**
+   <div className="writingArticle__calloutTitle">Şu meşhur "trilyonlarca parametre" muhabbeti aslında ne?</div>
+   <div className="writingArticle__calloutBody">
 
    Q, K ve V filtreleri havadan gelmiyor. O başlangıçtaki *Embedding* matrisinin modelin içine gömülü üç farklı ağırlık matrisiyle ($W_q$, $W_k$, $W_v$) çarpılmasıyla üretiliyor.
 
@@ -464,6 +469,7 @@ Teknoloji lansmanlarında CEO'ların ağzından düşmeyen o 400 milyar, 1 trily
          </div>
        </div>
      </details>
+   </div>
    </div>
           
    **Bir sonraki aşamada, prompt'taki token'ların birbirine ne kadar alakalı olduğunu skorluyoruz**
@@ -625,9 +631,9 @@ Ve sistemin literatürdeki adıyla Autoregressive (kendi çıktısını girdi ol
 Siz ekranda akıcı ve insansı bir cevabın saniyeler içinde sular seller gibi aktığını görürken, kaputun altındaki donanım aslında ekrana basılan her bir kelime, hece veya noktalama işareti için tüm bu devasa tahmin motorunu yüzlerce kez sıfırdan tetiklemektedir.
 
    <div className="writingArticle__callout">
-   
-   **Sonraki adımımız tahmin motorlarından aksiyon alan ajanlara geçmek olacak** 
-   
+   <div className="writingArticle__calloutTitle">Sonraki adımımız tahmin motorlarından aksiyon alan ajanlara geçmek olacak</div>
+   <div className="writingArticle__calloutBody">
+
    Bu yazıda bir dil modelinin kaputunun altında yatan o devasa sıradaki kelimeyi tahmin etme motorunu tüm mimari gerçekliğiyle inceledik. Peki bu temel donanım mimarisini neden bu kadar detaylı konuştuk?
 
 Çünkü sektörün bir sonraki durağında, sadece bizimle konuşan botları değil; bu metin tahmin yeteneğini bir akıl yürütme motoru olarak kullanıp, bizim yerimize kararlar alan ve aksiyona geçen Agentic AI sistemlerini konuşacağız. Sektörün geleceği, sadece sıradaki kelimeyi tahmin edenlerin değil, o tahminleri alıp somut hedeflere dönüştüren ajanların olacak.
@@ -637,4 +643,5 @@ Bir sonraki yazıda, bu statik mimarinin üzerine inşa edilen o akıllı ve oto
 
    **P.S.** Bu yazının teknik okumalarında yanımda olan ve detaylardaki pürüzleri birlikte giderdiğimiz software developer arkadaşım <a className="writingArticle__link" href="https://www.linkedin.com/in/arindenizkoklu/" target="_blank" rel="noreferrer">Arın Deniz Köklü</a>’ye destekleri için teşekkürler!
 
+   </div>
    </div>
